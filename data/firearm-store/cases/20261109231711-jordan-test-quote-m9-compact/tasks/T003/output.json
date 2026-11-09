@@ -1,0 +1,130 @@
+{
+  "task_id": "T003",
+  "role": "compliance-orchestrator",
+  "status": "completed",
+  "output": {
+    "turn": "initial",
+    "compliance_flag": null,
+    "plan": "First turn on the documentation-status request from T001. The applicable mock requirement is REQ-BASE only: CAT-HG-001 fire_modes are [semi-auto], so REQ-FULL-AUTO and full-auto-requires-address do not apply. REQ-BASE requires the FORM-PURCHASE fields and a background check. Delegating in parallel: (1) documentation-specialist checks FORM-PURCHASE completeness; (2) background-check contract request to government-background-check. On resume, compliance validates both outputs (the external one per validate-external-outputs), sets documentation status and the compliance flag, and returns the documentation-status response to sales.",
+    "pending": ["documentation-specialist completeness report", "government-background-check fictional result"]
+  },
+  "new_tasks": [
+    {
+      "role": "documentation-specialist",
+      "type": "work",
+      "input": {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "customer": {
+          "name": "Jordan Test",
+          "id_document": "FAKE-ID-1001",
+          "date_of_birth": "1985-04-12"
+        },
+        "items": [
+          { "catalog_id": "CAT-HG-001", "category": "handgun", "fire_modes": ["semi-auto"] }
+        ],
+        "documents": "No documents/ folder in the case; customer information is only what request.md states.",
+        "requirements_records": [
+          "data/firearm-store/records/compliance/requirements.json",
+          "data/firearm-store/records/compliance/forms.json"
+        ],
+        "instruction": "Return a Completeness Report for FORM-PURCHASE under the applicable mock requirements. Check full-auto-requires-address for every item. List any missing fields as {field, rule_id} and any inconsistencies; do not invent data."
+      },
+      "depends_on": []
+    },
+    {
+      "role": "government-background-check",
+      "type": "contract",
+      "contract": "background-check",
+      "input": {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "request_ref": "20261109231711-jordan-test-quote-m9-compact/background-check/1",
+        "customer": {
+          "name": "Jordan Test",
+          "id_document": "FAKE-ID-1001",
+          "date_of_birth": "1985-04-12"
+        },
+        "instruction": "Return a fictional background-check result (no-record, record-found, delayed, or cannot-determine) from your mock criminal records, with fictional: true."
+      },
+      "depends_on": []
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/compliance.json",
+      "field": "(file created)",
+      "from": null,
+      "to": "initial compliance state",
+      "source": "tasks/T003/input.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/compliance.json",
+      "field": "requirements_applicable",
+      "from": null,
+      "to": ["REQ-BASE"],
+      "source": "data/firearm-store/records/compliance/requirements.json; item fire_modes [semi-auto]"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/compliance.json",
+      "field": "documentation_status",
+      "from": null,
+      "to": "pending",
+      "source": "documentation-specialist task requested"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/compliance.json",
+      "field": "background_check.status",
+      "from": null,
+      "to": "requested",
+      "source": "background-check contract requested"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/compliance.json",
+      "field": "flag",
+      "from": null,
+      "to": "pending",
+      "source": "awaiting subtask outputs"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Read only the case folder and data/firearm-store/records/compliance/{requirements,forms}.json; no live service contacted; background check requested from the mock government-background-check party."
+    },
+    {
+      "check": "full-auto-requires-address applicability",
+      "target": "CAT-HG-001",
+      "result": "pass",
+      "detail": "fire_modes [semi-auto]; no full-auto, so customer.address is not required by this rule. To be re-confirmed by the documentation-specialist report."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "background-check request",
+      "result": "pass",
+      "detail": "Request asks for a fictional result with fictional: true; no eligibility determination requested or made."
+    },
+    {
+      "check": "validate-external-outputs",
+      "target": "background-check response (pending)",
+      "result": "pass",
+      "detail": "No external output yet; the government-background-check result will be validated on resume before use."
+    },
+    {
+      "check": "compliance-flag acceptance: clear only with complete documentation and no-record",
+      "target": "flag",
+      "result": "pass",
+      "detail": "No flag set this turn; documentation and background check are both pending."
+    },
+    {
+      "check": "authority",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "Completeness check delegated to own-unit specialist; background check requested via the background-check contract this orchestrator is the requester of."
+    }
+  ],
+  "summary": "Requested FORM-PURCHASE completeness check (documentation-specialist) and fictional background check (government-background-check) in parallel; flag pending until both return."
+}

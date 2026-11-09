@@ -1,0 +1,32 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T005",
+  "role": "documentation-specialist",
+  "type": "work",
+  "contract": null,
+  "attempt": 1,
+  "requested_by": "T003 (compliance-orchestrator)",
+  "input": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "customer": {
+      "name": "Jordan Test",
+      "id_document": "FAKE-ID-1001",
+      "date_of_birth": "1985-04-12"
+    },
+    "items": [
+      {
+        "catalog_id": "CAT-HG-001",
+        "category": "handgun",
+        "fire_modes": [
+          "semi-auto"
+        ]
+      }
+    ],
+    "documents": "No documents/ folder in the case; customer information is only what request.md states.",
+    "requirements_records": [
+      "data/firearm-store/records/compliance/requirements.json",
+      "data/firearm-store/records/compliance/forms.json"
+    ],
+    "instruction": "Return a Completeness Report for FORM-PURCHASE under the applicable mock requirements. Check full-auto-requires-address for every item. List any missing fields as {field, rule_id} and any inconsistencies; do not invent data."
+  }
+}

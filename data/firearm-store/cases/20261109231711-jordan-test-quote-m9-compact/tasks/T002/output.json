@@ -1,0 +1,128 @@
+{
+  "task_id": "T002",
+  "role": "inventory-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract": "inventory-availability",
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "action": "reserve",
+    "items": [
+      {
+        "catalog_id": "CAT-HG-001",
+        "quantity_requested": 1,
+        "status": "reserved",
+        "item_id": "INV-0001",
+        "serial": "MOCK-SN-0001",
+        "reservation_ref": "RES-0001",
+        "reserved_at": "2026-11-09T23:18:07Z",
+        "expires_at": "2026-11-12T23:18:07Z",
+        "note": "Reservation is released automatically if not delivered by expires_at (rule reservation-expiry). One further released unit (INV-0002) remains available."
+      }
+    ],
+    "applied_inventory_changes": [
+      {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "record": "INV-0001",
+        "change": { "field": "status", "old": "available", "new": "reserved" },
+        "source": "inventory-availability request T002 (action reserve, from T001 sales-orchestrator)"
+      },
+      {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "record": "RES-0001",
+        "change": { "field": "(record created)", "old": null, "new": "active reservation of INV-0001 for this case, 2026-11-09T23:18:07Z to 2026-11-12T23:18:07Z" },
+        "source": "inventory-availability request T002 (action reserve, from T001 sales-orchestrator)"
+      }
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/records/inventory/items.json",
+      "field": "items[INV-0001].status",
+      "from": "available",
+      "to": "reserved",
+      "source": "T002 inventory-availability reserve request"
+    },
+    {
+      "file": "data/firearm-store/records/inventory/items.json",
+      "field": "items[INV-0001].reservation_id",
+      "from": null,
+      "to": "RES-0001",
+      "source": "T002 inventory-availability reserve request"
+    },
+    {
+      "file": "data/firearm-store/records/inventory/reservations.json",
+      "field": "reservations[RES-0001]",
+      "from": null,
+      "to": "active; item INV-0001; case 20261109231711-jordan-test-quote-m9-compact; created 2026-11-09T23:18:07Z; expires 2026-11-12T23:18:07Z",
+      "source": "T002 inventory-availability reserve request"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/inventory.json",
+      "field": "(file created)",
+      "from": null,
+      "to": "inventory state with T002 reservation RES-0001",
+      "source": "T002 input.json"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "contract input completeness (inventory-availability)",
+      "target": "tasks/T002/input.json",
+      "result": "pass",
+      "detail": "Case ID, catalog item CAT-HG-001, quantity 1, and action reserve are present."
+    },
+    {
+      "check": "release-requires-pass / contract rule: only released items reported available or reserved",
+      "target": "INV-0001",
+      "result": "pass",
+      "detail": "INV-0001 had status available in the inventory records (a status set only after a release disposition); no on-hold or rejected unit was used. INV-0007 (on-hold) is a different catalog item and untouched. No item was made sellable in this task."
+    },
+    {
+      "check": "received-items-unavailable",
+      "target": "CAT-HG-001 units",
+      "result": "pass",
+      "detail": "No CAT-HG-001 unit is on-hold or in receiving; only an available unit was reserved."
+    },
+    {
+      "check": "no double reservation",
+      "target": "data/firearm-store/records/inventory/reservations.json",
+      "result": "pass",
+      "detail": "No existing reservation for INV-0001 or for this case before this task."
+    },
+    {
+      "check": "reservation-expiry",
+      "target": "RES-0001",
+      "result": "pass",
+      "detail": "expires_at = created_at + 72h (2026-11-09T23:18:07Z to 2026-11-12T23:18:07Z). No existing reservations were older than 72h, so none needed release."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "T002 action",
+      "result": "pass",
+      "detail": "Action is reserve, not deliver; no delivery movement recorded."
+    },
+    {
+      "check": "Applied Inventory Change acceptance: every change has a source; available only with release disposition",
+      "target": "output.applied_inventory_changes",
+      "result": "pass",
+      "detail": "Both changes cite the T002 request; no change sets status to available."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Only inventory records and state/inventory.json changed; reserving for sales is within this orchestrator's authority."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only data/firearm-store/records/inventory/*, records/sales/catalog.json (read), and the case folder were used; no live service contacted."
+    }
+  ],
+  "summary": "Reserved CAT-HG-001 (Mockworks M9 Compact) unit INV-0001 / MOCK-SN-0001 for the case as RES-0001, expiring 2026-11-12T23:18:07Z (72h, reservation-expiry)."
+}

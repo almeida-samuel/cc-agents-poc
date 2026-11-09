@@ -1,0 +1,20 @@
+{
+  "description": "Mock compliance requirements: customer details and forms required per item. Owner: compliance-orchestrator.",
+  "requirements": [
+    {
+      "requirement_id": "REQ-BASE",
+      "applies_to": "every item",
+      "required_customer_fields": ["customer.name", "customer.id_document", "customer.date_of_birth"],
+      "forms": ["FORM-PURCHASE"],
+      "background_check": true
+    },
+    {
+      "requirement_id": "REQ-FULL-AUTO",
+      "applies_to": "items whose fire_modes include full-auto",
+      "required_customer_fields": ["customer.address"],
+      "forms": [],
+      "background_check": true,
+      "rule_id": "full-auto-requires-address"
+    }
+  ]
+}

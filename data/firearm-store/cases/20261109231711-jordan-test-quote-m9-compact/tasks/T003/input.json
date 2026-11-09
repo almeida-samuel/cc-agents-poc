@@ -1,0 +1,28 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T003",
+  "role": "compliance-orchestrator",
+  "type": "contract",
+  "contract": "documentation-status",
+  "attempt": 1,
+  "requested_by": "T001 (sales-orchestrator)",
+  "input": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "customer": {
+      "name": "Jordan Test",
+      "id_document": "FAKE-ID-1001",
+      "date_of_birth": "1985-04-12"
+    },
+    "items": [
+      {
+        "catalog_id": "CAT-HG-001",
+        "category": "handgun",
+        "fire_modes": [
+          "semi-auto"
+        ]
+      }
+    ],
+    "documents": "No documents/ folder in the case; customer information is only what request.md states.",
+    "note": "Return documentation status (with missing fields if incomplete) and the compliance flag, including the background-check outcome labeled fictional."
+  }
+}

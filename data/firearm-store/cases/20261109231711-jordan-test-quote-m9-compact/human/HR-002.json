@@ -1,0 +1,8 @@
+{
+  "request_id": "HR-002",
+  "kind": "case-response-answer",
+  "addressed_to": "operator",
+  "about": "case response in tasks/T016/output.json",
+  "response": { "accepted": true, "operator_note": "Close the case." },
+  "answered_at": "2026-11-09T23:33:20Z"
+}

@@ -1,0 +1,169 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "tasks": [
+    {
+      "id": "T001",
+      "role": "sales-orchestrator",
+      "type": "work",
+      "parent": null,
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "continued_by": "T008"
+    },
+    {
+      "id": "T002",
+      "role": "inventory-orchestrator",
+      "type": "contract",
+      "parent": "T001",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "inventory-availability"
+    },
+    {
+      "id": "T003",
+      "role": "compliance-orchestrator",
+      "type": "contract",
+      "parent": "T001",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "documentation-status",
+      "continued_by": "T007"
+    },
+    {
+      "id": "T004",
+      "role": "finance-orchestrator",
+      "type": "contract",
+      "parent": "T001",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "payment-status"
+    },
+    {
+      "id": "T005",
+      "role": "documentation-specialist",
+      "type": "work",
+      "parent": "T003",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1
+    },
+    {
+      "id": "T006",
+      "role": "government-background-check",
+      "type": "contract",
+      "parent": "T003",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "background-check"
+    },
+    {
+      "id": "T007",
+      "role": "compliance-orchestrator",
+      "type": "resume",
+      "parent": "T001",
+      "resumes": "T003",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "documentation-status"
+    },
+    {
+      "id": "T008",
+      "role": "sales-orchestrator",
+      "type": "resume",
+      "parent": null,
+      "resumes": "T001",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1
+    },
+    {
+      "id": "T009",
+      "role": "sales-orchestrator",
+      "type": "resume",
+      "parent": null,
+      "resumes": "T001",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "continued_by": "T011"
+    },
+    {
+      "id": "T010",
+      "role": "finance-orchestrator",
+      "type": "contract",
+      "parent": "T009",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "payment-status"
+    },
+    {
+      "id": "T011",
+      "role": "sales-orchestrator",
+      "type": "resume",
+      "parent": null,
+      "resumes": "T001",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "continued_by": "T013"
+    },
+    {
+      "id": "T012",
+      "role": "inventory-orchestrator",
+      "type": "contract",
+      "parent": "T011",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "inventory-availability"
+    },
+    {
+      "id": "T013",
+      "role": "sales-orchestrator",
+      "type": "resume",
+      "parent": null,
+      "resumes": "T001",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "continued_by": "T016"
+    },
+    {
+      "id": "T014",
+      "role": "finance-orchestrator",
+      "type": "contract",
+      "parent": "T013",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "transaction-report"
+    },
+    {
+      "id": "T015",
+      "role": "inventory-orchestrator",
+      "type": "contract",
+      "parent": "T013",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1,
+      "contract": "transaction-report"
+    },
+    {
+      "id": "T016",
+      "role": "sales-orchestrator",
+      "type": "resume",
+      "parent": null,
+      "resumes": "T001",
+      "depends_on": [],
+      "status": "completed",
+      "attempt": 1
+    }
+  ]
+}

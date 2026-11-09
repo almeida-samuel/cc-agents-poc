@@ -1,0 +1,12 @@
+{
+  "description": "Mock inventory item records. Fake serial numbers. Owner: inventory-orchestrator. Status values: available, reserved, sold, on-hold, rejected. `release_ref` points to the technical-services release disposition (records/technical-services/inspections.json) that made the item sellable.",
+  "items": [
+    { "item_id": "INV-0001", "catalog_id": "CAT-HG-001", "serial": "MOCK-SN-0001", "new_or_used": "new", "release_ref": "DSP-0001", "status": "sold", "location": "delivered", "reservation_id": "RES-0001", "delivery_ref": "MOV-0002", "sold_at": "2026-11-09T23:28:00Z", "sale_case_id": "20261109231711-jordan-test-quote-m9-compact", "sale_report_ref": "T015" },
+    { "item_id": "INV-0002", "catalog_id": "CAT-HG-001", "serial": "MOCK-SN-0002", "new_or_used": "new", "release_ref": "DSP-0002", "status": "available", "location": "vault" },
+    { "item_id": "INV-0003", "catalog_id": "CAT-HG-002", "serial": "MOCK-SN-0003", "new_or_used": "new", "release_ref": "DSP-0003", "status": "sold", "location": "delivered" },
+    { "item_id": "INV-0004", "catalog_id": "CAT-HG-003", "serial": "MOCK-SN-0004", "new_or_used": "new", "release_ref": "DSP-0004", "status": "available", "location": "vault" },
+    { "item_id": "INV-0005", "catalog_id": "CAT-RF-001", "serial": "MOCK-SN-0005", "new_or_used": "new", "release_ref": "DSP-0005", "status": "available", "location": "showroom" },
+    { "item_id": "INV-0006", "catalog_id": "CAT-RF-002", "serial": "MOCK-SN-0006", "new_or_used": "new", "release_ref": "DSP-0006", "status": "available", "location": "vault" },
+    { "item_id": "INV-0007", "catalog_id": "CAT-SG-001", "serial": "MOCK-SN-0007", "new_or_used": "used", "status": "on-hold", "location": "receiving" }
+  ]
+}

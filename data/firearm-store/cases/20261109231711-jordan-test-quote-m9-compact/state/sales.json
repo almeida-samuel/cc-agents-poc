@@ -1,0 +1,125 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "unit": "sales",
+  "customer_request": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "request_type": "buy",
+    "request_type_history": [
+      { "value": "quotation", "source": "request.md" },
+      { "value": "buy", "source": "human/HR-001.json (operator: customer accepted the quote)" }
+    ],
+    "customer": {
+      "name": "Jordan Test",
+      "id_document": "FAKE-ID-1001",
+      "date_of_birth": "1985-04-12"
+    },
+    "items": [
+      { "catalog_id": "CAT-HG-001", "name": "Mockworks M9 Compact", "quantity": 1, "list_price": 549 }
+    ],
+    "payment_method": "cash"
+  },
+  "contracts": {
+    "inventory-availability": {
+      "status": "responded",
+      "action": "deliver",
+      "request": {
+        "requested_by_task": "T011",
+        "purpose": "deliver INV-0001 under RES-0001 (payment paid T010, compliance clear T007)"
+      },
+      "response": {
+        "source_ref": "tasks/T012/output.json",
+        "catalog_id": "CAT-HG-001",
+        "item_id": "INV-0001",
+        "serial": "MOCK-SN-0001",
+        "status": "delivered",
+        "reservation_ref": "RES-0001",
+        "delivery_ref": "MOV-0002",
+        "delivered_at": "2026-11-09T23:28:00Z"
+      },
+      "previous_response": {
+        "source_ref": "tasks/T002/output.json",
+        "catalog_id": "CAT-HG-001",
+        "status": "reserved",
+        "item_id": "INV-0001",
+        "reservation_ref": "RES-0001",
+        "reserved_at": "2026-11-09T23:18:07Z",
+        "expires_at": "2026-11-12T23:18:07Z"
+      }
+    },
+    "documentation-status": {
+      "status": "responded",
+      "response": {
+        "source_ref": "tasks/T007/output.json",
+        "flag": "clear",
+        "documentation_status": "complete",
+        "background_check": { "outcome": "no-record", "fictional": true }
+      }
+    },
+    "payment-status": {
+      "status": "responded",
+      "response": {
+        "source_ref": "tasks/T010/output.json",
+        "payment_status": "paid",
+        "payment_method": "cash",
+        "method_accepted": true,
+        "amount": 549,
+        "currency": "USD",
+        "paid_at": "2026-11-09T23:24:50Z",
+        "installment_plan": null
+      },
+      "previous_response": {
+        "source_ref": "tasks/T004/output.json",
+        "payment_status": "pending"
+      }
+    },
+    "transaction-report": {
+      "status": "responded",
+      "requested_by_task": "T013",
+      "type": "sale",
+      "providers": {
+        "finance-orchestrator": { "status": "responded", "response": { "outcome": "recorded", "ledger_entry": "LED-0001", "source_ref": "tasks/T014/output.json" } },
+        "inventory-orchestrator": { "status": "responded", "response": { "outcome": "recorded", "item_status": "INV-0001 sold", "source_ref": "tasks/T015/output.json" } }
+      }
+    }
+  },
+  "quote": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "lines": [ { "catalog_id": "CAT-HG-001", "item_id": "INV-0001", "price": 549 } ],
+    "total": 549,
+    "currency": "USD",
+    "payment": { "status": "pending", "method": "cash", "installment_plan": null },
+    "valid_until": "2026-11-12T23:18:07Z",
+    "statuses": {
+      "availability": "reserved (RES-0001)",
+      "compliance_flag": "clear",
+      "payment_status": "pending"
+    },
+    "accepted": true,
+    "accepted_source": "human/HR-001.json (answered 2026-11-09T23:24:50Z)",
+    "note": "Quote as issued (payment pending at issue time). Current payment status is in contracts.payment-status."
+  },
+  "operator_reported_payment": {
+    "method": "cash",
+    "amount": 549,
+    "currency": "USD",
+    "status_reported_by_operator": "paid",
+    "source": "human/HR-001.json",
+    "note": "Operator report only; confirmed by finance as paid in T010."
+  },
+  "sales_side_ready": true,
+  "delivery": {
+    "requested": true,
+    "requested_by_task": "T011",
+    "status": "delivered",
+    "delivery_ref": "MOV-0002",
+    "delivered_at": "2026-11-09T23:28:00Z",
+    "source": "tasks/T012/output.json"
+  },
+  "sale_completed": true,
+  "sale_completed_source": "payment paid (tasks/T010/output.json) and order delivered (tasks/T012/output.json)",
+  "transaction_reported": true,
+  "transaction_report_note": "Recorded by finance (T014, LED-0001) and inventory (T015, INV-0001 sold); reported per report-every-transaction.",
+  "sales_tasks_complete": true,
+  "case_response_sent": "T016 (deliverable: completed sale)",
+  "updated_by_task": "T016"
+}

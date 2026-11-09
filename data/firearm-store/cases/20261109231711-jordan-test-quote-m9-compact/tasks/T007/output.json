@@ -1,0 +1,118 @@
+{
+  "task_id": "T007",
+  "role": "compliance-orchestrator",
+  "status": "completed",
+  "output": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "contract": "documentation-status",
+    "responds_to": "T003 (requested by T001, sales-orchestrator)",
+    "flag": "clear",
+    "documentation_status": "complete",
+    "information_needed": [],
+    "background_check": {
+      "request_ref": "20261109231711-jordan-test-quote-m9-compact/background-check/1",
+      "outcome": "no-record",
+      "fictional": true,
+      "source_ref": "tasks/T006/output.json"
+    },
+    "requirements_applied": ["REQ-BASE"],
+    "documentation_source_ref": "tasks/T005/output.json",
+    "note": "All data is mock. The background-check outcome is fictional and is not a legal eligibility determination. Under the documentation-status contract, sales may proceed on 'clear'."
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/compliance.json",
+      "field": "documentation_status",
+      "from": "pending",
+      "to": "complete",
+      "source": "tasks/T005/output.json (accepted)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/compliance.json",
+      "field": "background_check",
+      "from": { "status": "requested", "outcome": null, "fictional": true },
+      "to": { "status": "completed", "outcome": "no-record", "fictional": true },
+      "source": "tasks/T006/output.json (accepted)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/compliance.json",
+      "field": "flag",
+      "from": "pending",
+      "to": "clear",
+      "source": "documentation complete (T005) and fictional background check no-record (T006)"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "acceptance (documentation-specialist completeness report): required fields present",
+      "target": "tasks/T005/output.json",
+      "result": "pass",
+      "detail": "case_id, status, requirements_applied, missing, and inconsistencies are all present."
+    },
+    {
+      "check": "acceptance (documentation-specialist): full-auto-requires-address checked for every item",
+      "target": "tasks/T005/output.json",
+      "result": "pass",
+      "detail": "1 of 1 items checked. CAT-HG-001 fire_modes [semi-auto]. The rule does not apply, so no address is required. REQ-FULL-AUTO appears in requirements_applied because it was checked and found not to apply."
+    },
+    {
+      "check": "acceptance (documentation-specialist): complete only with no missing fields and no inconsistencies",
+      "target": "tasks/T005/output.json",
+      "result": "pass",
+      "detail": "missing = [], inconsistencies = [], status = complete. REQ-BASE fields (name, id_document, date_of_birth) match request.md."
+    },
+    {
+      "check": "validate-external-outputs",
+      "target": "tasks/T006/output.json (government-background-check)",
+      "result": "pass",
+      "detail": "Validated before use. request_ref matches the request, outcome 'no-record' is a valid enum value, and fictional is true. Accepted."
+    },
+    {
+      "check": "acceptance (government-background-check): labeled fictional and from mock criminal records",
+      "target": "tasks/T006/output.json",
+      "result": "pass",
+      "detail": "fictional == true. The source is data/firearm-store/external/government-background-check/criminal-records.json (mock)."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "output.background_check",
+      "result": "pass",
+      "detail": "Recorded with fictional: true and reported as the outcome code only. No eligibility statement is made."
+    },
+    {
+      "check": "full-auto-requires-address",
+      "target": "documentation_status",
+      "result": "pass",
+      "detail": "No item has full-auto, so needs-information is not triggered."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files and data/firearm-store/records/compliance/requirements.json were read. No live service was contacted."
+    },
+    {
+      "check": "compliance-flag acceptance: clear only when documentation complete and background check no-record",
+      "target": "output.flag",
+      "result": "pass",
+      "detail": "documentation_status = complete and background_check.outcome = no-record (fictional), so flag = clear."
+    },
+    {
+      "check": "compliance-flag acceptance: needs-human-review persists until human response",
+      "target": "state/compliance.json",
+      "result": "pass",
+      "detail": "No needs-human-review flag was ever set on this case. Nothing was ambiguous, so no human request is needed."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Only state/compliance.json changed. Set documentation status, recorded the fictional result, and set the flag, all within this role's authority. No real eligibility determination was made."
+    }
+  ],
+  "summary": "Documentation-status for sales: flag clear. FORM-PURCHASE is complete (REQ-BASE; the M9 Compact is semi-auto only, so no address is needed) and the fictional background check is no-record. Both subtask outputs were validated and accepted."
+}

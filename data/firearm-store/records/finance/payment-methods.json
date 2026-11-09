@@ -1,0 +1,8 @@
+{
+  "description": "Mock payment methods and the payment status each has before the customer pays. Owner: finance-orchestrator.",
+  "methods": [
+    { "method": "cash", "accepted": true, "status_before_payment": "pending" },
+    { "method": "card", "accepted": true, "status_before_payment": "pending" },
+    { "method": "installments", "accepted": true, "status_before_payment": "pending", "note": "Subject to rule installment-limits." }
+  ]
+}

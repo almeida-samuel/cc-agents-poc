@@ -1,0 +1,193 @@
+{
+  "task_id": "T008",
+  "role": "sales-orchestrator",
+  "status": "completed",
+  "output": {
+    "customer_request_record": {
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "request_type": "quotation",
+      "customer": {
+        "name": "Jordan Test",
+        "id_document": "FAKE-ID-1001",
+        "date_of_birth": "1985-04-12"
+      },
+      "items": [ { "catalog_id": "CAT-HG-001", "quantity": 1 } ],
+      "payment_method": "cash"
+    },
+    "quote": {
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "lines": [ { "catalog_id": "CAT-HG-001", "item_id": "INV-0001", "price": 549 } ],
+      "total": 549,
+      "payment": { "status": "pending", "method": "cash", "method_accepted": true, "installment_plan": null, "source_ref": "tasks/T004/output.json" },
+      "valid_until": "2026-11-12T23:18:07Z",
+      "statuses": {
+        "availability": { "status": "reserved", "reservation_ref": "RES-0001", "source_ref": "tasks/T002/output.json" },
+        "compliance_flag": { "flag": "clear", "documentation_status": "complete", "background_check_outcome": "no-record", "fictional": true, "source_ref": "tasks/T007/output.json" },
+        "payment_status": { "status": "pending", "source_ref": "tasks/T004/output.json" }
+      }
+    },
+    "sales_side_ready": true,
+    "delivery_requested": false,
+    "transaction_report": null,
+    "note": "Mock quote only. No delivery requested and no transaction report sent: payment is pending (not paid) and the order is not delivered."
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "contracts.inventory-availability",
+      "from": { "status": "requested", "response": null },
+      "to": { "status": "responded", "response": "reserved INV-0001, RES-0001, expires 2026-11-12T23:18:07Z" },
+      "source": "tasks/T002/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "contracts.documentation-status",
+      "from": { "status": "requested", "response": null },
+      "to": { "status": "responded", "response": "flag clear; documentation complete; background check no-record (fictional)" },
+      "source": "tasks/T007/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "contracts.payment-status",
+      "from": { "status": "requested", "response": null },
+      "to": { "status": "responded", "response": "pending; cash accepted; 549 USD" },
+      "source": "tasks/T004/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "quote",
+      "from": null,
+      "to": "CAT-HG-001 / INV-0001 at 549 USD, total 549 USD, valid_until 2026-11-12T23:18:07Z",
+      "source": "data/firearm-store/records/sales/catalog.json; tasks/T002, T004, T007 outputs"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "sales_side_ready",
+      "from": false,
+      "to": true,
+      "source": "availability reserved (T002), compliance clear (T007), payment pending with accepted method (T004)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "delivery / sale_completed / transaction_reported",
+      "from": null,
+      "to": { "delivery.requested": false, "sale_completed": false, "transaction_reported": false },
+      "source": "rules delivery-requires-clearance and sale-completion (payment pending)"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "entry_unit": "sales",
+    "type": "deliverable",
+    "summary": "Mock quote for Jordan Test: one Mockworks M9 Compact (CAT-HG-001, unit INV-0001) at 549 USD, cash, reserved until 2026-11-12T23:18:07Z. Compliance flag is clear (fictional background-check outcome: no-record) and the cash payment is pending.",
+    "deliverable": {
+      "quote": {
+        "lines": [ { "catalog_id": "CAT-HG-001", "name": "Mockworks M9 Compact", "item_id": "INV-0001", "price": 549 } ],
+        "total": 549,
+        "currency": "USD",
+        "payment": { "method": "cash", "status": "pending", "installment_plan": null },
+        "valid_until": "2026-11-12T23:18:07Z",
+        "reservation_ref": "RES-0001",
+        "statuses": {
+          "availability": "reserved (tasks/T002/output.json)",
+          "compliance_flag": "clear (tasks/T007/output.json)",
+          "documentation_status": "complete (tasks/T007/output.json)",
+          "background_check_outcome": "no-record (FICTIONAL mock result; not a legal eligibility determination; tasks/T007/output.json)",
+          "payment_status": "pending (tasks/T004/output.json)"
+        }
+      },
+      "disclaimer": "All data is mock. No real transaction, payment, or regulatory determination has taken place."
+    },
+    "next_step": "If the customer accepts and pays cash before 2026-11-12T23:18:07Z, a new request records the payment with finance (status paid); sales then asks inventory to deliver RES-0001 (compliance clear and payment paid) and, once delivered, reports the sale to finance and inventory. If not accepted by then, inventory releases the reservation (reservation-expiry)."
+  },
+  "checks": [
+    {
+      "check": "inventory-availability response acceptance (per item status and reservation reference)",
+      "target": "tasks/T002/output.json",
+      "result": "pass",
+      "detail": "CAT-HG-001 status reserved, item INV-0001, reservation RES-0001, expires_at = reserved_at + 72h. Accepted."
+    },
+    {
+      "check": "documentation-status response acceptance (documentation status, flag, fictional label)",
+      "target": "tasks/T007/output.json",
+      "result": "pass",
+      "detail": "documentation_status complete, flag clear, background_check outcome no-record with fictional: true, information_needed empty. Accepted."
+    },
+    {
+      "check": "T003 output (compliance first turn)",
+      "target": "tasks/T003/output.json",
+      "result": "pass",
+      "detail": "Intermediate turn with flag null; superseded by the T007 continuation, which carries the contract answer. Not used as a response."
+    },
+    {
+      "check": "payment-status response acceptance (status and installment plan if requested)",
+      "target": "tasks/T004/output.json",
+      "result": "pass",
+      "detail": "pending, cash method accepted, 549 USD, no installment requested. Positive per the payment-status contract. Accepted."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "case_response, quote.statuses",
+      "result": "pass",
+      "detail": "Background check reported only as outcome code no-record, labeled fictional, with no eligibility statement."
+    },
+    {
+      "check": "quote acceptance: prices from mock catalog",
+      "target": "output.quote.lines",
+      "result": "pass",
+      "detail": "CAT-HG-001 list_price 549 in data/firearm-store/records/sales/catalog.json; total 549."
+    },
+    {
+      "check": "quote acceptance: issued only when availability, compliance clear, and payment positive",
+      "target": "output.quote",
+      "result": "pass",
+      "detail": "reserved (T002), clear (T007), pending with accepted method (T004)."
+    },
+    {
+      "check": "quote acceptance: valid_until matches the reservation",
+      "target": "output.quote.valid_until",
+      "result": "pass",
+      "detail": "2026-11-12T23:18:07Z equals RES-0001 expires_at."
+    },
+    {
+      "check": "documentation-status contract rule: proceed only on clear",
+      "target": "T007 flag",
+      "result": "pass",
+      "detail": "Flag is clear; no compliance flag or needs-human-review to respect."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "No delivery requested: payment is pending, not paid; also a quotation request."
+    },
+    {
+      "check": "sale-completion / report-every-transaction",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "Sale not completed (not paid, not delivered), so no transaction-report requested."
+    },
+    {
+      "check": "case response acceptance",
+      "target": "case_response",
+      "result": "pass",
+      "detail": "Exactly one type (deliverable) with deliverable filled; nothing blocks and no information missing; statuses cite source tasks; background-check outcome labeled fictional."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Only state/sales.json changed; no reservation, compliance or finance status set by sales; sales side marked ready only with all three positive."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only the case folder, data/firearm-store/records/sales/catalog.json, and contract files read; no live service contacted."
+    }
+  ],
+  "summary": "Issued mock quote: Mockworks M9 Compact (CAT-HG-001, INV-0001) 549 USD cash, valid until 2026-11-12T23:18:07Z (RES-0001); compliance clear (fictional no-record), payment pending; deliverable case response sent to operator."
+}

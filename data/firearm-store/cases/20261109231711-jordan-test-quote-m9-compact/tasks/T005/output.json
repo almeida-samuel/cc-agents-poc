@@ -1,0 +1,37 @@
+{
+  "task_id": "T005",
+  "role": "documentation-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "status": "complete",
+    "form_id": "FORM-PURCHASE",
+    "requirements_applied": ["REQ-BASE", "REQ-FULL-AUTO", "FORM-PURCHASE", "full-auto-requires-address", "mock-data-only"],
+    "fields_checked": {
+      "customer.name": "Jordan Test",
+      "customer.id_document": "FAKE-ID-1001",
+      "customer.date_of_birth": "1985-04-12",
+      "items": [{"catalog_id": "CAT-HG-001", "name": "Mockworks M9 Compact", "category": "handgun", "fire_modes": ["semi-auto"]}],
+      "customer.address": "not required (no item has full-auto); not provided"
+    },
+    "missing": [],
+    "inconsistencies": [],
+    "notes": "No documents/ folder exists in the case; the check is against the customer information stated in request.md and the task input. All data is mock. This is a form-completeness check only, not a regulatory or eligibility determination."
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {"check": "mock-data-only", "target": "all data references", "result": "pass", "detail": "Only request.md, task input, records/compliance/requirements.json, records/compliance/forms.json and records/sales/catalog.json under data/firearm-store/ were read."},
+    {"check": "REQ-BASE required customer fields", "target": "customer.name, customer.id_document, customer.date_of_birth", "result": "pass", "detail": "All three present in request.md and task input."},
+    {"check": "FORM-PURCHASE fields", "target": "customer.name, customer.id_document, customer.date_of_birth, items", "result": "pass", "detail": "Every form field has a value from the case."},
+    {"check": "full-auto-requires-address", "target": "CAT-HG-001 (Mockworks M9 Compact)", "result": "pass", "detail": "fire_modes = [semi-auto]; no full-auto mode, so customer.address is not required."},
+    {"check": "consistency: customer details", "target": "request.md vs task input customer", "result": "pass", "detail": "Name, ID document and date of birth match between request.md and task input."},
+    {"check": "consistency: item", "target": "CAT-HG-001 vs request.md and catalog", "result": "pass", "detail": "Catalog CAT-HG-001 is 'Mockworks M9 Compact', category handgun, fire_modes [semi-auto], matching the request and task input."},
+    {"check": "acceptance: full-auto-requires-address checked for every item", "target": "output", "result": "pass", "detail": "1 of 1 items checked."},
+    {"check": "acceptance: complete only with no missing fields and no inconsistencies", "target": "output.status", "result": "pass", "detail": "missing = [], inconsistencies = [], status = complete."}
+  ],
+  "summary": "FORM-PURCHASE complete for Jordan Test: all REQ-BASE fields present and consistent; CAT-HG-001 is semi-auto only, so full-auto-requires-address does not require an address."
+}

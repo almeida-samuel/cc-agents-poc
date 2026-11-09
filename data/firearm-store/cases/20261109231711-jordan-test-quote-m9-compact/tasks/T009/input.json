@@ -1,0 +1,19 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T009",
+  "role": "sales-orchestrator",
+  "type": "resume",
+  "resumes": "T001 (entry task; your latest turn is T008, which sent the quote as the case response)",
+  "operator_answer": {
+    "ref": "human/HR-001.json",
+    "accepted_quote": true,
+    "payment": {
+      "method": "cash",
+      "amount": 549,
+      "currency": "USD",
+      "status_reported_by_operator": "paid"
+    },
+    "operator_note": "Continue: the customer accepted the quote and paid 549 USD in cash."
+  },
+  "instruction": "Resume turn after the operator answered the case response: continue the sale from here per your role spec, rules, and contracts."
+}

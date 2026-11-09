@@ -1,0 +1,48 @@
+{
+  "task_id": "T006",
+  "role": "government-background-check",
+  "status": "completed",
+  "output": {
+    "request_ref": "20261109231711-jordan-test-quote-m9-compact/background-check/1",
+    "outcome": "no-record",
+    "fictional": true
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "input-sufficient",
+      "target": "tasks/T006/input.json",
+      "result": "pass",
+      "detail": "Request includes request_ref and customer identifiers (name, id_document FAKE-ID-1001, date_of_birth)."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data/firearm-store/external/government-background-check/criminal-records.json",
+      "result": "pass",
+      "detail": "Result taken solely from the mock criminal-records file (itself marked fictional: true); no live service contacted and no store records or other case files read."
+    },
+    {
+      "check": "record-lookup",
+      "target": "FAKE-ID-1001",
+      "result": "pass",
+      "detail": "Exact match on id_document FAKE-ID-1001 in mock records with outcome no-record. Mock records are keyed by ID document only; name and date of birth are not held there, so they were not cross-checked."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "output.fictional",
+      "result": "pass",
+      "detail": "fictional == true; this is the outcome code only and not an eligibility determination."
+    },
+    {
+      "check": "acceptance: expected-output fields",
+      "target": "output",
+      "result": "pass",
+      "detail": "request_ref, outcome (valid enum value), and fictional are present; record_summary is left out because the outcome is not record-found."
+    }
+  ],
+  "summary": "Fictional background check for FAKE-ID-1001 (request 20261109231711-jordan-test-quote-m9-compact/background-check/1): outcome no-record, from mock records; not an eligibility determination."
+}

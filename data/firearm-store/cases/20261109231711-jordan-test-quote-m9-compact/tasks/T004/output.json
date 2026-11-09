@@ -1,0 +1,75 @@
+{
+  "task_id": "T004",
+  "role": "finance-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract": "payment-status",
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "payment_status": "pending",
+    "positive": true,
+    "payment_method": "cash",
+    "method_accepted": true,
+    "amount": 549,
+    "currency": "USD",
+    "installment_plan": null,
+    "note": "Mock only. Cash is an accepted method; status is pending until the customer pays. Pending with an accepted method is positive for a quote; delivery still requires status paid (rule delivery-requires-clearance).",
+    "applied_finance_change": {
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "record": "payment status",
+      "change": { "payment.status": { "from": null, "to": "pending" }, "payment.method": "cash", "amount": 549, "currency": "USD" },
+      "source": "payment-status request T004 (from T001 sales-orchestrator); data/firearm-store/records/finance/payment-methods.json"
+    }
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/finance.json",
+      "field": "payment.status",
+      "from": null,
+      "to": "pending",
+      "source": "T004 payment-status request; records/finance/payment-methods.json (cash accepted, status_before_payment pending)"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "payment-status contract input completeness",
+      "target": "T004/input.json",
+      "result": "pass",
+      "detail": "Case ID, price (549 USD), and payment method (cash) are present; no installment request."
+    },
+    {
+      "check": "payment method accepted",
+      "target": "data/firearm-store/records/finance/payment-methods.json",
+      "result": "pass",
+      "detail": "cash: accepted=true, status_before_payment=pending."
+    },
+    {
+      "check": "installment-limits",
+      "target": "T004 request",
+      "result": "pass",
+      "detail": "Not applicable: installment_request is null, no plan requested or approved."
+    },
+    {
+      "check": "report-every-transaction / ledger traceability",
+      "target": "data/firearm-store/records/finance/ledger.json",
+      "result": "pass",
+      "detail": "Quotation stage, no completed sale or purchase reported; no ledger entry made."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "T004 data references",
+      "result": "pass",
+      "detail": "All data comes from data/firearm-store/; no live payment service contacted."
+    },
+    {
+      "check": "authority",
+      "target": "payment status pending",
+      "result": "pass",
+      "detail": "Setting a case's mock payment status is within finance-orchestrator authority; no credit involved."
+    }
+  ],
+  "summary": "Payment status pending (mock): cash is an accepted method for 549 USD, so the status is positive for the quote. No installment plan and no ledger entry."
+}

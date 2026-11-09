@@ -1,0 +1,17 @@
+{
+  "description": "Mock reservations: item, case, created_at, expires_at (72 hours, rule reservation-expiry). Owner: inventory-orchestrator.",
+  "reservations": [
+    {
+      "reservation_id": "RES-0001",
+      "item_id": "INV-0001",
+      "catalog_id": "CAT-HG-001",
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "status": "delivered",
+      "created_at": "2026-11-09T23:18:07Z",
+      "expires_at": "2026-11-12T23:18:07Z",
+      "delivered_at": "2026-11-09T23:28:00Z",
+      "delivery_ref": "MOV-0002",
+      "source": "inventory-availability request T002 (from T001, sales-orchestrator); delivered per T012 (from T011, sales-orchestrator)"
+    }
+  ]
+}

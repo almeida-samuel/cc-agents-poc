@@ -1,0 +1,142 @@
+{
+  "task_id": "T016",
+  "role": "sales-orchestrator",
+  "status": "completed",
+  "output": {
+    "customer_request_record": {
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "request_type": "buy",
+      "customer": { "name": "Jordan Test", "id_document": "FAKE-ID-1001", "date_of_birth": "1985-04-12" },
+      "items": [ { "catalog_id": "CAT-HG-001", "quantity": 1 } ],
+      "payment_method": "cash"
+    },
+    "statuses": {
+      "availability": "delivered (INV-0001, RES-0001, MOV-0002 at 2026-11-09T23:28:00Z; T012)",
+      "compliance_flag": "clear (T007; background check outcome no-record, fictional)",
+      "payment_status": "paid (T010, 549 USD cash, 2026-11-09T23:24:50Z)"
+    },
+    "sale_completed": true,
+    "transaction_report": {
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "type": "sale",
+      "total": 549,
+      "currency": "USD",
+      "finance": { "outcome": "recorded", "ledger_entry": "LED-0001", "source_ref": "tasks/T014/output.json" },
+      "inventory": { "outcome": "recorded", "item": "INV-0001 sold", "source_ref": "tasks/T015/output.json" },
+      "status": "reported"
+    },
+    "sales_tasks_complete": true,
+    "case_can_close": true
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "contracts.transaction-report",
+      "from": { "status": "requested", "providers": { "finance-orchestrator": "requested", "inventory-orchestrator": "requested" } },
+      "to": { "status": "responded", "providers": { "finance-orchestrator": "recorded (LED-0001)", "inventory-orchestrator": "recorded (INV-0001 sold)" } },
+      "source": "tasks/T014/output.json, tasks/T015/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "transaction_reported",
+      "from": false,
+      "to": true,
+      "source": "tasks/T014/output.json, tasks/T015/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "sales_tasks_complete / case_response_sent / updated_by_task",
+      "from": "(none) / (none) / T013",
+      "to": "true / T016 / T016",
+      "source": "T016"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "entry_unit": "sales",
+    "type": "deliverable",
+    "summary": "Mock sale complete: Jordan Test paid 549 USD cash for the Mockworks M9 Compact (INV-0001, MOCK-SN-0001), and it was delivered. Finance and inventory have both recorded the sale.",
+    "deliverable": {
+      "kind": "completed-sale",
+      "quote_ref": "state/sales.json quote (accepted, human/HR-001.json)",
+      "lines": [ { "catalog_id": "CAT-HG-001", "item_id": "INV-0001", "serial": "MOCK-SN-0001", "price": 549 } ],
+      "total": 549,
+      "currency": "USD",
+      "payment": { "method": "cash", "status": "paid", "paid_at": "2026-11-09T23:24:50Z", "source_ref": "tasks/T010/output.json" },
+      "delivery": { "delivery_ref": "MOV-0002", "reservation_ref": "RES-0001", "delivered_at": "2026-11-09T23:28:00Z", "source_ref": "tasks/T012/output.json" },
+      "compliance": { "flag": "clear", "background_check_outcome": "no-record", "fictional": true, "source_ref": "tasks/T007/output.json" },
+      "transaction_report": {
+        "finance": "recorded, ledger entry LED-0001 (tasks/T014/output.json)",
+        "inventory": "recorded, INV-0001 marked sold (tasks/T015/output.json)"
+      },
+      "mock": true
+    },
+    "next_step": "Nothing more is needed from the operator. The sales side is done and the case can be closed."
+  },
+  "checks": [
+    {
+      "check": "transaction-report contract output validation (finance)",
+      "target": "tasks/T014/output.json",
+      "result": "pass",
+      "detail": "Contract transaction-report, case ID matches, type sale, outcome recorded (a defined outcome), total 549 USD matches the report sent in T013, ledger entry LED-0001 cited. Accepted."
+    },
+    {
+      "check": "transaction-report contract output validation (inventory)",
+      "target": "tasks/T015/output.json",
+      "result": "pass",
+      "detail": "Contract transaction-report, case ID matches, type sale, outcome recorded, item INV-0001 / MOCK-SN-0001 / CAT-HG-001 x1 at 549 USD matches the T013 report; INV-0001 changed reserved -> sold. Accepted."
+    },
+    {
+      "check": "conflict with other department outputs",
+      "target": "T014 vs T015 vs state/sales.json",
+      "result": "pass",
+      "detail": "Finance and inventory agree on the item, amount, payment, and delivery references, and match the sales state. No conflict."
+    },
+    {
+      "check": "report-every-transaction",
+      "target": "completed sale",
+      "result": "pass",
+      "detail": "Both finance-orchestrator (T014) and inventory-orchestrator (T015) returned recorded, so the sale counts as reported and the case may close."
+    },
+    {
+      "check": "sale-completion",
+      "target": "state/sales.json",
+      "result": "pass",
+      "detail": "Payment paid (T010) and order delivered (T012) before the sale was reported (T013)."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "MOV-0002",
+      "result": "pass",
+      "detail": "The delivery was requested in T011 only after payment was paid (T010) and compliance was clear (T007), under reservation RES-0001 for this case. Nothing was delivered this turn."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "case_response",
+      "result": "pass",
+      "detail": "The background check appears only as outcome code no-record with fictional: true. No eligibility statement is made."
+    },
+    {
+      "check": "case response acceptance",
+      "target": "case_response",
+      "result": "pass",
+      "detail": "Exactly one type (deliverable) with the deliverable filled. Every reference cites its source task. Nothing blocks and no information is missing."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Only state/sales.json changed: contract responses recorded and sales tasks marked complete. No inventory, finance, or compliance status was set."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files under data/firearm-store/ were used. No live services."
+    }
+  ],
+  "summary": "Finance (LED-0001) and inventory (INV-0001 sold) both recorded the sale, so it counts as reported. Deliverable case response sent with the completed mock sale (549 USD cash, delivered MOV-0002); the case can close."
+}

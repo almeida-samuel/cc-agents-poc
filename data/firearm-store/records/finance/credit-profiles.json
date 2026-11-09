@@ -1,0 +1,9 @@
+{
+  "description": "Mock customer financial profiles, keyed by fake ID document. Credit score scale 300-850. Owner: finance-orchestrator.",
+  "profiles": [
+    { "id_document": "FAKE-ID-1001", "credit_score": 720, "annual_income": 80000, "existing_debt": 5000 },
+    { "id_document": "FAKE-ID-1002", "credit_score": 690, "annual_income": 55000, "existing_debt": 12000 },
+    { "id_document": "FAKE-ID-1003", "credit_score": 580, "annual_income": 42000, "existing_debt": 18000 },
+    { "id_document": "FAKE-ID-1004", "credit_score": 760, "annual_income": 110000, "existing_debt": 2000 }
+  ]
+}

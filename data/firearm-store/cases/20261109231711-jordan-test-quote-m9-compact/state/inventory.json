@@ -1,0 +1,70 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "unit": "inventory",
+  "updated_by_task": "T015",
+  "requests": [
+    {
+      "task_id": "T002",
+      "contract": "inventory-availability",
+      "action": "reserve",
+      "requested_by": "T001 (sales-orchestrator)",
+      "items": [
+        {
+          "catalog_id": "CAT-HG-001",
+          "quantity": 1,
+          "outcome": "reserved",
+          "item_id": "INV-0001",
+          "serial": "MOCK-SN-0001",
+          "reservation_id": "RES-0001",
+          "reserved_at": "2026-11-09T23:18:07Z",
+          "expires_at": "2026-11-12T23:18:07Z"
+        }
+      ]
+    },
+    {
+      "task_id": "T012",
+      "contract": "inventory-availability",
+      "action": "deliver",
+      "requested_by": "T011 (sales-orchestrator)",
+      "items": [
+        {
+          "catalog_id": "CAT-HG-001",
+          "quantity": 1,
+          "outcome": "delivered",
+          "item_id": "INV-0001",
+          "serial": "MOCK-SN-0001",
+          "reservation_id": "RES-0001",
+          "delivery_ref": "MOV-0002",
+          "delivered_at": "2026-11-09T23:28:00Z"
+        }
+      ]
+    }
+  ],
+  "reservations": ["RES-0001"],
+  "deliveries": [
+    {
+      "delivery_ref": "MOV-0002",
+      "item_id": "INV-0001",
+      "reservation_id": "RES-0001",
+      "delivered_at": "2026-11-09T23:28:00Z",
+      "source": "T012"
+    }
+  ],
+  "transaction_reports": [
+    {
+      "task_id": "T015",
+      "contract": "transaction-report",
+      "type": "sale",
+      "requested_by": "T013 (sales-orchestrator)",
+      "items": [
+        { "catalog_id": "CAT-HG-001", "item_id": "INV-0001", "serial": "MOCK-SN-0001", "quantity": 1, "amount": 549, "status_from": "reserved", "status_to": "sold" }
+      ],
+      "total": 549,
+      "currency": "USD",
+      "delivery_ref": "MOV-0002",
+      "reservation_ref": "RES-0001",
+      "outcome": "recorded"
+    }
+  ],
+  "pending": null
+}

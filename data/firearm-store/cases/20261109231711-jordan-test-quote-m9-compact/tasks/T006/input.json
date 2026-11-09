@@ -1,0 +1,19 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T006",
+  "role": "government-background-check",
+  "type": "contract",
+  "contract": "background-check",
+  "attempt": 1,
+  "requested_by": "T003 (compliance-orchestrator)",
+  "input": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "request_ref": "20261109231711-jordan-test-quote-m9-compact/background-check/1",
+    "customer": {
+      "name": "Jordan Test",
+      "id_document": "FAKE-ID-1001",
+      "date_of_birth": "1985-04-12"
+    },
+    "instruction": "Return a fictional background-check result (no-record, record-found, delayed, or cannot-determine) from your mock criminal records, with fictional: true."
+  }
+}

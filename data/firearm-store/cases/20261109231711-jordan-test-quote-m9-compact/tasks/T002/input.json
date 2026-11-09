@@ -1,0 +1,20 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T002",
+  "role": "inventory-orchestrator",
+  "type": "contract",
+  "contract": "inventory-availability",
+  "attempt": 1,
+  "requested_by": "T001 (sales-orchestrator)",
+  "input": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "items": [
+      {
+        "catalog_id": "CAT-HG-001",
+        "quantity": 1
+      }
+    ],
+    "action": "reserve",
+    "note": "Quotation request. Reserve one released unit for this case if available; return per-item status and the reservation reference with its expiry (72 hours, rule reservation-expiry) so the quote's valid_until can match it."
+  }
+}

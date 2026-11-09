@@ -1,0 +1,36 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "unit": "compliance",
+  "contract_served": {
+    "contract": "documentation-status",
+    "task_id": "T003",
+    "resumed_by": "T007",
+    "requested_by": "T001 (sales-orchestrator)"
+  },
+  "customer": {
+    "name": "Jordan Test",
+    "id_document": "FAKE-ID-1001",
+    "date_of_birth": "1985-04-12"
+  },
+  "items": [
+    { "catalog_id": "CAT-HG-001", "category": "handgun", "fire_modes": ["semi-auto"] }
+  ],
+  "requirements_applicable": ["REQ-BASE"],
+  "documentation_status": "complete",
+  "documentation_source": "tasks/T005/output.json",
+  "information_needed": [],
+  "background_check": {
+    "status": "completed",
+    "request_ref": "20261109231711-jordan-test-quote-m9-compact/background-check/1",
+    "outcome": "no-record",
+    "fictional": true,
+    "source": "tasks/T006/output.json"
+  },
+  "flag": "clear",
+  "human_review": null,
+  "subtasks_requested": [
+    { "task_id": "T005", "role": "documentation-specialist", "type": "work", "purpose": "completeness report", "validation": "accepted" },
+    { "task_id": "T006", "role": "government-background-check", "type": "contract", "contract": "background-check", "purpose": "fictional background check", "validation": "accepted" }
+  ],
+  "updated_by_task": "T007"
+}

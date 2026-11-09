@@ -1,0 +1,17 @@
+{
+  "request_id": "HR-001",
+  "kind": "case-response-answer",
+  "addressed_to": "operator",
+  "about": "case response in tasks/T008/output.json",
+  "response": {
+    "accepted_quote": true,
+    "payment": {
+      "method": "cash",
+      "amount": 549,
+      "currency": "USD",
+      "status_reported_by_operator": "paid"
+    },
+    "operator_note": "Continue: the customer accepted the quote and paid 549 USD in cash."
+  },
+  "answered_at": "2026-11-09T23:24:50Z"
+}

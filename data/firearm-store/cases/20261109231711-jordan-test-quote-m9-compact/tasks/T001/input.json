@@ -1,0 +1,9 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T001",
+  "role": "sales-orchestrator",
+  "type": "work",
+  "attempt": 1,
+  "instruction": "Entry task: handle the operator's case request in request.md (quotation). Plan and delegate as your role spec and guides describe.",
+  "request_ref": "request.md"
+}

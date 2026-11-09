@@ -1,0 +1,143 @@
+{
+  "task_id": "T009",
+  "role": "sales-orchestrator",
+  "status": "completed",
+  "output": {
+    "customer_request_record": {
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "request_type": "buy",
+      "customer": {
+        "name": "Jordan Test",
+        "id_document": "FAKE-ID-1001",
+        "date_of_birth": "1985-04-12"
+      },
+      "items": [ { "catalog_id": "CAT-HG-001", "quantity": 1 } ],
+      "payment_method": "cash"
+    },
+    "quote_accepted": { "total": 549, "currency": "USD", "reservation_ref": "RES-0001", "valid_until": "2026-11-12T23:18:07Z", "source": "human/HR-001.json" },
+    "progress": "Operator reports the customer accepted the quote and paid 549 USD cash. Sales does not set payment status; finance is asked to record the payment. Once finance returns paid, sales asks inventory to deliver RES-0001 (compliance clear), then reports the completed sale to finance and inventory.",
+    "delivery_requested": false,
+    "transaction_report": null
+  },
+  "new_tasks": [
+    {
+      "role": "finance-orchestrator",
+      "type": "contract",
+      "contract": "payment-status",
+      "input": {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "price": 549,
+        "currency": "USD",
+        "payment_method": "cash",
+        "installment_request": null,
+        "operator_reported_payment": {
+          "method": "cash",
+          "amount": 549,
+          "currency": "USD",
+          "status_reported_by_operator": "paid",
+          "source_ref": "human/HR-001.json",
+          "answered_at": "2026-11-09T23:24:50Z"
+        },
+        "previous_response_ref": "tasks/T004/output.json (pending, cash accepted)",
+        "note": "Customer accepted quote (CAT-HG-001 / INV-0001, 549 USD, RES-0001). Operator reports a cash payment of 549 USD received. Please record and return the mock payment status for this case. Sales needs status paid before requesting delivery (delivery-requires-clearance)."
+      }
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "customer_request.request_type",
+      "from": "quotation",
+      "to": "buy",
+      "source": "human/HR-001.json (customer accepted the quote)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "quote.accepted",
+      "from": null,
+      "to": true,
+      "source": "human/HR-001.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "operator_reported_payment",
+      "from": null,
+      "to": { "method": "cash", "amount": 549, "currency": "USD", "status_reported_by_operator": "paid" },
+      "source": "human/HR-001.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "contracts.payment-status",
+      "from": { "status": "responded", "response": "pending (T004)" },
+      "to": { "status": "requested", "response": null, "previous_response": "pending (T004)" },
+      "source": "T009 new payment-status request"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/sales.json",
+      "field": "delivery.reason",
+      "from": "Quotation only; payment is pending, not paid (delivery-requires-clearance).",
+      "to": "Waiting for finance to confirm payment status paid (delivery-requires-clearance).",
+      "source": "T009"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "operator answer validation",
+      "target": "human/HR-001.json, tasks/T009/input.json",
+      "result": "pass",
+      "detail": "accepted_quote true; payment cash 549 USD matches quote total 549 USD and payment method cash. Inputs consistent."
+    },
+    {
+      "check": "authority: payment status is owned by finance",
+      "target": "operator_reported_payment",
+      "result": "pass",
+      "detail": "Operator-reported 'paid' is recorded as a report only; sales does not set the payment status. Requested finance via payment-status contract."
+    },
+    {
+      "check": "reservation still valid (quote valid_until)",
+      "target": "RES-0001",
+      "result": "pass",
+      "detail": "Quote accepted at 2026-11-09T23:24:50Z, before valid_until 2026-11-12T23:18:07Z."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "Reserved for case (RES-0001, T002) and compliance clear (T007), but payment status from finance is still pending (T004). No delivery requested until finance returns paid; delivery not chained via depends_on because the outcome must be validated first."
+    },
+    {
+      "check": "documentation-status: compliance flag respected",
+      "target": "tasks/T007/output.json",
+      "result": "pass",
+      "detail": "Flag clear; no flag or needs-human-review to respect."
+    },
+    {
+      "check": "sale-completion / report-every-transaction",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "Sale not completed (payment not confirmed paid by finance, order not delivered); no transaction-report requested yet."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "state/sales.json",
+      "result": "pass",
+      "detail": "Background check kept as outcome code no-record with fictional: true; no eligibility statement."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case folder files under data/firearm-store/ used; no live payment service contacted."
+    },
+    {
+      "check": "case response",
+      "target": "case_response",
+      "result": "pass",
+      "detail": "No case response this turn: the case continues internally; nothing blocks and no information is needed from the operator."
+    }
+  ],
+  "summary": "Quote accepted (operator, HR-001); request type now buy. Asked finance (payment-status) to record the 549 USD cash payment; delivery of RES-0001 waits for finance to confirm paid."
+}

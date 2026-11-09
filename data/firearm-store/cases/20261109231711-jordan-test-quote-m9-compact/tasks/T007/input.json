@@ -1,0 +1,23 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T007",
+  "role": "compliance-orchestrator",
+  "type": "resume",
+  "contract": "documentation-status",
+  "resumes": "T003 (your earlier turn; see tasks/T003/output.json and input.json)",
+  "finished_subtasks": [
+    {
+      "task_id": "T005",
+      "role": "documentation-specialist",
+      "status": "completed",
+      "output": "tasks/T005/output.json"
+    },
+    {
+      "task_id": "T006",
+      "role": "government-background-check",
+      "status": "completed",
+      "output": "tasks/T006/output.json"
+    }
+  ],
+  "instruction": "Resume turn: validate the finished subtasks, apply accepted changes, then continue or finish your original task."
+}

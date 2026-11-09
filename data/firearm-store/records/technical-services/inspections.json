@@ -1,0 +1,19 @@
+{
+  "description": "Mock inspection results and dispositions. Owner: technical-services-orchestrator. Starting stock: every item that is or was sellable has a pass result and a release disposition (rule release-requires-pass). INV-0007 has none yet: it is on hold awaiting inspection.",
+  "inspection_results": [
+    { "result_id": "INS-0001", "item_id": "INV-0001", "outcome": "pass", "inspected_by": "inspection-technician (mock)", "inspected_at": "2026-10-20T14:00:00Z", "notes": "Mock: new item, factory condition." },
+    { "result_id": "INS-0002", "item_id": "INV-0002", "outcome": "pass", "inspected_by": "inspection-technician (mock)", "inspected_at": "2026-10-20T14:20:00Z", "notes": "Mock: new item, factory condition." },
+    { "result_id": "INS-0003", "item_id": "INV-0003", "outcome": "pass", "inspected_by": "inspection-technician (mock)", "inspected_at": "2026-10-15T10:00:00Z", "notes": "Mock: new item, factory condition." },
+    { "result_id": "INS-0004", "item_id": "INV-0004", "outcome": "pass", "inspected_by": "inspection-technician (mock)", "inspected_at": "2026-10-21T09:30:00Z", "notes": "Mock: new item, factory condition." },
+    { "result_id": "INS-0005", "item_id": "INV-0005", "outcome": "pass", "inspected_by": "inspection-technician (mock)", "inspected_at": "2026-10-21T10:00:00Z", "notes": "Mock: new item, factory condition." },
+    { "result_id": "INS-0006", "item_id": "INV-0006", "outcome": "pass", "inspected_by": "inspection-technician (mock)", "inspected_at": "2026-10-22T11:15:00Z", "notes": "Mock: new item, factory condition." }
+  ],
+  "dispositions": [
+    { "disposition_id": "DSP-0001", "item_id": "INV-0001", "disposition": "release", "inspection_ref": "INS-0001", "at": "2026-10-20T15:00:00Z" },
+    { "disposition_id": "DSP-0002", "item_id": "INV-0002", "disposition": "release", "inspection_ref": "INS-0002", "at": "2026-10-20T15:00:00Z" },
+    { "disposition_id": "DSP-0003", "item_id": "INV-0003", "disposition": "release", "inspection_ref": "INS-0003", "at": "2026-10-15T11:00:00Z" },
+    { "disposition_id": "DSP-0004", "item_id": "INV-0004", "disposition": "release", "inspection_ref": "INS-0004", "at": "2026-10-21T12:00:00Z" },
+    { "disposition_id": "DSP-0005", "item_id": "INV-0005", "disposition": "release", "inspection_ref": "INS-0005", "at": "2026-10-21T12:00:00Z" },
+    { "disposition_id": "DSP-0006", "item_id": "INV-0006", "disposition": "release", "inspection_ref": "INS-0006", "at": "2026-10-22T12:00:00Z" }
+  ]
+}

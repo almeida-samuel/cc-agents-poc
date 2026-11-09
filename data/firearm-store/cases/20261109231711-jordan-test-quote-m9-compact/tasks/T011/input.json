@@ -1,0 +1,17 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T011",
+  "role": "sales-orchestrator",
+  "type": "resume",
+  "contract": null,
+  "resumes": "T009 (your earlier turn; see tasks/T009/output.json and input.json)",
+  "finished_subtasks": [
+    {
+      "task_id": "T010",
+      "role": "finance-orchestrator",
+      "status": "completed",
+      "output": "tasks/T010/output.json"
+    }
+  ],
+  "instruction": "Resume turn: validate the finished subtasks, apply accepted changes, then continue or finish your original task."
+}

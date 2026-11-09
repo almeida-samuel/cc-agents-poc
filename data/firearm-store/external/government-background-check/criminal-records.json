@@ -1,0 +1,10 @@
+{
+  "description": "FICTIONAL criminal records. Read only by government-background-check. A request matches a record only when the ID document, name, and date of birth all agree. Identities not listed here, or listed with a different name or date of birth, return cannot-determine.",
+  "fictional": true,
+  "records": [
+    { "id_document": "FAKE-ID-1001", "name": "Jordan Test", "date_of_birth": "1985-04-12", "outcome": "no-record" },
+    { "id_document": "FAKE-ID-1002", "name": "Casey Sample", "date_of_birth": "1990-09-30", "outcome": "record-found", "record_summary": "Fictional record: mock felony conviction, 2019." },
+    { "id_document": "FAKE-ID-1003", "name": "Morgan Mock", "date_of_birth": "1978-01-05", "outcome": "no-record" },
+    { "id_document": "FAKE-ID-1004", "name": "Riley Demo", "date_of_birth": "1995-07-21", "outcome": "delayed", "note": "Fictional: verification backlog." }
+  ]
+}

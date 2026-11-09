@@ -1,0 +1,82 @@
+{
+  "task_id": "T010",
+  "role": "finance-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract": "payment-status",
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "payment_status": "paid",
+    "positive": true,
+    "payment_method": "cash",
+    "method_accepted": true,
+    "amount": 549,
+    "currency": "USD",
+    "paid_at": "2026-11-09T23:24:50Z",
+    "installment_plan": null,
+    "note": "Mock only. The operator reported a cash payment of 549 USD (human/HR-001.json), which matches the quoted price and the accepted method, so the status is now paid. That meets the payment condition of delivery-requires-clearance. No ledger entry yet: finance records the sale in the ledger when sales sends the transaction-report after delivery (sale-completion, report-every-transaction).",
+    "applied_finance_change": {
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "record": "payment status",
+      "change": { "payment.status": { "from": "pending", "to": "paid" }, "payment.method": "cash", "amount": 549, "currency": "USD", "paid_at": "2026-11-09T23:24:50Z" },
+      "source": "payment-status request T010 (from T009 sales-orchestrator); operator-reported payment human/HR-001.json"
+    }
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/finance.json",
+      "field": "payment.status",
+      "from": "pending",
+      "to": "paid",
+      "source": "T010 payment-status request; human/HR-001.json (operator reports 549 USD cash received at 2026-11-09T23:24:50Z)"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "payment-status contract input completeness",
+      "target": "T010/input.json",
+      "result": "pass",
+      "detail": "Case ID, price (549 USD), and payment method (cash) are present. Installment request is null. The operator-reported payment cites human/HR-001.json."
+    },
+    {
+      "check": "operator-reported payment matches the case",
+      "target": "human/HR-001.json vs state/finance.json",
+      "result": "pass",
+      "detail": "HR-001 reports cash, 549 USD, paid. This matches the method (cash), amount (549), and currency (USD) recorded as pending in T004. No discrepancy."
+    },
+    {
+      "check": "payment method accepted",
+      "target": "data/firearm-store/records/finance/payment-methods.json",
+      "result": "pass",
+      "detail": "cash: accepted=true."
+    },
+    {
+      "check": "installment-limits",
+      "target": "T010 request",
+      "result": "pass",
+      "detail": "Not applicable: no installment plan requested or approved, and no credit extended."
+    },
+    {
+      "check": "report-every-transaction / ledger traceability",
+      "target": "data/firearm-store/records/finance/ledger.json",
+      "result": "pass",
+      "detail": "No transaction-report received: the sale is not completed because it is not delivered yet. No ledger entry made, so every ledger entry still traces to a transaction report."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "T010 data references",
+      "result": "pass",
+      "detail": "The payment is an operator-reported mock event recorded under data/firearm-store/. No live payment service contacted."
+    },
+    {
+      "check": "authority",
+      "target": "payment status paid",
+      "result": "pass",
+      "detail": "Setting a case's mock payment status is within finance-orchestrator authority. No credit involved, and no conflict with other units."
+    }
+  ],
+  "summary": "Payment status paid (mock): the operator-reported 549 USD cash payment (HR-001) is recorded and changes the status from pending to paid. No installment plan; no ledger entry until the transaction-report."
+}

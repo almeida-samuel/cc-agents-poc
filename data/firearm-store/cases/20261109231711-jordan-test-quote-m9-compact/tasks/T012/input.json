@@ -1,0 +1,38 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T012",
+  "role": "inventory-orchestrator",
+  "type": "contract",
+  "contract": "inventory-availability",
+  "attempt": 1,
+  "requested_by": "T011 (sales-orchestrator)",
+  "input": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "action": "deliver",
+    "items": [
+      {
+        "catalog_id": "CAT-HG-001",
+        "item_id": "INV-0001",
+        "quantity": 1,
+        "reservation_ref": "RES-0001"
+      }
+    ],
+    "clearance": {
+      "reservation": {
+        "ref": "RES-0001",
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "expires_at": "2026-11-12T23:18:07Z",
+        "source_ref": "tasks/T002/output.json"
+      },
+      "compliance_flag": {
+        "value": "clear",
+        "source_ref": "tasks/T007/output.json"
+      },
+      "payment_status": {
+        "value": "paid",
+        "source_ref": "tasks/T010/output.json"
+      }
+    },
+    "note": "Customer accepted the quote (human/HR-001.json) and finance confirmed payment paid. Please deliver the reserved item and return the delivery reference (rule delivery-requires-clearance)."
+  }
+}

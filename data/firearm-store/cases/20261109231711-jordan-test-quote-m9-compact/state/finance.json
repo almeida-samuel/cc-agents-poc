@@ -1,0 +1,25 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "unit": "finance",
+  "mock": true,
+  "payment": {
+    "status": "paid",
+    "method": "cash",
+    "method_accepted": true,
+    "amount": 549,
+    "currency": "USD",
+    "paid_at": "2026-11-09T23:24:50Z",
+    "source": "T010 payment-status request (from T009 sales-orchestrator); operator-reported mock cash payment in human/HR-001.json",
+    "history": [
+      { "status": "pending", "task": "T004", "source": "records/finance/payment-methods.json (cash: accepted, status_before_payment=pending)" },
+      { "status": "paid", "task": "T010", "source": "human/HR-001.json (operator reports 549 USD cash received, 2026-11-09T23:24:50Z)" }
+    ]
+  },
+  "installment_plan": null,
+  "ledger_entries": ["LED-0001"],
+  "transaction_reports": [
+    { "task": "T014", "type": "sale", "outcome": "recorded", "ledger_entry": "LED-0001", "total": 549, "currency": "USD" }
+  ],
+  "ledger_note": "Sale recorded in the mock ledger as LED-0001 from transaction-report T014 (paid T010, delivered T012/MOV-0002).",
+  "updated_by_task": "T014"
+}

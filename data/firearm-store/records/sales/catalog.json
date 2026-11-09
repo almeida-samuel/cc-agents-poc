@@ -1,0 +1,53 @@
+{
+  "description": "Mock catalog. Fictional products and prices (USD). Owner: sales-orchestrator.",
+  "items": [
+    {
+      "catalog_id": "CAT-HG-001",
+      "name": "Mockworks M9 Compact",
+      "category": "handgun",
+      "caliber": "9mm",
+      "fire_modes": ["semi-auto"],
+      "list_price": 549
+    },
+    {
+      "catalog_id": "CAT-HG-002",
+      "name": "Mockworks P45 Full Size",
+      "category": "handgun",
+      "caliber": ".45 ACP",
+      "fire_modes": ["semi-auto"],
+      "list_price": 689
+    },
+    {
+      "catalog_id": "CAT-HG-003",
+      "name": "Mockworks MX9 Select-Fire",
+      "category": "handgun",
+      "caliber": "9mm",
+      "fire_modes": ["semi-auto", "full-auto"],
+      "list_price": 2450
+    },
+    {
+      "catalog_id": "CAT-RF-001",
+      "name": "Mockworks R15 Carbine",
+      "category": "rifle",
+      "caliber": "5.56mm",
+      "fire_modes": ["semi-auto"],
+      "list_price": 1199
+    },
+    {
+      "catalog_id": "CAT-RF-002",
+      "name": "Mockworks AR Select",
+      "category": "rifle",
+      "caliber": "5.56mm",
+      "fire_modes": ["semi-auto", "burst", "full-auto"],
+      "list_price": 7800
+    },
+    {
+      "catalog_id": "CAT-SG-001",
+      "name": "Mockworks Field 12",
+      "category": "shotgun",
+      "caliber": "12 gauge",
+      "fire_modes": ["pump-action"],
+      "list_price": 449
+    }
+  ]
+}

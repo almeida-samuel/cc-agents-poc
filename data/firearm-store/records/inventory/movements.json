@@ -1,0 +1,7 @@
+{
+  "description": "Mock intake, movement, and delivery records. Owner: inventory-orchestrator.",
+  "movements": [
+    { "movement_id": "MOV-0001", "item_id": "INV-0007", "type": "intake", "from": "seller", "to": "receiving", "at": "2026-11-02T15:00:00Z", "note": "Used item received; on hold until technical services releases it (rule received-items-unavailable)." },
+    { "movement_id": "MOV-0002", "item_id": "INV-0001", "type": "delivery", "from": "showroom", "to": "customer (case 20261109231711-jordan-test-quote-m9-compact)", "at": "2026-11-09T23:28:00Z", "reservation_id": "RES-0001", "case_id": "20261109231711-jordan-test-quote-m9-compact", "source": "inventory-availability deliver request T012 (from T011, sales-orchestrator); clearance: RES-0001 (T002), compliance clear (T007), payment paid (T010)", "note": "Mock delivery. Item status stays reserved until the sale transaction-report marks it sold." }
+  ]
+}

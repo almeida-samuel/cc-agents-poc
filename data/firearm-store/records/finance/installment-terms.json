@@ -1,0 +1,8 @@
+{
+  "description": "Mock installment plans: the only plans that may be offered (rule installment-limits). Owner: finance-orchestrator.",
+  "plans": [
+    { "plan_id": "PLAN-3", "months": 3, "annual_interest_rate": 0.00 },
+    { "plan_id": "PLAN-6", "months": 6, "annual_interest_rate": 0.05 },
+    { "plan_id": "PLAN-12", "months": 12, "annual_interest_rate": 0.10 }
+  ]
+}

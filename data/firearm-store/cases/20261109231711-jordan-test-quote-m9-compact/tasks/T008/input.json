@@ -1,0 +1,35 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T008",
+  "role": "sales-orchestrator",
+  "type": "resume",
+  "contract": null,
+  "resumes": "T001 (your earlier turn; see tasks/T001/output.json and input.json)",
+  "finished_subtasks": [
+    {
+      "task_id": "T002",
+      "role": "inventory-orchestrator",
+      "status": "completed",
+      "output": "tasks/T002/output.json"
+    },
+    {
+      "task_id": "T003",
+      "role": "compliance-orchestrator",
+      "status": "completed",
+      "output": "tasks/T003/output.json"
+    },
+    {
+      "task_id": "T004",
+      "role": "finance-orchestrator",
+      "status": "completed",
+      "output": "tasks/T004/output.json"
+    },
+    {
+      "task_id": "T007",
+      "role": "compliance-orchestrator",
+      "status": "completed",
+      "output": "tasks/T007/output.json"
+    }
+  ],
+  "instruction": "Resume turn: validate the finished subtasks, apply accepted changes, then continue or finish your original task."
+}

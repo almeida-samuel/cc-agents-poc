@@ -1,0 +1,26 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T010",
+  "role": "finance-orchestrator",
+  "type": "contract",
+  "contract": "payment-status",
+  "attempt": 1,
+  "requested_by": "T009 (sales-orchestrator)",
+  "input": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "price": 549,
+    "currency": "USD",
+    "payment_method": "cash",
+    "installment_request": null,
+    "operator_reported_payment": {
+      "method": "cash",
+      "amount": 549,
+      "currency": "USD",
+      "status_reported_by_operator": "paid",
+      "source_ref": "human/HR-001.json",
+      "answered_at": "2026-11-09T23:24:50Z"
+    },
+    "previous_response_ref": "tasks/T004/output.json (pending, cash accepted)",
+    "note": "Customer accepted quote (CAT-HG-001 / INV-0001, 549 USD, RES-0001). Operator reports a cash payment of 549 USD received. Please record and return the mock payment status for this case. Sales needs status paid before requesting delivery (delivery-requires-clearance)."
+  }
+}

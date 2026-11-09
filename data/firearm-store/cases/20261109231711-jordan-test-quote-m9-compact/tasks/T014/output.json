@@ -1,0 +1,100 @@
+{
+  "task_id": "T014",
+  "role": "finance-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract": "transaction-report",
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "outcome": "recorded",
+    "type": "sale",
+    "ledger_entry": "LED-0001",
+    "total": 549,
+    "currency": "USD",
+    "note": "Mock only. The completed sale of INV-0001 (MOCK-SN-0001, CAT-HG-001) to Jordan Test for 549 USD cash is in the mock ledger as LED-0001. Under report-every-transaction, the sale counts as reported only after inventory (T015) also records it.",
+    "applied_finance_change": {
+      "case_id": "20261109231711-jordan-test-quote-m9-compact",
+      "record": "ledger entry",
+      "change": {
+        "ledger.entries[LED-0001]": { "from": null, "to": "sale; INV-0001 x1; 549 USD; cash paid 2026-11-09T23:24:50Z; delivered MOV-0002 2026-11-09T23:28:00Z; customer FAKE-ID-1001" }
+      },
+      "source": "transaction-report T014 (from T013 sales-orchestrator)"
+    }
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/records/finance/ledger.json",
+      "field": "entries[LED-0001]",
+      "from": null,
+      "to": "sale entry for case 20261109231711-jordan-test-quote-m9-compact, INV-0001, 549 USD cash",
+      "source": "transaction-report T014"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/finance.json",
+      "field": "ledger_entries / transaction_reports",
+      "from": "[] / (none)",
+      "to": "[LED-0001] / [T014 sale recorded]",
+      "source": "transaction-report T014"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "transaction-report input completeness",
+      "target": "tasks/T014/input.json",
+      "result": "pass",
+      "detail": "The input has the case ID, type sale, the item with quantity and amount, the total and currency, and the counterparty reference (customer FAKE-ID-1001)."
+    },
+    {
+      "check": "contract rule: sale reported only when paid and delivered",
+      "target": "tasks/T010/output.json, tasks/T012/output.json",
+      "result": "pass",
+      "detail": "T010 shows payment_status paid (cash 549 USD, 2026-11-09T23:24:50Z). T012 shows INV-0001 delivered as MOV-0002 under RES-0001 at 2026-11-09T23:28:00Z."
+    },
+    {
+      "check": "report consistency with finance records",
+      "target": "state/finance.json vs T014 input",
+      "result": "pass",
+      "detail": "The method (cash), amount (549), currency (USD), and paid_at in the report match finance's recorded payment. The item total (1 x 549) equals the report total. No mismatch."
+    },
+    {
+      "check": "duplicate ledger entry",
+      "target": "data/firearm-store/records/finance/ledger.json",
+      "result": "pass",
+      "detail": "The ledger had no entries before, so this case is not recorded twice."
+    },
+    {
+      "check": "Applied Finance Change acceptance: every ledger entry traces to a transaction report",
+      "target": "ledger LED-0001",
+      "result": "pass",
+      "detail": "LED-0001 cites transaction-report T014 as its source."
+    },
+    {
+      "check": "installment-limits",
+      "target": "T014",
+      "result": "pass",
+      "detail": "Not applicable: this is a cash sale with no installment plan and no credit extended."
+    },
+    {
+      "check": "report-every-transaction",
+      "target": "case sale",
+      "result": "pass",
+      "detail": "Finance has recorded the sale. Inventory's recording (T015) is still needed before the transaction counts as reported."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files and data/firearm-store/records/finance/ledger.json were used. This is a mock ledger entry; no live service was contacted."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Recording a sale that sales reported is within finance-orchestrator authority. Only finance records and state/finance.json changed."
+    }
+  ],
+  "summary": "Transaction-report recorded (mock): completed sale of INV-0001 for 549 USD cash is ledger entry LED-0001; inventory's recording (T015) is still needed for the sale to count as reported."
+}

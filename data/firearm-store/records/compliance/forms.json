@@ -1,0 +1,13 @@
+{
+  "description": "Mock form definitions. A form is complete when every field has a value from the case. Owner: compliance-orchestrator.",
+  "forms": [
+    {
+      "form_id": "FORM-PURCHASE",
+      "name": "Mock purchase form",
+      "fields": ["customer.name", "customer.id_document", "customer.date_of_birth", "items"],
+      "conditional_fields": [
+        { "field": "customer.address", "when": "any item's fire_modes include full-auto" }
+      ]
+    }
+  ]
+}

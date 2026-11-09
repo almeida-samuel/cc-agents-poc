@@ -1,0 +1,166 @@
+{
+  "task_id": "T012",
+  "role": "inventory-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract": "inventory-availability",
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "action": "deliver",
+    "items": [
+      {
+        "catalog_id": "CAT-HG-001",
+        "item_id": "INV-0001",
+        "serial": "MOCK-SN-0001",
+        "quantity_requested": 1,
+        "status": "delivered",
+        "reservation_ref": "RES-0001",
+        "delivery_ref": "MOV-0002",
+        "delivered_at": "2026-11-09T23:28:00Z",
+        "note": "Mock delivery recorded as movement MOV-0002. INV-0001 stays 'reserved' (location delivered) until the sale transaction-report arrives, when inventory marks it 'sold' (report-every-transaction)."
+      }
+    ],
+    "applied_inventory_changes": [
+      {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "record": "MOV-0002",
+        "change": { "field": "(record created)", "old": null, "new": "delivery movement of INV-0001 from showroom to customer, 2026-11-09T23:28:00Z, under RES-0001" },
+        "source": "inventory-availability deliver request T012 (from T011 sales-orchestrator); clearance T002, T007, T010"
+      },
+      {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "record": "INV-0001",
+        "change": { "field": "location", "old": "showroom", "new": "delivered" },
+        "source": "inventory-availability deliver request T012 (from T011 sales-orchestrator)"
+      },
+      {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "record": "INV-0001",
+        "change": { "field": "delivery_ref", "old": null, "new": "MOV-0002" },
+        "source": "inventory-availability deliver request T012 (from T011 sales-orchestrator)"
+      },
+      {
+        "case_id": "20261109231711-jordan-test-quote-m9-compact",
+        "record": "RES-0001",
+        "change": { "field": "status", "old": "active", "new": "delivered" },
+        "source": "inventory-availability deliver request T012 (from T011 sales-orchestrator)"
+      }
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/records/inventory/movements.json",
+      "field": "movements[MOV-0002]",
+      "from": null,
+      "to": "delivery; INV-0001; showroom -> customer; 2026-11-09T23:28:00Z; reservation RES-0001; case 20261109231711-jordan-test-quote-m9-compact",
+      "source": "T012 inventory-availability deliver request"
+    },
+    {
+      "file": "data/firearm-store/records/inventory/items.json",
+      "field": "items[INV-0001].location",
+      "from": "showroom",
+      "to": "delivered",
+      "source": "T012 inventory-availability deliver request"
+    },
+    {
+      "file": "data/firearm-store/records/inventory/items.json",
+      "field": "items[INV-0001].delivery_ref",
+      "from": null,
+      "to": "MOV-0002",
+      "source": "T012 inventory-availability deliver request"
+    },
+    {
+      "file": "data/firearm-store/records/inventory/reservations.json",
+      "field": "reservations[RES-0001].status",
+      "from": "active",
+      "to": "delivered",
+      "source": "T012 inventory-availability deliver request"
+    },
+    {
+      "file": "data/firearm-store/records/inventory/reservations.json",
+      "field": "reservations[RES-0001].delivered_at / delivery_ref",
+      "from": null,
+      "to": "2026-11-09T23:28:00Z / MOV-0002",
+      "source": "T012 inventory-availability deliver request"
+    },
+    {
+      "file": "data/firearm-store/cases/20261109231711-jordan-test-quote-m9-compact/state/inventory.json",
+      "field": "requests[T012], deliveries",
+      "from": "deliveries []",
+      "to": "deliver request T012 recorded; deliveries [MOV-0002]",
+      "source": "T012 input.json"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "contract input completeness (inventory-availability)",
+      "target": "tasks/T012/input.json",
+      "result": "pass",
+      "detail": "Case ID, catalog item CAT-HG-001, item INV-0001, quantity 1, action deliver, and reservation RES-0001 are present, with clearance references."
+    },
+    {
+      "check": "delivery-requires-clearance: reservation is for this case",
+      "target": "data/firearm-store/records/inventory/reservations.json RES-0001",
+      "result": "pass",
+      "detail": "RES-0001 is active, item INV-0001, case_id 20261109231711-jordan-test-quote-m9-compact (matches). Verified against inventory's own records, not only the request."
+    },
+    {
+      "check": "delivery-requires-clearance: compliance flag clear",
+      "target": "tasks/T007/output.json",
+      "result": "pass",
+      "detail": "flag = clear (documentation complete; fictional background check outcome no-record)."
+    },
+    {
+      "check": "delivery-requires-clearance: payment paid",
+      "target": "tasks/T010/output.json",
+      "result": "pass",
+      "detail": "payment_status = paid (549 USD cash, mock)."
+    },
+    {
+      "check": "contract rule: only reserved items can be delivered",
+      "target": "data/firearm-store/records/inventory/items.json INV-0001",
+      "result": "pass",
+      "detail": "INV-0001 status is reserved with reservation_id RES-0001."
+    },
+    {
+      "check": "reservation-expiry",
+      "target": "RES-0001",
+      "result": "pass",
+      "detail": "Created 2026-11-09T23:18:07Z, expires 2026-11-12T23:18:07Z; delivered 2026-11-09T23:28:00Z, within 72h. Not expired, so delivery is allowed and no release is needed."
+    },
+    {
+      "check": "release-requires-pass / Applied Inventory Change acceptance",
+      "target": "output.applied_inventory_changes",
+      "result": "pass",
+      "detail": "Every change cites its source (T012 request and clearance tasks). No change sets any item to available."
+    },
+    {
+      "check": "received-items-unavailable",
+      "target": "INV-0001",
+      "result": "pass",
+      "detail": "Not applicable: no item was received in this task. The on-hold item INV-0007 was not touched."
+    },
+    {
+      "check": "report-every-transaction",
+      "target": "INV-0001 status",
+      "result": "pass",
+      "detail": "No transaction report received yet, so INV-0001 is not marked sold. Inventory will record the sale when sales sends the transaction-report."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Only inventory records and state/inventory.json changed. Delivering a reserved item at sales' request, recorded as a movement, is within this orchestrator's authority."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only data/firearm-store/records/inventory/* and case files were used. The delivery is a mock movement record; no real transfer and no live service."
+    }
+  ],
+  "summary": "Delivered INV-0001 (Mockworks M9 Compact, MOCK-SN-0001) under RES-0001 as movement MOV-0002 after verifying clearance (reservation for case, compliance clear T007, payment paid T010); item marked sold when the transaction-report arrives."
+}

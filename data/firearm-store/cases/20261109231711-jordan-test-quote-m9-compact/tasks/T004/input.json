@@ -1,0 +1,17 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T004",
+  "role": "finance-orchestrator",
+  "type": "contract",
+  "contract": "payment-status",
+  "attempt": 1,
+  "requested_by": "T001 (sales-orchestrator)",
+  "input": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "price": 549,
+    "currency": "USD",
+    "payment_method": "cash",
+    "installment_request": null,
+    "note": "Quotation stage: return the mock payment status for a cash payment of 549 USD (CAT-HG-001 list price)."
+  }
+}

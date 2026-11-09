@@ -1,0 +1,42 @@
+{
+  "case_id": "20261109231711-jordan-test-quote-m9-compact",
+  "task_id": "T014",
+  "role": "finance-orchestrator",
+  "type": "contract",
+  "contract": "transaction-report",
+  "attempt": 1,
+  "requested_by": "T013 (sales-orchestrator)",
+  "input": {
+    "case_id": "20261109231711-jordan-test-quote-m9-compact",
+    "type": "sale",
+    "items": [
+      {
+        "catalog_id": "CAT-HG-001",
+        "item_id": "INV-0001",
+        "serial": "MOCK-SN-0001",
+        "quantity": 1,
+        "amount": 549
+      }
+    ],
+    "total": 549,
+    "currency": "USD",
+    "payment": {
+      "method": "cash",
+      "status": "paid",
+      "paid_at": "2026-11-09T23:24:50Z",
+      "source_ref": "tasks/T010/output.json"
+    },
+    "delivery": {
+      "delivery_ref": "MOV-0002",
+      "reservation_ref": "RES-0001",
+      "delivered_at": "2026-11-09T23:28:00Z",
+      "source_ref": "tasks/T012/output.json"
+    },
+    "counterparty": {
+      "kind": "customer",
+      "name": "Jordan Test",
+      "id_document": "FAKE-ID-1001"
+    },
+    "note": "Completed mock sale (paid and delivered). Please record it in the mock ledger and return recorded, mismatch, or refused. The same report goes to inventory."
+  }
+}
