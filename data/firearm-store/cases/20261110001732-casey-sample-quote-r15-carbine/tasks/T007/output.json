@@ -1,0 +1,71 @@
+{
+  "task_id": "T007",
+  "role": "documentation-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+    "status": "needs-information",
+    "requirements_applied": ["REQ-BASE", "REQ-FULL-AUTO", "full-auto-requires-address", "mock-data-only"],
+    "missing": [
+      { "field": "documents.FORM-PURCHASE", "rule_id": "REQ-BASE" }
+    ],
+    "inconsistencies": [],
+    "notes": [
+      "REQ-BASE customer fields are all present: customer.name 'Casey Sample', customer.id_document 'FAKE-ID-1002', customer.date_of_birth '1990-09-30' (from input.json, matching request.md).",
+      "REQ-BASE also lists the form FORM-PURCHASE for every item. The case has no documents/ folder, so the form is not in the case. requirements.json does not say whether the form is needed at the quotation stage or only at sale. The compliance orchestrator decides whether to ask for it now or defer it.",
+      "REQ-FULL-AUTO / full-auto-requires-address: CAT-RF-001 has fire_modes ['semi-auto'] (per input.json; the catalog record was not part of this task's inputs). The rule does not apply, so customer.address is not required. The request gives no address, and none is needed.",
+      "No inconsistencies were found: the customer name, ID and date of birth are the same in input.json and request.md. There is no ID document to cross-check against.",
+      "REQ-BASE and REQ-FULL-AUTO both set background_check: true. That check is handled by the regulatory-verification-specialist task and is outside the scope of this report."
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "REQ-BASE required customer fields",
+      "target": "customer.name, customer.id_document, customer.date_of_birth",
+      "result": "pass",
+      "detail": "All three present in input.json and request.md."
+    },
+    {
+      "check": "REQ-BASE required forms",
+      "target": "FORM-PURCHASE",
+      "result": "fail",
+      "detail": "No documents/ folder exists in the case, so FORM-PURCHASE is not on file. Listed as missing."
+    },
+    {
+      "check": "full-auto-requires-address",
+      "target": "CAT-RF-001",
+      "result": "pass",
+      "detail": "'full-auto' not in fire_modes ['semi-auto']; customer.address not required."
+    },
+    {
+      "check": "consistency of customer details",
+      "target": "input.json vs request.md",
+      "result": "pass",
+      "detail": "Name, fake ID and date of birth are the same in both. No ID document is available to cross-check."
+    },
+    {
+      "check": "acceptance: full-auto-requires-address checked for every item",
+      "target": "items (1: CAT-RF-001)",
+      "result": "pass",
+      "detail": "Rule applied to the only requested item."
+    },
+    {
+      "check": "acceptance: complete only with no missing fields and no inconsistencies",
+      "target": "output.status",
+      "result": "pass",
+      "detail": "One missing entry (FORM-PURCHASE), so status is needs-information."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Read only files under data/firearm-store/ (task input, request.md, records/compliance/requirements.json). No live service was contacted."
+    }
+  ],
+  "summary": "Completeness report: needs-information. All customer fields are present and the R15 Carbine is semi-auto only, so no address is needed. FORM-PURCHASE (REQ-BASE) is not in the case, since there is no documents/ folder."
+}

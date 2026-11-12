@@ -1,0 +1,114 @@
+{
+  "task_id": "T010",
+  "role": "inventory-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract": "inventory-availability",
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "action": "reserve",
+    "items": [
+      {
+        "catalog_id": "CAT-HG-002",
+        "quantity_requested": 1,
+        "status": "unavailable",
+        "reservation_ref": null,
+        "reservation_expires_at": null,
+        "detail": "No sellable unit. The only unit of CAT-HG-002 (INV-0003) has status sold and location delivered. No reservation was made.",
+        "source": "tasks/T005/output.json"
+      }
+    ],
+    "notes": [
+      "Catalog mapping of CAT-HG-002 to 'Mockworks P45 Full Size' comes from the sales request. Inventory did not verify it (the catalog is a sales record).",
+      "Inventory record discrepancy noted internally for INV-0003 (sold without sale traceability fields). It does not change this answer."
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/inventory.json",
+      "field": "requests[T002].status",
+      "from": "waiting-on-specialist",
+      "to": "answered (outcome unavailable)",
+      "source": "tasks/T005/output.json (accepted stock-manager availability answer)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/inventory.json",
+      "field": "open_discrepancies",
+      "from": [],
+      "to": "[INV-0003 sold record missing traceability fields, status open]",
+      "source": "tasks/T005/output.json (discrepancies)"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "acceptance: stock-manager availability answer (case_id, items with catalog_id, item_id, status, reservable)",
+      "target": "tasks/T005/output.json",
+      "result": "pass",
+      "detail": "All fields present. Cross-checked against records/inventory/items.json: INV-0003 is the only CAT-HG-002 unit, and its status is sold."
+    },
+    {
+      "check": "acceptance: reservable only for available, released items with no active reservation",
+      "target": "tasks/T005/output.json items[INV-0003]",
+      "result": "pass",
+      "detail": "INV-0003 is sold, so reservable=false is correct."
+    },
+    {
+      "check": "acceptance: proposed reservation change (from equals current value, 72h expiry)",
+      "target": "tasks/T005/output.json proposed_record_changes",
+      "result": "pass",
+      "detail": "Not applicable: no reservable unit, so no change was proposed, which is correct."
+    },
+    {
+      "check": "delegation",
+      "target": "records under data/firearm-store/records/inventory/",
+      "result": "pass",
+      "detail": "No inventory record changed. Only case state/inventory.json was updated for tracking. The INV-0003 discrepancy was not corrected because no specialist proposed a change."
+    },
+    {
+      "check": "release-requires-pass",
+      "target": "CAT-HG-002",
+      "result": "pass",
+      "detail": "Nothing reported available or made sellable."
+    },
+    {
+      "check": "received-items-unavailable",
+      "target": "CAT-HG-002",
+      "result": "pass",
+      "detail": "No on-hold or unreleased unit is offered."
+    },
+    {
+      "check": "reservation-expiry",
+      "target": "reservations for this case",
+      "result": "pass",
+      "detail": "No reservation was created, so there is nothing to expire."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "T002",
+      "result": "pass",
+      "detail": "Not applicable: action is reserve, not deliver."
+    },
+    {
+      "check": "contract outcome valid (inventory-availability)",
+      "target": "output.items[0].status",
+      "result": "pass",
+      "detail": "'unavailable' is one of the contract outcomes."
+    },
+    {
+      "check": "escalation triggers",
+      "target": "INV-0003 discrepancy",
+      "result": "pass",
+      "detail": "Internal low-severity record gap. It is not a conflict with another department and not outside authority, so it was tracked in state, not escalated."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "All data read is under data/firearm-store/."
+    }
+  ],
+  "summary": "Answered inventory-availability for T001: CAT-HG-002 unavailable (only unit INV-0003 is sold/delivered), no reservation made. INV-0003 traceability gap tracked in state."
+}

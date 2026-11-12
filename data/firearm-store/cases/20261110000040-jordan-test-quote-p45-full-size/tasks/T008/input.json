@@ -1,0 +1,23 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T008",
+  "role": "payments-credit-specialist",
+  "type": "work",
+  "parent": "T004",
+  "attempt": 1,
+  "input": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "expected_output": "Payment Status Proposal",
+    "price": 689,
+    "currency": "USD",
+    "payment_method": "cash",
+    "installment_request": null,
+    "customer": { "name": "Jordan Test", "id_document": "FAKE-ID-1001" },
+    "stage": "quotation",
+    "mock_records": [
+      "data/firearm-store/records/finance/payment-methods.json",
+      "data/firearm-store/records/finance/credit-profiles.json"
+    ],
+    "note": "Propose the mock payment status for a cash payment of 689 USD (CAT-HG-002 list price) at the quotation stage, from the case's mock data. No installment plan requested."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T012",
+  "role": "government-background-check",
+  "type": "contract",
+  "contract": "background-check",
+  "attempt": 1,
+  "requested_by": "T011",
+  "request": {
+    "request_ref": "tasks/T008/output.json",
+    "customer": { "name": "Casey Sample", "id_document": "FAKE-ID-1002", "date_of_birth": "1990-09-30" },
+    "fictional": true,
+    "instruction": "Return a fictional Background-Check Result (request_ref, outcome, match, record_summary if record-found, fictional: true) from the mock criminal records only. Use a record only when ID document, name and date of birth all match; otherwise cannot-determine with the mismatch in match. Not an eligibility determination."
+  }
+}

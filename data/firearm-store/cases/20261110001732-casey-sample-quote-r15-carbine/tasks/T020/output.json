@@ -1,0 +1,78 @@
+{
+  "task_id": "T020",
+  "role": "stock-manager",
+  "status": "completed",
+  "output": {
+    "availability_answer": {
+      "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+      "as_of": "after the proposed release is applied",
+      "items": [
+        {
+          "catalog_id": "CAT-RF-001",
+          "item_id": "INV-0005",
+          "status": "available",
+          "reservable": true,
+          "note": "Current status is 'reserved' (RES-0002). Becomes 'available' and reservable only once the inventory orchestrator applies the changes below. release_ref DSP-0005 is present."
+        }
+      ]
+    },
+    "proposed_record_changes": [
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "RES-0002",
+        "field": "status",
+        "from": "active",
+        "to": "released",
+        "reason": "Operator dropped the quotation (human/HR-001.json, choice 1) and asked for the reservation to be released. No sale, payment, or delivery took place (no delivery movement for INV-0005)."
+      },
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "RES-0002",
+        "field": "released_at",
+        "from": null,
+        "to": "<UTC timestamp at which the inventory orchestrator applies the release>",
+        "reason": "Records when the reservation was released. Field does not exist yet on RES-0002 (from = absent/null). The stock manager does not know the application time, so the orchestrator sets it when applying."
+      },
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "INV-0005",
+        "field": "status",
+        "from": "reserved",
+        "to": "available",
+        "reason": "Its only reservation (RES-0002) is being released. The item may return to 'available' because it carries release disposition DSP-0005 (release_ref present; rules received-items-unavailable, release-requires-pass)."
+      },
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "INV-0005",
+        "field": "reservation_id",
+        "from": "RES-0002",
+        "to": null,
+        "reason": "Remove the link to the released reservation so the item has no active reservation."
+      }
+    ],
+    "discrepancies": [
+      {
+        "record": "INV-0003",
+        "detail": "Status 'sold', location 'delivered', but it has no reservation_id, delivery_ref, sold_at, or sale_case_id, and movements.json has no delivery movement for it (unlike INV-0001). Not related to this case; reported for the orchestrator. No change proposed."
+      }
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "mock-data-only", "target": "records read", "result": "pass", "detail": "Only data/firearm-store/records/inventory/{items,reservations,movements}.json were read; no live service contacted." },
+    { "check": "RES-0002 belongs to this case", "target": "RES-0002.case_id", "result": "pass", "detail": "case_id == 20261110001732-casey-sample-quote-r15-carbine." },
+    { "check": "RES-0002 is active", "target": "RES-0002.status", "result": "pass", "detail": "status == 'active'." },
+    { "check": "RES-0002 links to INV-0005 consistently", "target": "RES-0002.item_id / INV-0005.reservation_id", "result": "pass", "detail": "RES-0002.item_id == INV-0005 and INV-0005.reservation_id == RES-0002; catalog CAT-RF-001 on both." },
+    { "check": "Not delivered", "target": "movements.json", "result": "pass", "detail": "No delivery movement for INV-0005 or RES-0002; RES-0002 has no delivered_at/delivery_ref; INV-0005 location is 'showroom'." },
+    { "check": "reservation-expiry (72h expiry carried)", "target": "RES-0002", "result": "pass", "detail": "created_at 2026-11-10T00:23:00Z, expires_at 2026-11-13T00:23:00Z = 72h. Not yet expired; release is by operator request, not expiry." },
+    { "check": "received-items-unavailable / release_ref present", "target": "INV-0005.release_ref", "result": "pass", "detail": "release_ref == DSP-0005, so returning to 'available' is allowed. Pass inspection behind DSP-0005 not re-verified here (technical-services record outside this task's listed inputs)." },
+    { "check": "Acceptance: from equals current record value", "target": "proposed_record_changes", "result": "pass", "detail": "RES-0002.status 'active'; RES-0002.released_at absent (null); INV-0005.status 'reserved'; INV-0005.reservation_id 'RES-0002' all match current records." },
+    { "check": "Acceptance: reservable only for available items without active reservation", "target": "availability_answer INV-0005", "result": "pass", "detail": "reservable=true is stated for the post-release state only (status available, reservation_id null, release_ref present)." },
+    { "check": "Record consistency scan", "target": "items.json / reservations.json / movements.json", "result": "fail", "detail": "INV-0003 is 'sold' with no reservation, delivery movement, or sale references. Reported as a discrepancy; does not affect this release." }
+  ],
+  "summary": "Proposed release of RES-0002 (active -> released, released_at set on apply) and INV-0005 (reserved -> available, reservation_id RES-0002 -> null); all checks pass; INV-0005 reservable after release. Unrelated discrepancy reported: INV-0003 sold with no delivery/sale references."
+}

@@ -1,0 +1,15 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T002",
+  "role": "inventory-orchestrator",
+  "type": "contract",
+  "contract": "inventory-availability",
+  "parent": "T001",
+  "attempt": 1,
+  "input": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "items": [ { "catalog_id": "CAT-HG-002", "quantity": 1 } ],
+    "action": "reserve",
+    "note": "Quotation request. Reserve one released unit for this case if available; return per-item status and the reservation reference with its expiry (72 hours, rule reservation-expiry) so the quote's valid_until can match it."
+  }
+}

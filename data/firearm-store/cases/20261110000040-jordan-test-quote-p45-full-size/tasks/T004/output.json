@@ -1,0 +1,51 @@
+{
+  "task_id": "T004",
+  "role": "finance-orchestrator",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "contract": "payment-status",
+    "outcome": null,
+    "note": "Payment status not yet determined: delegated to payments-credit-specialist for a Payment Status Proposal. Finance will set the status and answer sales on its resume turn."
+  },
+  "new_tasks": [
+    {
+      "role": "payments-credit-specialist",
+      "type": "work",
+      "input": {
+        "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+        "expected_output": "Payment Status Proposal",
+        "price": 689,
+        "currency": "USD",
+        "payment_method": "cash",
+        "installment_request": null,
+        "customer": { "name": "Jordan Test", "id_document": "FAKE-ID-1001" },
+        "stage": "quotation",
+        "mock_records": [
+          "data/firearm-store/records/finance/payment-methods.json",
+          "data/firearm-store/records/finance/credit-profiles.json"
+        ],
+        "note": "Propose the mock payment status for a cash payment of 689 USD (CAT-HG-002 list price) at the quotation stage, from the case's mock data. No installment plan requested."
+      }
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/finance.json",
+      "field": "(file created)",
+      "from": null,
+      "to": "contracts.payment-status = in-progress; subtask payments-credit-specialist requested",
+      "source": "T004 input (payment-status contract request)"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "contract-input", "target": "T004 input (payment-status)", "result": "pass", "detail": "Case ID, price (689 USD), and payment method (cash) are present as the contract requires." },
+    { "check": "installment-limits", "target": "T004 input", "result": "pass", "detail": "No installment plan requested (installment_request null); rule condition not triggered." },
+    { "check": "mock-data-only", "target": "T004 data references", "result": "pass", "detail": "All references resolve under data/firearm-store/; no live service contacted." },
+    { "check": "delegation", "target": "payment status", "result": "pass", "detail": "No record change applied this turn; payment status will be set only from an accepted payments-credit-specialist Payment Status Proposal." }
+  ],
+  "summary": "Created state/finance.json and delegated the Payment Status Proposal (cash, 689 USD) to payments-credit-specialist; finance will answer payment-status on resume."
+}

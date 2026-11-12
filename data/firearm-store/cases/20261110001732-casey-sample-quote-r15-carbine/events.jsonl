@@ -1,0 +1,149 @@
+{"ts":"2026-11-10T00:17:32Z","actor":"dispatcher","type":"case-opened","data":{"entry_unit":"sales","request":"request.md"}}
+{"ts":"2026-11-10T00:17:32Z","actor":"dispatcher","type":"task-created","task_id":"T001","data":{"role":"sales-orchestrator","type":"work"}}
+{"ts":"2026-11-10T00:17:32Z","actor":"dispatcher","type":"task-ready","task_id":"T001","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:17:33Z","actor":"dispatcher","type":"task-started","task_id":"T001","data":{}}
+{"ts":"2026-11-10T00:18:53Z","actor":"sales-orchestrator","type":"state-changed","task_id":"T001","data":{"file":"state/sales.json","fields":["(file created)","customer_request","contracts"]}}
+{"ts":"2026-11-10T00:18:53Z","actor":"sales-orchestrator","type":"check","task_id":"T001","data":{"count":9,"all_pass":true,"checks":["customer-request-record acceptance","mock-data-only","item resolves in mock catalog","full-auto-requires-address precondition","quote issuance precondition","delivery-requires-clearance / sale-completion / report-every-transaction","fictional-background-checks","authority","delegation"]}}
+{"ts":"2026-11-10T00:18:53Z","actor":"dispatcher","type":"task-completed","task_id":"T001","data":{"summary":"Recorded quotation request (Casey Sample, CAT-RF-001 x1, card, list 1199 USD); requested inventory-availability (reserve), documentation-status, payment-status in parallel.","status":"waiting","new_tasks":["T002","T003","T004"]}}
+{"ts":"2026-11-10T00:18:53Z","actor":"dispatcher","type":"task-created","task_id":"T002","data":{"role":"inventory-orchestrator","type":"contract","contract":"inventory-availability","parent":"T001"}}
+{"ts":"2026-11-10T00:18:53Z","actor":"dispatcher","type":"task-created","task_id":"T003","data":{"role":"compliance-orchestrator","type":"contract","contract":"documentation-status","parent":"T001"}}
+{"ts":"2026-11-10T00:18:53Z","actor":"dispatcher","type":"task-created","task_id":"T004","data":{"role":"finance-orchestrator","type":"contract","contract":"payment-status","parent":"T001"}}
+{"ts":"2026-11-10T00:18:53Z","actor":"dispatcher","type":"task-ready","task_id":"T002","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:18:53Z","actor":"dispatcher","type":"task-ready","task_id":"T003","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:18:53Z","actor":"dispatcher","type":"task-ready","task_id":"T004","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:18:54Z","actor":"dispatcher","type":"task-started","task_id":"T002","data":{}}
+{"ts":"2026-11-10T00:18:54Z","actor":"dispatcher","type":"task-started","task_id":"T003","data":{}}
+{"ts":"2026-11-10T00:18:54Z","actor":"dispatcher","type":"task-started","task_id":"T004","data":{}}
+{"ts":"2026-11-10T00:20:01Z","actor":"finance-orchestrator","type":"state-changed","task_id":"T004","data":{"file":"state/finance.json","fields":["(file created)"]}}
+{"ts":"2026-11-10T00:20:01Z","actor":"finance-orchestrator","type":"check","task_id":"T004","data":{"count":5,"all_pass":true,"checks":["contract-input","installment-limits","report-every-transaction","mock-data-only","delegation"]}}
+{"ts":"2026-11-10T00:20:01Z","actor":"dispatcher","type":"task-completed","task_id":"T004","data":{"summary":"Created state/finance.json and delegated the Payment Status Proposal (card, 1199 USD) to payments-credit-specialist.","status":"waiting","new_tasks":["T006"]}}
+{"ts":"2026-11-10T00:20:01Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T002","data":{"file":"state/inventory.json","fields":["(file created)"]}}
+{"ts":"2026-11-10T00:20:01Z","actor":"inventory-orchestrator","type":"check","task_id":"T002","data":{"count":6,"all_pass":true,"checks":["input completeness","delegation","release-requires-pass/received-items-unavailable","reservation-expiry","delivery-requires-clearance","mock-data-only"]}}
+{"ts":"2026-11-10T00:20:01Z","actor":"dispatcher","type":"task-completed","task_id":"T002","data":{"summary":"Delegated availability check and reservation proposal for CAT-RF-001 x1 to stock-manager.","status":"waiting","new_tasks":["T005"]}}
+{"ts":"2026-11-10T00:20:01Z","actor":"dispatcher","type":"task-created","task_id":"T005","data":{"role":"stock-manager","type":"work","parent":"T002"}}
+{"ts":"2026-11-10T00:20:01Z","actor":"dispatcher","type":"task-created","task_id":"T006","data":{"role":"payments-credit-specialist","type":"work","parent":"T004"}}
+{"ts":"2026-11-10T00:20:01Z","actor":"dispatcher","type":"task-ready","task_id":"T005","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:20:01Z","actor":"dispatcher","type":"task-ready","task_id":"T006","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:20:02Z","actor":"dispatcher","type":"task-started","task_id":"T005","data":{}}
+{"ts":"2026-11-10T00:20:02Z","actor":"dispatcher","type":"task-started","task_id":"T006","data":{}}
+{"ts":"2026-11-10T00:20:29Z","actor":"compliance-orchestrator","type":"state-changed","task_id":"T003","data":{"file":"state/compliance.json","fields":["(file created)"]}}
+{"ts":"2026-11-10T00:20:29Z","actor":"compliance-orchestrator","type":"check","task_id":"T003","data":{"count":8,"all_pass":true,"checks":["input sufficiency","delegate the work","full-auto-requires-address (scheduled)","fictional-background-checks","validate-external-outputs (scheduled)","mock-data-only","authority","delegation"]}}
+{"ts":"2026-11-10T00:20:29Z","actor":"dispatcher","type":"task-completed","task_id":"T003","data":{"summary":"Requested completeness report (documentation-specialist) and background-check request draft (regulatory-verification-specialist) in parallel; flag pending.","status":"waiting","new_tasks":["T007","T008"]}}
+{"ts":"2026-11-10T00:20:29Z","actor":"dispatcher","type":"task-created","task_id":"T007","data":{"role":"documentation-specialist","type":"work","parent":"T003"}}
+{"ts":"2026-11-10T00:20:29Z","actor":"dispatcher","type":"task-created","task_id":"T008","data":{"role":"regulatory-verification-specialist","type":"work","parent":"T003"}}
+{"ts":"2026-11-10T00:20:29Z","actor":"dispatcher","type":"task-ready","task_id":"T007","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:20:29Z","actor":"dispatcher","type":"task-ready","task_id":"T008","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:20:30Z","actor":"dispatcher","type":"task-started","task_id":"T007","data":{}}
+{"ts":"2026-11-10T00:20:30Z","actor":"dispatcher","type":"task-started","task_id":"T008","data":{}}
+{"ts":"2026-11-10T00:21:17Z","actor":"regulatory-verification-specialist","type":"check","task_id":"T008","data":{"count":5,"all_pass":true}}
+{"ts":"2026-11-10T00:21:17Z","actor":"dispatcher","type":"task-completed","task_id":"T008","data":{"summary":"Background-check request draft for Casey Sample (FAKE-ID-1002) prepared from case data only."}}
+{"ts":"2026-11-10T00:21:28Z","actor":"payments-credit-specialist","type":"check","task_id":"T006","data":{"count":4,"all_pass":true}}
+{"ts":"2026-11-10T00:21:28Z","actor":"dispatcher","type":"task-completed","task_id":"T006","data":{"summary":"Payment Status Proposal: card 1199 USD pending (quotation stage); no installment plan."}}
+{"ts":"2026-11-10T00:21:28Z","actor":"dispatcher","type":"task-completed","task_id":"T004","data":{"reason":"all subtasks finished (T006)","continued_by":"T009"}}
+{"ts":"2026-11-10T00:21:28Z","actor":"dispatcher","type":"task-created","task_id":"T009","data":{"role":"finance-orchestrator","type":"resume","contract":"payment-status","parent":"T001","resumes":"T004"}}
+{"ts":"2026-11-10T00:21:28Z","actor":"dispatcher","type":"task-ready","task_id":"T009","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T00:21:28Z","actor":"dispatcher","type":"task-started","task_id":"T009","data":{}}
+{"ts":"2026-11-10T00:22:00Z","actor":"stock-manager","type":"check","task_id":"T005","data":{"count":8,"all_pass":false,"failed":[{"check":"stock-reconciliation: records consistent","detail":"INV-0003 marked sold/delivered without reservation, delivery movement or sale reference (outside this case)"}]}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-completed","task_id":"T005","data":{"summary":"INV-0005 (CAT-RF-001) available and reservable; proposed reservation RES-0002 (72h). Discrepancy reported on INV-0003."}}
+{"ts":"2026-11-10T00:22:00Z","actor":"documentation-specialist","type":"check","task_id":"T007","data":{"count":7,"all_pass":false,"failed":[{"check":"REQ-BASE required forms","detail":"FORM-PURCHASE not in case (no documents/ folder)"}]}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-completed","task_id":"T007","data":{"summary":"Completeness report: needs-information (FORM-PURCHASE missing); customer fields complete; no address required."}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-completed","task_id":"T002","data":{"reason":"all subtasks finished (T005)","continued_by":"T010"}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-created","task_id":"T010","data":{"role":"inventory-orchestrator","type":"resume","contract":"inventory-availability","parent":"T001","resumes":"T002"}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-completed","task_id":"T003","data":{"reason":"all subtasks finished (T007, T008)","continued_by":"T011"}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-created","task_id":"T011","data":{"role":"compliance-orchestrator","type":"resume","contract":"documentation-status","parent":"T001","resumes":"T003"}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-ready","task_id":"T010","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-ready","task_id":"T011","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-started","task_id":"T010","data":{}}
+{"ts":"2026-11-10T00:22:00Z","actor":"dispatcher","type":"task-started","task_id":"T011","data":{}}
+{"ts":"2026-11-10T00:22:23Z","actor":"finance-orchestrator","type":"output-accepted","task_id":"T009","data":{"accepted":"T006"}}
+{"ts":"2026-11-10T00:22:23Z","actor":"finance-orchestrator","type":"state-changed","task_id":"T009","data":{"file":"state/finance.json","fields":["payment_status"],"to":"pending","source":"T006"}}
+{"ts":"2026-11-10T00:22:23Z","actor":"finance-orchestrator","type":"check","task_id":"T009","data":{"all_pass":true}}
+{"ts":"2026-11-10T00:22:23Z","actor":"dispatcher","type":"task-completed","task_id":"T009","data":{"summary":"payment-status answered to T001: pending (card, 1199 USD)."}}
+{"ts":"2026-11-10T00:23:44Z","actor":"compliance-orchestrator","type":"output-accepted","task_id":"T011","data":{"accepted":["T007","T008"]}}
+{"ts":"2026-11-10T00:23:44Z","actor":"compliance-orchestrator","type":"state-changed","task_id":"T011","data":{"file":"state/compliance.json","fields":["documentation_status","needed","background_check"],"to":{"documentation_status":"needs-information","needed":"documents.FORM-PURCHASE (REQ-BASE)","background_check":"requested"}}}
+{"ts":"2026-11-10T00:23:44Z","actor":"compliance-orchestrator","type":"check","task_id":"T011","data":{"count":10,"all_pass":true}}
+{"ts":"2026-11-10T00:23:44Z","actor":"dispatcher","type":"task-completed","task_id":"T011","data":{"summary":"Accepted T007/T008; documentation needs-information (FORM-PURCHASE); fictional background-check request sent; flag pending.","status":"waiting","new_tasks":["T012"]}}
+{"ts":"2026-11-10T00:23:44Z","actor":"inventory-orchestrator","type":"output-accepted","task_id":"T010","data":{"accepted":"T005"}}
+{"ts":"2026-11-10T00:23:44Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T010","data":{"file":"records/inventory/reservations.json","field":"reservations[RES-0002]","to":"INV-0005 for case, expires 2026-11-13T00:23:00Z","source":"T005"}}
+{"ts":"2026-11-10T00:23:44Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T010","data":{"file":"records/inventory/items.json","field":"items[INV-0005].status","from":"available","to":"reserved","source":"T005"}}
+{"ts":"2026-11-10T00:23:44Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T010","data":{"file":"records/inventory/items.json","field":"items[INV-0005].reservation_id","from":null,"to":"RES-0002","source":"T005"}}
+{"ts":"2026-11-10T00:23:44Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T010","data":{"file":"state/inventory.json","fields":["contract_requests[T002].status","accepted_outputs","reservations","record_changes_applied","open_discrepancies"]}}
+{"ts":"2026-11-10T00:23:44Z","actor":"inventory-orchestrator","type":"check","task_id":"T010","data":{"count":13,"all_pass":true}}
+{"ts":"2026-11-10T00:23:44Z","actor":"dispatcher","type":"task-completed","task_id":"T010","data":{"summary":"inventory-availability answered to T001: reserved (INV-0005, RES-0002, expires 2026-11-13T00:23:00Z)."}}
+{"ts":"2026-11-10T00:23:44Z","actor":"dispatcher","type":"task-created","task_id":"T012","data":{"role":"government-background-check","type":"contract","contract":"background-check","parent":"T011"}}
+{"ts":"2026-11-10T00:23:44Z","actor":"dispatcher","type":"task-ready","task_id":"T012","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:23:44Z","actor":"dispatcher","type":"task-started","task_id":"T012","data":{}}
+{"ts":"2026-11-10T00:24:40Z","actor":"dispatcher","type":"task-failed","task_id":"T012","data":{"reason":"agent stopped by operator before writing output.json; no valid output"}}
+{"ts":"2026-11-10T00:24:40Z","actor":"dispatcher","type":"task-created","task_id":"T013","data":{"role":"government-background-check","type":"contract","contract":"background-check","parent":"T011","attempt":2,"retry_of":"T012","reason":"operator chose retry"}}
+{"ts":"2026-11-10T00:24:40Z","actor":"dispatcher","type":"task-ready","task_id":"T013","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:24:40Z","actor":"dispatcher","type":"task-started","task_id":"T013","data":{}}
+{"ts":"2026-11-10T00:25:27Z","actor":"government-background-check","type":"check","task_id":"T013","data":{"note":"external party checks recorded in output.json"}}
+{"ts":"2026-11-10T00:25:27Z","actor":"dispatcher","type":"task-completed","task_id":"T013","data":{"summary":"Fictional background-check result: record-found (mock); full match on ID, name, DOB; not an eligibility determination."}}
+{"ts":"2026-11-10T00:25:27Z","actor":"dispatcher","type":"task-completed","task_id":"T011","data":{"reason":"all subtasks finished (T012 failed, T013 completed)","continued_by":"T014"}}
+{"ts":"2026-11-10T00:25:27Z","actor":"dispatcher","type":"task-created","task_id":"T014","data":{"role":"compliance-orchestrator","type":"resume","contract":"documentation-status","parent":"T001","resumes":"T003"}}
+{"ts":"2026-11-10T00:25:27Z","actor":"dispatcher","type":"task-ready","task_id":"T014","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T00:25:27Z","actor":"dispatcher","type":"task-started","task_id":"T014","data":{}}
+{"ts":"2026-11-10T00:27:04Z","actor":"compliance-orchestrator","type":"output-accepted","task_id":"T014","data":{"accepted":"T013"}}
+{"ts":"2026-11-10T00:27:04Z","actor":"compliance-orchestrator","type":"state-changed","task_id":"T014","data":{"file":"state/compliance.json","fields":["background_check (response received, attempts, interpretation requested)"]}}
+{"ts":"2026-11-10T00:27:04Z","actor":"compliance-orchestrator","type":"check","task_id":"T014","data":{"count":11,"all_pass":true}}
+{"ts":"2026-11-10T00:27:04Z","actor":"dispatcher","type":"task-completed","task_id":"T014","data":{"summary":"Accepted fictional response T013 (record-found); requested interpretation; flag pending; documentation needs-information.","status":"waiting","new_tasks":["T015"]}}
+{"ts":"2026-11-10T00:27:04Z","actor":"dispatcher","type":"task-created","task_id":"T015","data":{"role":"regulatory-verification-specialist","type":"work","parent":"T014"}}
+{"ts":"2026-11-10T00:27:04Z","actor":"dispatcher","type":"task-ready","task_id":"T015","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:27:04Z","actor":"dispatcher","type":"task-started","task_id":"T015","data":{}}
+{"ts":"2026-11-10T00:28:03Z","actor":"regulatory-verification-specialist","type":"check","task_id":"T015","data":{"all_pass":true}}
+{"ts":"2026-11-10T00:28:03Z","actor":"dispatcher","type":"task-completed","task_id":"T015","data":{"summary":"Background-Check Interpretation: record-found (fictional, mock 2019 felony); full match; no ambiguity."}}
+{"ts":"2026-11-10T00:28:03Z","actor":"dispatcher","type":"task-completed","task_id":"T014","data":{"reason":"all subtasks finished (T015)","continued_by":"T016"}}
+{"ts":"2026-11-10T00:28:03Z","actor":"dispatcher","type":"task-created","task_id":"T016","data":{"role":"compliance-orchestrator","type":"resume","contract":"documentation-status","parent":"T001","resumes":"T003"}}
+{"ts":"2026-11-10T00:28:03Z","actor":"dispatcher","type":"task-ready","task_id":"T016","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T00:28:03Z","actor":"dispatcher","type":"task-started","task_id":"T016","data":{}}
+{"ts":"2026-11-10T00:29:19Z","actor":"compliance-orchestrator","type":"output-accepted","task_id":"T016","data":{"accepted":"T015"}}
+{"ts":"2026-11-10T00:29:19Z","actor":"compliance-orchestrator","type":"state-changed","task_id":"T016","data":{"file":"state/compliance.json","fields":["background_check.outcome","compliance_flag","contract_response"],"to":{"background_check.outcome":"record-found (fictional)","compliance_flag":"check-failed"}}}
+{"ts":"2026-11-10T00:29:19Z","actor":"compliance-orchestrator","type":"check","task_id":"T016","data":{"all_pass":true}}
+{"ts":"2026-11-10T00:29:19Z","actor":"dispatcher","type":"task-completed","task_id":"T016","data":{"summary":"documentation-status answered to T001: flag check-failed (fictional record-found); documentation needs-information (FORM-PURCHASE)."}}
+{"ts":"2026-11-10T00:29:19Z","actor":"dispatcher","type":"task-completed","task_id":"T001","data":{"reason":"all subtasks finished (T002→T010, T003→T016, T004→T009)","continued_by":"T017"}}
+{"ts":"2026-11-10T00:29:19Z","actor":"dispatcher","type":"task-created","task_id":"T017","data":{"role":"sales-orchestrator","type":"resume","parent":null,"resumes":"T001"}}
+{"ts":"2026-11-10T00:29:19Z","actor":"dispatcher","type":"task-ready","task_id":"T017","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T00:29:19Z","actor":"dispatcher","type":"task-started","task_id":"T017","data":{}}
+{"ts":"2026-11-10T00:30:52Z","actor":"sales-orchestrator","type":"output-accepted","task_id":"T017","data":{"accepted":["T010","T016","T009"]}}
+{"ts":"2026-11-10T00:30:52Z","actor":"sales-orchestrator","type":"state-changed","task_id":"T017","data":{"file":"state/sales.json","fields":["contract responses","quote withheld","sales_side_ready=false"]}}
+{"ts":"2026-11-10T00:30:52Z","actor":"sales-orchestrator","type":"check","task_id":"T017","data":{"count":15,"all_pass":true}}
+{"ts":"2026-11-10T00:30:52Z","actor":"dispatcher","type":"task-completed","task_id":"T017","data":{"summary":"No quote issued; blocking-findings case response sent to operator."}}
+{"ts":"2026-11-10T00:30:52Z","actor":"dispatcher","type":"case-response","task_id":"T017","data":{"type":"blocking-findings","ref":"tasks/T017/output.json#case_response"}}
+{"ts":"2026-11-10T01:58:40Z","actor":"operator","type":"human-response","data":{"request_id":"HR-001","kind":"case-response-answer","choice":1,"answer":"accept; drop request; release RES-0002 now; close case"}}
+{"ts":"2026-11-10T01:58:40Z","actor":"dispatcher","type":"task-created","task_id":"T018","data":{"role":"sales-orchestrator","type":"resume","parent":null,"resumes":"T001","reason":"operator answer HR-001 asks sales to release RES-0002 before closing"}}
+{"ts":"2026-11-10T01:58:40Z","actor":"dispatcher","type":"task-ready","task_id":"T018","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T01:58:40Z","actor":"dispatcher","type":"task-started","task_id":"T018","data":{}}
+{"ts":"2026-11-10T01:59:50Z","actor":"sales-orchestrator","type":"state-changed","task_id":"T018","data":{"file":"state/sales.json","fields":["request dropped by operator (HR-001)","release requested"]}}
+{"ts":"2026-11-10T01:59:50Z","actor":"sales-orchestrator","type":"check","task_id":"T018","data":{"count":9,"all_pass":true}}
+{"ts":"2026-11-10T01:59:50Z","actor":"dispatcher","type":"task-completed","task_id":"T018","data":{"summary":"Operator dropped quotation; requested inventory release of RES-0002 (INV-0005).","status":"waiting","new_tasks":["T019"]}}
+{"ts":"2026-11-10T01:59:50Z","actor":"dispatcher","type":"task-created","task_id":"T019","data":{"role":"inventory-orchestrator","type":"contract","contract":"inventory-availability","parent":"T018","action":"release"}}
+{"ts":"2026-11-10T01:59:50Z","actor":"dispatcher","type":"task-ready","task_id":"T019","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T01:59:50Z","actor":"dispatcher","type":"task-started","task_id":"T019","data":{}}
+{"ts":"2026-11-10T02:01:15Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T019","data":{"file":"state/inventory.json","fields":["contract_requests[T019] awaiting-stock-manager"]}}
+{"ts":"2026-11-10T02:01:15Z","actor":"inventory-orchestrator","type":"check","task_id":"T019","data":{"count":9,"all_pass":true}}
+{"ts":"2026-11-10T02:01:15Z","actor":"dispatcher","type":"task-completed","task_id":"T019","data":{"summary":"Delegated release proposal for RES-0002/INV-0005 to stock-manager.","status":"waiting","new_tasks":["T020"]}}
+{"ts":"2026-11-10T02:01:15Z","actor":"dispatcher","type":"task-created","task_id":"T020","data":{"role":"stock-manager","type":"work","parent":"T019"}}
+{"ts":"2026-11-10T02:01:15Z","actor":"dispatcher","type":"task-ready","task_id":"T020","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T02:01:15Z","actor":"dispatcher","type":"task-started","task_id":"T020","data":{}}
+{"ts":"2026-11-10T02:02:36Z","actor":"stock-manager","type":"check","task_id":"T020","data":{"all_pass":false,"failed":[{"check":"Record consistency scan","detail":"INV-0003 sold/delivered without supporting records (outside this case)"}]}}
+{"ts":"2026-11-10T02:02:36Z","actor":"dispatcher","type":"task-completed","task_id":"T020","data":{"summary":"Proposed release of RES-0002 (4 record changes; INV-0005 back to available). INV-0003 discrepancy reported."}}
+{"ts":"2026-11-10T02:02:36Z","actor":"dispatcher","type":"task-completed","task_id":"T019","data":{"reason":"all subtasks finished (T020)","continued_by":"T021"}}
+{"ts":"2026-11-10T02:02:36Z","actor":"dispatcher","type":"task-created","task_id":"T021","data":{"role":"inventory-orchestrator","type":"resume","contract":"inventory-availability","parent":"T018","resumes":"T019"}}
+{"ts":"2026-11-10T02:02:36Z","actor":"dispatcher","type":"task-ready","task_id":"T021","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T02:02:36Z","actor":"dispatcher","type":"task-started","task_id":"T021","data":{}}
+{"ts":"2026-11-10T02:04:29Z","actor":"inventory-orchestrator","type":"output-accepted","task_id":"T021","data":{"accepted":"T020"}}
+{"ts":"2026-11-10T02:04:29Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T021","data":{"file":"records/inventory/reservations.json","field":"RES-0002.status","from":"active","to":"released","released_at":"2026-11-10T02:03:00Z","source":"T020"}}
+{"ts":"2026-11-10T02:04:29Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T021","data":{"file":"records/inventory/items.json","field":"INV-0005.status","from":"reserved","to":"available","source":"T020"}}
+{"ts":"2026-11-10T02:04:29Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T021","data":{"file":"records/inventory/items.json","field":"INV-0005.reservation_id","from":"RES-0002","to":null,"source":"T020"}}
+{"ts":"2026-11-10T02:04:29Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T021","data":{"file":"state/inventory.json","fields":["contract_requests[T019] answered: released"]}}
+{"ts":"2026-11-10T02:04:29Z","actor":"inventory-orchestrator","type":"check","task_id":"T021","data":{"all_pass":true}}
+{"ts":"2026-11-10T02:04:29Z","actor":"dispatcher","type":"task-completed","task_id":"T021","data":{"summary":"inventory-availability (release) answered to T018: released RES-0002; INV-0005 available."}}
+{"ts":"2026-11-10T02:04:29Z","actor":"dispatcher","type":"task-completed","task_id":"T018","data":{"reason":"all subtasks finished (T019→T021)","continued_by":"T022"}}
+{"ts":"2026-11-10T02:04:29Z","actor":"dispatcher","type":"task-created","task_id":"T022","data":{"role":"sales-orchestrator","type":"resume","parent":null,"resumes":"T001"}}
+{"ts":"2026-11-10T02:04:29Z","actor":"dispatcher","type":"task-ready","task_id":"T022","data":{"reason":"resume task, no dependencies"}}
+{"ts":"2026-11-10T02:04:29Z","actor":"dispatcher","type":"task-started","task_id":"T022","data":{}}
+{"ts":"2026-11-10T02:05:46Z","actor":"sales-orchestrator","type":"output-accepted","task_id":"T022","data":{"accepted":"T021"}}
+{"ts":"2026-11-10T02:05:46Z","actor":"sales-orchestrator","type":"state-changed","task_id":"T022","data":{"file":"state/sales.json","fields":["release response recorded","request closed-dropped-by-operator","sale_completed=false","transaction_report_required=false","sales_tasks_complete=true"]}}
+{"ts":"2026-11-10T02:05:46Z","actor":"sales-orchestrator","type":"check","task_id":"T022","data":{"all_pass":true}}
+{"ts":"2026-11-10T02:05:46Z","actor":"dispatcher","type":"task-completed","task_id":"T022","data":{"summary":"Release of RES-0002 confirmed; operator's HR-001 answer fully carried out; no quote, sale, or transaction report."}}
+{"ts":"2026-11-10T02:05:46Z","actor":"dispatcher","type":"case-closed","data":{"reason":"operator accepted blocking-findings response and dropped the request (human/HR-001.json, choice 1); reservation RES-0002 released","final_response":"tasks/T017/output.json#case_response","open_tasks":[]}}

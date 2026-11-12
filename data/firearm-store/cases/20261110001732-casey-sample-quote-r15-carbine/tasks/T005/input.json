@@ -1,0 +1,23 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T005",
+  "role": "stock-manager",
+  "type": "work",
+  "attempt": 1,
+  "requested_by": "T002",
+  "request": {
+    "contract": "inventory-availability",
+    "action": "reserve",
+    "items": [ { "catalog_id": "CAT-RF-001", "quantity": 1 } ]
+  },
+  "records": [
+    "data/firearm-store/records/inventory/items.json",
+    "data/firearm-store/records/inventory/reservations.json",
+    "data/firearm-store/records/inventory/movements.json"
+  ],
+  "expected_outputs": [
+    "Availability Answer: {case_id, items: [{catalog_id, item_id?, status, reservable}]}; reservable only for available (released) items without an active reservation.",
+    "Proposed Record Change(s) for one reservation if a unit is reservable: {case_id, record, field, from, to, reason}; from must equal the current record value; reservation carries created_at and expires_at = created_at + 72h (rule reservation-expiry)."
+  ],
+  "note": "Apply received-items-unavailable: on-hold items are not reservable. Check existing reservations for expiry (>72h and not delivered) and report any that should be released. If no reservable unit exists, report the status (unavailable / on-hold) and propose no change. Report any record discrepancies."
+}

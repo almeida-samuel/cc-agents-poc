@@ -1,0 +1,16 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T009",
+  "role": "finance-orchestrator",
+  "type": "resume",
+  "contract": "payment-status",
+  "attempt": 1,
+  "resumes": "T004",
+  "parent": "T001",
+  "instruction": "Resume turn continuing T004 (payment-status contract requested by T001). Validate the finished subtask outputs below, apply changes within your authority, and answer the contract.",
+  "original_input": "tasks/T004/input.json",
+  "previous_output": "tasks/T004/output.json",
+  "finished_subtasks": [
+    { "task_id": "T006", "role": "payments-credit-specialist", "status": "completed", "output": "tasks/T006/output.json" }
+  ]
+}

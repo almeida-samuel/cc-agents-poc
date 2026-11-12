@@ -1,0 +1,16 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T014",
+  "role": "regulatory-verification-specialist",
+  "type": "work",
+  "parent": "T013",
+  "attempt": 1,
+  "input": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "expected_output": "Background-Check Interpretation",
+    "response_ref": "tasks/T012/output.json",
+    "request_draft_ref": "tasks/T007/output.json",
+    "fictional": true,
+    "instruction": "Interpret the fictional government background-check response in tasks/T012/output.json for Jordan Test (FAKE-ID-1001). Return case_id, outcome (no-record, record-found, delayed, or cannot-determine), fictional: true, a short summary, and response_ref. Use the outcome code only; no eligibility wording."
+  }
+}

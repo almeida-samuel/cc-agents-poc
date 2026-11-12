@@ -1,0 +1,71 @@
+{
+  "task_id": "T016",
+  "role": "compliance-orchestrator",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+    "contract": "documentation-status",
+    "responds_to": "T003 (requested by sales-orchestrator T001)",
+    "flag": "check-failed",
+    "documentation_status": "needs-information",
+    "information_needed": [
+      { "field": "documents.FORM-PURCHASE", "rule_id": "REQ-BASE" }
+    ],
+    "background_check": {
+      "outcome": "record-found",
+      "fictional": true,
+      "response_ref": "tasks/T013/output.json",
+      "interpretation_ref": "tasks/T015/output.json",
+      "note": "Fictional mock background-check outcome code; not a legal eligibility determination."
+    },
+    "sources": {
+      "documentation": "tasks/T007/output.json (accepted in T011)",
+      "background_check_response": "tasks/T013/output.json (accepted in T014)",
+      "background_check_interpretation": "tasks/T015/output.json (accepted in T016)"
+    },
+    "note_for_requester": "Sales may proceed only on clear. This outcome (check-failed, with documentation needs-information) goes into the case response; quote the outcome code record-found labeled fictional, plus the missing FORM-PURCHASE (REQ-BASE)."
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "background_check.status / interpretation / interpretation_accepted_in / outcome",
+      "from": "response-received / null / (absent) / null",
+      "to": "interpreted / tasks/T015/output.json / T016 / record-found",
+      "source": "tasks/T015/output.json (regulatory-verification-specialist, accepted in T016)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "compliance_flag / compliance_flag_source",
+      "from": "null / null",
+      "to": "check-failed / tasks/T015/output.json + tasks/T007/output.json",
+      "source": "tasks/T015/output.json (accepted in T016)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "contract_served.resumed_by / response_sent_by",
+      "from": "[T011, T014] / null",
+      "to": "[T011, T014, T016] / T016",
+      "source": "T016 input.json; this output"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "acceptance: Background-Check Interpretation required fields", "target": "tasks/T015/output.json", "result": "pass", "detail": "case_id, outcome, fictional, summary, response_ref present; request_ref and ambiguities also present." },
+    { "check": "acceptance: outcome in enum", "target": "tasks/T015/output.json outcome", "result": "pass", "detail": "record-found is a valid outcome (no-record, record-found, delayed, cannot-determine)." },
+    { "check": "acceptance: interpretation consistent with accepted response", "target": "tasks/T015/output.json vs tasks/T013/output.json", "result": "pass", "detail": "response_ref is T013, accepted in T014, which reported record-found with full ID/name/DOB match. Interpretation agrees." },
+    { "check": "escalation trigger: verification outcome ambiguous", "target": "tasks/T015/output.json ambiguities", "result": "pass", "detail": "ambiguities empty; full match; no conflicting sources. No human review (judgment) needed." },
+    { "check": "fictional-background-checks", "target": "tasks/T015/output.json; this output; state/compliance.json", "result": "pass", "detail": "fictional: true everywhere; outcome given as code record-found only; no eligibility wording." },
+    { "check": "output accepted", "target": "tasks/T015/output.json", "result": "pass", "detail": "Accepted on attempt 1; outcome recorded as the specialist interprets it (authority)." },
+    { "check": "compliance flag acceptance: clear only when documentation complete and background check no-record", "target": "output.flag", "result": "pass", "detail": "Flag is check-failed, not clear: documentation needs-information and outcome record-found." },
+    { "check": "compliance flag acceptance: needs-human-review persists until a human response", "target": "state/compliance.json compliance_flag", "result": "pass", "detail": "Flag was never needs-human-review; nothing to clear." },
+    { "check": "full-auto-requires-address", "target": "CAT-RF-001", "result": "pass", "detail": "fire_modes ['semi-auto']; customer.address not required." },
+    { "check": "documentation status from documentation specialist", "target": "output.documentation_status", "result": "pass", "detail": "needs-information with documents.FORM-PURCHASE (REQ-BASE), from tasks/T007/output.json accepted in T011; every information_needed item names its rule." },
+    { "check": "validate-external-outputs", "target": "tasks/T013/output.json", "result": "pass", "detail": "External response was validated and accepted in T014 before use." },
+    { "check": "delegation", "target": "state_changes", "result": "pass", "detail": "No unit records changed; state changes cite the accepted specialist output T015 or this turn's tracking." },
+    { "check": "mock-data-only", "target": "data references", "result": "pass", "detail": "Only case files under data/firearm-store/ read; no live service contacted." }
+  ],
+  "summary": "Answered documentation-status for T001: flag check-failed (fictional background-check outcome record-found, interpretation T015 accepted), documentation needs-information (FORM-PURCHASE, REQ-BASE); no ambiguity, no human review."
+}

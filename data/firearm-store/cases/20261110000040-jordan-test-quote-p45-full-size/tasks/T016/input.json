@@ -1,0 +1,17 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T016",
+  "role": "sales-orchestrator",
+  "type": "resume",
+  "parent": null,
+  "resumes": "T001",
+  "attempt": 1,
+  "instruction": "Resume turn continuing T001 (entry task). All contract requests you made are finished; validate the responses and complete your turn (quote or case response).",
+  "original_input": "tasks/T001/input.json",
+  "previous_output": "tasks/T001/output.json",
+  "finished_subtasks": [
+    { "task_id": "T002", "role": "inventory-orchestrator", "contract": "inventory-availability", "status": "completed", "continued_by_chain": ["T010"], "final_output": "tasks/T010/output.json" },
+    { "task_id": "T003", "role": "compliance-orchestrator", "contract": "documentation-status", "status": "completed", "continued_by_chain": ["T011", "T013", "T015"], "final_output": "tasks/T015/output.json" },
+    { "task_id": "T004", "role": "finance-orchestrator", "contract": "payment-status", "status": "completed", "continued_by_chain": ["T009"], "final_output": "tasks/T009/output.json" }
+  ]
+}

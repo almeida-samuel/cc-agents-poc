@@ -1,0 +1,17 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T004",
+  "role": "finance-orchestrator",
+  "type": "contract",
+  "contract": "payment-status",
+  "parent": "T001",
+  "attempt": 1,
+  "input": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "price": 689,
+    "currency": "USD",
+    "payment_method": "cash",
+    "installment_request": null,
+    "note": "Quotation stage: return the mock payment status for a cash payment of 689 USD (CAT-HG-002 list price)."
+  }
+}

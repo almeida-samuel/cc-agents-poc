@@ -1,0 +1,28 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "unit": "finance",
+  "contracts": {
+    "payment-status": {
+      "status": "answered",
+      "served_by_task": "T004",
+      "resumed_by_task": "T009",
+      "requested_by_task": "T001",
+      "request": { "price": 689, "currency": "USD", "payment_method": "cash", "installment_request": null },
+      "outcome": "pending"
+    }
+  },
+  "subtasks": {
+    "payments-credit-specialist": { "status": "accepted", "expected_output": "Payment Status Proposal", "created_by_task": "T004", "task_id": "T008" }
+  },
+  "payment_status": {
+    "status": "pending",
+    "method": "cash",
+    "amount": 689,
+    "currency": "USD",
+    "source": "T008 Payment Status Proposal (payments-credit-specialist), accepted in T009",
+    "mock": true
+  },
+  "installment_plan": null,
+  "ledger_entries": [],
+  "updated_by_task": "T009"
+}

@@ -1,0 +1,16 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T012",
+  "role": "government-background-check",
+  "type": "contract",
+  "contract": "background-check",
+  "parent": "T011",
+  "attempt": 1,
+  "input": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "customer": { "name": "Jordan Test", "id_document": "FAKE-ID-1001", "date_of_birth": "1985-04-12" },
+    "request_draft_ref": "tasks/T007/output.json",
+    "fictional": true,
+    "instruction": "Return the fictional background-check result for this customer from the mock records only: outcome no-record, record-found (with mock record summary), delayed, or cannot-determine. Label it fictional; it is not an eligibility determination."
+  }
+}

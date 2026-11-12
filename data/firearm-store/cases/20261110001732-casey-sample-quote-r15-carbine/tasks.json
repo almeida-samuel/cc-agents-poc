@@ -1,0 +1,27 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "tasks": [
+    { "id": "T001", "role": "sales-orchestrator", "type": "work", "parent": null, "depends_on": [], "status": "completed", "attempt": 1, "continued_by": "T017" },
+    { "id": "T002", "role": "inventory-orchestrator", "type": "contract", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "inventory-availability", "continued_by": "T010" },
+    { "id": "T003", "role": "compliance-orchestrator", "type": "contract", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "documentation-status", "continued_by": "T011" },
+    { "id": "T004", "role": "finance-orchestrator", "type": "contract", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "payment-status", "continued_by": "T009" },
+    { "id": "T005", "role": "stock-manager", "type": "work", "parent": "T002", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T006", "role": "payments-credit-specialist", "type": "work", "parent": "T004", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T007", "role": "documentation-specialist", "type": "work", "parent": "T003", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T008", "role": "regulatory-verification-specialist", "type": "work", "parent": "T003", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T009", "role": "finance-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "payment-status", "resumes": "T004" },
+    { "id": "T010", "role": "inventory-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "inventory-availability", "resumes": "T002" },
+    { "id": "T011", "role": "compliance-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "documentation-status", "resumes": "T003", "continued_by": "T014" },
+    { "id": "T012", "role": "government-background-check", "type": "contract", "parent": "T011", "depends_on": [], "status": "failed", "attempt": 1, "contract": "background-check" },
+    { "id": "T013", "role": "government-background-check", "type": "contract", "parent": "T011", "depends_on": [], "status": "completed", "attempt": 2, "contract": "background-check" },
+    { "id": "T014", "role": "compliance-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "documentation-status", "resumes": "T003", "continued_by": "T016" },
+    { "id": "T015", "role": "regulatory-verification-specialist", "type": "work", "parent": "T014", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T016", "role": "compliance-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "documentation-status", "resumes": "T003" },
+    { "id": "T017", "role": "sales-orchestrator", "type": "resume", "parent": null, "depends_on": [], "status": "completed", "attempt": 1, "resumes": "T001" },
+    { "id": "T018", "role": "sales-orchestrator", "type": "resume", "parent": null, "depends_on": [], "status": "completed", "attempt": 1, "resumes": "T001", "continued_by": "T022" },
+    { "id": "T019", "role": "inventory-orchestrator", "type": "contract", "parent": "T018", "depends_on": [], "status": "completed", "attempt": 1, "contract": "inventory-availability", "continued_by": "T021" },
+    { "id": "T020", "role": "stock-manager", "type": "work", "parent": "T019", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T021", "role": "inventory-orchestrator", "type": "resume", "parent": "T018", "depends_on": [], "status": "completed", "attempt": 1, "contract": "inventory-availability", "resumes": "T019" },
+    { "id": "T022", "role": "sales-orchestrator", "type": "resume", "parent": null, "depends_on": [], "status": "completed", "attempt": 1, "resumes": "T001" }
+  ]
+}

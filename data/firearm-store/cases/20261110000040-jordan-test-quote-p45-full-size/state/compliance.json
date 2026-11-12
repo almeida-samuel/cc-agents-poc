@@ -1,0 +1,30 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "unit": "compliance",
+  "contract_served": { "contract": "documentation-status", "task_id": "T003", "requester": "sales-orchestrator", "requester_task": "T001", "resumed_by": ["T011", "T013", "T015"], "response_sent_by": "T015" },
+  "customer": { "name": "Jordan Test", "id_document": "FAKE-ID-1001", "date_of_birth": "1985-04-12" },
+  "items": [ { "catalog_id": "CAT-HG-002", "category": "handgun", "fire_modes": ["semi-auto"] } ],
+  "documentation_status": "complete",
+  "documentation_status_source": "tasks/T006/output.json (accepted in T011)",
+  "information_needed": [],
+  "background_check": {
+    "status": "recorded",
+    "request_draft": "tasks/T007/output.json (accepted in T011)",
+    "request_sent_by": "T011",
+    "provider": "government-background-check",
+    "response_ref": "tasks/T012/output.json (validated and accepted in T013)",
+    "interpretation": "tasks/T014/output.json (accepted in T015)",
+    "outcome": "no-record",
+    "fictional": true,
+    "notes": ["Response field request_ref is 'T012' (the response's own task ID) rather than the request draft T007; identifiers fully match, outcome unaffected."]
+  },
+  "compliance_flag": "clear",
+  "compliance_flag_source": "documentation complete (T006) + fictional background-check outcome no-record (T014, accepted in T015)",
+  "subtasks_requested": [
+    "documentation-specialist: completeness report (T006, accepted)",
+    "regulatory-verification-specialist: background-check request draft (T007, accepted)",
+    "government-background-check: background-check contract request (T012, accepted)",
+    "regulatory-verification-specialist: background-check interpretation (T014, accepted)"
+  ],
+  "human_requests": []
+}

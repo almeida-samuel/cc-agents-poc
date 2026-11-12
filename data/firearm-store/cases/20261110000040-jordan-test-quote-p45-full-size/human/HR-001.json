@@ -1,0 +1,16 @@
+{
+  "request_id": "HR-001",
+  "kind": "case-response-answer",
+  "addressed_to": "operator",
+  "case_response_ref": "tasks/T016/output.json",
+  "options_presented": [
+    "1. Close the case with no quote",
+    "2. Request a different catalog item",
+    "3. Ask again once CAT-HG-002 is restocked"
+  ],
+  "response": {
+    "answer": "3",
+    "meaning": "Ask again once CAT-HG-002 is restocked",
+    "recorded_at": "2026-11-10T00:14:00Z"
+  }
+}

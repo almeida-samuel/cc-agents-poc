@@ -1,0 +1,85 @@
+{
+  "task_id": "T005",
+  "role": "stock-manager",
+  "status": "completed",
+  "output": {
+    "availability_answer": {
+      "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+      "items": [
+        {
+          "catalog_id": "CAT-HG-002",
+          "item_id": "INV-0003",
+          "status": "sold",
+          "reservable": false
+        }
+      ],
+      "requested_quantity": 1,
+      "reservable_quantity": 0,
+      "result": "not-available",
+      "detail": "The only inventory unit for CAT-HG-002 (INV-0003, MOCK-SN-0003) has status 'sold' and location 'delivered'. No unit of CAT-HG-002 is available, so none can be reserved."
+    },
+    "proposed_record_changes": [],
+    "proposed_record_change_note": "No reservation proposed: no reservable unit of CAT-HG-002 exists.",
+    "discrepancies": [
+      {
+        "record": "data/firearm-store/records/inventory/items.json#INV-0003",
+        "detail": "INV-0003 is 'sold' / 'delivered' but has no reservation_id, delivery_ref, sold_at, sale_case_id or sale_report_ref, unlike the other sold item (INV-0001). reservations.json has no reservation for INV-0003. The sale cannot be traced from inventory records. This does not change availability (the unit is not sellable in any case), but the orchestrator may want to review the record.",
+        "severity": "low"
+      }
+    ],
+    "notes": [
+      "Catalog mapping of CAT-HG-002 to 'Mockworks P45 Full Size' was not verified here: the catalog is not among this task's input records. The catalog_id came from the task input.",
+      "No active reservations exist for CAT-HG-002 in reservations.json."
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "mock-data-only",
+      "target": "data/firearm-store/records/inventory/items.json, data/firearm-store/records/inventory/reservations.json",
+      "result": "pass",
+      "detail": "All data read resolves under data/firearm-store/; no live services contacted."
+    },
+    {
+      "check": "received-items-unavailable",
+      "target": "CAT-HG-002 units",
+      "result": "pass",
+      "detail": "No on-hold or unreleased CAT-HG-002 unit exists; none offered as available."
+    },
+    {
+      "check": "stock-reconciliation: available requires release_ref",
+      "target": "INV-0003",
+      "result": "pass",
+      "detail": "INV-0003 has release_ref DSP-0003 but status is 'sold'; not offered."
+    },
+    {
+      "check": "reservation-expiry",
+      "target": "reservations.json (CAT-HG-002)",
+      "result": "pass",
+      "detail": "No reservations exist for CAT-HG-002, so none can be active or expired. No new reservation proposed, so the 72-hour expiry does not apply."
+    },
+    {
+      "check": "acceptance: reservable only for available items without an active reservation",
+      "target": "availability_answer.items",
+      "result": "pass",
+      "detail": "INV-0003 is 'sold' and is marked reservable=false."
+    },
+    {
+      "check": "acceptance: proposed change 'from' equals current record value",
+      "target": "proposed_record_changes",
+      "result": "pass",
+      "detail": "Not applicable: no record change proposed."
+    },
+    {
+      "check": "stock-reconciliation: record consistency",
+      "target": "INV-0003",
+      "result": "fail",
+      "detail": "Sold item has no sale traceability fields and no reservation record; reported as a low-severity discrepancy."
+    }
+  ],
+  "summary": "CAT-HG-002 not available: its only unit INV-0003 is sold/delivered; no reservation proposed. INV-0003 has no sale traceability fields (discrepancy reported)."
+}

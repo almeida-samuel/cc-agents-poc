@@ -1,0 +1,43 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "unit": "compliance",
+  "contract_served": { "contract": "documentation-status", "task_id": "T003", "requester": "sales-orchestrator", "requester_task": "T001", "resumed_by": ["T011", "T014", "T016"], "response_sent_by": "T016" },
+  "customer": { "name": "Casey Sample", "id_document": "FAKE-ID-1002", "date_of_birth": "1990-09-30" },
+  "items": [ { "catalog_id": "CAT-RF-001", "category": "rifle", "fire_modes": ["semi-auto"] } ],
+  "documentation_status": "needs-information",
+  "documentation_status_source": "tasks/T007/output.json (documentation-specialist completeness report, accepted in T011)",
+  "information_needed": [
+    { "field": "documents.FORM-PURCHASE", "rule_id": "REQ-BASE" }
+  ],
+  "background_check": {
+    "status": "interpreted",
+    "request_draft": "tasks/T008/output.json",
+    "request_sent_by": "T011",
+    "provider": "government-background-check",
+    "attempts": [
+      { "task_id": "T012", "attempt": 1, "status": "failed", "note": "Stopped by operator before writing output; no response to validate." },
+      { "task_id": "T013", "attempt": 2, "status": "completed", "validation": "accepted in T014" }
+    ],
+    "response_ref": "tasks/T013/output.json",
+    "response_outcome_reported": "record-found",
+    "interpretation": "tasks/T015/output.json",
+    "interpretation_requested_in": "T014",
+    "interpretation_accepted_in": "T016",
+    "outcome": "record-found",
+    "fictional": true,
+    "notes": [
+      "Request draft accepted in T011; contract request to the mock government service listed in T011 new_tasks.",
+      "T013 government response validated and accepted in T014 (validate-external-outputs).",
+      "T015 regulatory-verification-specialist interpretation accepted in T016: outcome code record-found, full match, no ambiguity. Fictional; not a legal determination."
+    ]
+  },
+  "compliance_flag": "check-failed",
+  "compliance_flag_source": "tasks/T015/output.json (regulatory-verification-specialist interpretation, accepted in T016); documentation also needs-information per tasks/T007/output.json",
+  "subtasks_requested": [
+    "documentation-specialist: completeness report (requested in T003, accepted in T011)",
+    "regulatory-verification-specialist: background-check request draft (requested in T003, accepted in T011)",
+    "government-background-check: background-check contract request (requested in T011; T012 failed, T013 retry accepted in T014)",
+    "regulatory-verification-specialist: background-check interpretation of tasks/T013/output.json (requested in T014, accepted in T016)"
+  ],
+  "human_requests": []
+}

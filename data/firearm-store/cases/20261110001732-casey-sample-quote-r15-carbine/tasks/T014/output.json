@@ -1,0 +1,125 @@
+{
+  "task_id": "T014",
+  "role": "compliance-orchestrator",
+  "status": "completed",
+  "output": {
+    "compliance_flag": null,
+    "documentation_status": "needs-information",
+    "information_needed": [
+      { "field": "documents.FORM-PURCHASE", "rule_id": "REQ-BASE" }
+    ],
+    "background_check": { "status": "response-received", "response_ref": "tasks/T013/output.json", "outcome": null, "fictional": true },
+    "plan": "Validated and accepted the mock government response T013 (attempt 2; T012 failed without output). Per authority, the result is recorded only as the regulatory-verification-specialist interprets it, so an interpretation task is created. On the next resume: validate the interpretation, record the fictional outcome code, set the compliance flag (expected check-failed if record-found is confirmed; never clear), and answer documentation-status to sales (T001) with documentation status needs-information (FORM-PURCHASE, REQ-BASE)."
+  },
+  "new_tasks": [
+    {
+      "role": "regulatory-verification-specialist",
+      "type": "work",
+      "input": {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "expected_output": "Background-Check Interpretation",
+        "response_ref": "tasks/T013/output.json",
+        "request_ref": "tasks/T008/output.json",
+        "customer": { "name": "Casey Sample", "id_document": "FAKE-ID-1002", "date_of_birth": "1990-09-30" },
+        "fictional": true,
+        "instruction": "Interpret the fictional government background-check response in tasks/T013/output.json. Return case_id, outcome (no-record, record-found, delayed, or cannot-determine), fictional: true, a short summary, and response_ref. Report any ambiguity (e.g., match inconsistencies) in the output. No eligibility wording; this is not a legal determination."
+      },
+      "depends_on": []
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "background_check.status / response_ref / response_outcome_reported / attempts",
+      "from": "requested / null / (absent) / (absent)",
+      "to": "response-received / tasks/T013/output.json / record-found / [T012 failed, T013 accepted]",
+      "source": "tasks/T013/output.json (external output, validated and accepted in T014)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "background_check.interpretation_requested_in",
+      "from": null,
+      "to": "T014",
+      "source": "T014 new_tasks"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "contract_served.resumed_by, subtasks_requested",
+      "from": "[T011], 3 entries",
+      "to": "[T011, T014], 4 entries (interpretation task added; government entry updated)",
+      "source": "T014 input.json; T014 new_tasks"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "retry accounting (orchestrator-turn)",
+      "target": "T012, T013",
+      "result": "pass",
+      "detail": "T012 (attempt 1) failed with no output after the operator stopped it; dispatcher retried as T013 (attempt 2). Attempt 2 is within the max of 4, so no escalation is needed."
+    },
+    {
+      "check": "validate-external-outputs: required fields (request_ref, outcome, match, fictional)",
+      "target": "tasks/T013/output.json",
+      "result": "pass",
+      "detail": "All present; request_ref tasks/T008/output.json matches the accepted draft; outcome record-found is a valid enum value; record_summary present for record-found."
+    },
+    {
+      "check": "validate-external-outputs: record used only on full match (ID, name, DOB)",
+      "target": "tasks/T013/output.json match",
+      "result": "pass",
+      "detail": "match {id_document: true, name: true, date_of_birth: true}; consistent with using the record and with outcome record-found."
+    },
+    {
+      "check": "validate-external-outputs: comes from the mock criminal records",
+      "target": "tasks/T013/output.json source",
+      "result": "pass",
+      "detail": "Source is data/firearm-store/external/government-background-check/criminal-records.json (mock external data). Compliance does not read external-party data directly, so this is checked from the declared source."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "tasks/T013/output.json; T014 new task input; state/compliance.json",
+      "result": "pass",
+      "detail": "Response fictional: true with outcome code only and no eligibility statement; interpretation request and state labeled fictional: true."
+    },
+    {
+      "check": "validate-external-outputs: decision",
+      "target": "tasks/T013/output.json",
+      "result": "pass",
+      "detail": "Accepted."
+    },
+    {
+      "check": "authority: background-check result recorded as the regulatory verification specialist interprets it",
+      "target": "state/compliance.json background_check.outcome",
+      "result": "pass",
+      "detail": "Outcome not recorded and compliance flag not set yet; interpretation delegated to regulatory-verification-specialist."
+    },
+    {
+      "check": "compliance flag acceptance: clear only when documentation complete and background check no-record",
+      "target": "state/compliance.json compliance_flag",
+      "result": "pass",
+      "detail": "Flag left null. Documentation is needs-information and the reported outcome is record-found, so clear is impossible regardless."
+    },
+    {
+      "check": "full-auto-requires-address",
+      "target": "CAT-RF-001",
+      "result": "pass",
+      "detail": "fire_modes ['semi-auto'] (state, from catalog check in T011); customer.address not required."
+    },
+    {
+      "check": "delegation",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "No unit records changed; state changes cite the accepted external output T013 and this turn's task plan."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files under data/firearm-store/ read; no live service contacted."
+    }
+  ],
+  "summary": "Accepted fictional government response T013 (record-found, full match; T012 failed and was retried); requested regulatory-verification-specialist interpretation; flag pending; documentation still needs-information (FORM-PURCHASE)."
+}

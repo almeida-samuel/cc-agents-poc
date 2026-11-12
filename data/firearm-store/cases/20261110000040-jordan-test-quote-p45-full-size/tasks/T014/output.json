@@ -1,0 +1,62 @@
+{
+  "task_id": "T014",
+  "role": "regulatory-verification-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "outcome": "no-record",
+    "fictional": true,
+    "summary": "The fictional government background-check response returned outcome code 'no-record' for Jordan Test (FAKE-ID-1001, DOB 1985-04-12). The ID, name, and date of birth all match the request draft in T007. This is a mock result labeled fictional and reports only the outcome code. Minor note: the response's request_ref field is 'T012', the response's own task ID, not the request draft T007. Because all three identifiers match, the outcome is not affected; the orchestrator may want to note the field.",
+    "response_ref": "tasks/T012/output.json"
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "rule: fictional-background-checks",
+      "target": "output.fictional",
+      "result": "pass",
+      "detail": "fictional == true. The interpretation gives only the outcome code and makes no eligibility statement."
+    },
+    {
+      "check": "rule: mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Read only tasks/T014/input.json, request.md, tasks/T007/output.json, and tasks/T012/output.json, all under data/firearm-store/. No live service was contacted."
+    },
+    {
+      "check": "acceptance: labeled fictional",
+      "target": "output.fictional",
+      "result": "pass",
+      "detail": "The fictional field is set to true and the summary says the result is a mock fictional result."
+    },
+    {
+      "check": "acceptance: no eligibility wording",
+      "target": "output.summary",
+      "result": "pass",
+      "detail": "The summary reports only the outcome code and the identifier match. It does not say whether the customer is eligible, approved, or cleared."
+    },
+    {
+      "check": "acceptance: required fields present (case_id, outcome, fictional, summary, response_ref)",
+      "target": "output",
+      "result": "pass",
+      "detail": "All five fields are present, and outcome 'no-record' is one of the allowed enum values."
+    },
+    {
+      "check": "consistency: response identifiers match request draft",
+      "target": "tasks/T012/output.json vs tasks/T007/output.json",
+      "result": "pass",
+      "detail": "The response says match.id_document, match.name, and match.date_of_birth are all true. The request draft T007 has FAKE-ID-1001 / Jordan Test / 1985-04-12, which matches request.md. The response is well-formed and has no internal contradiction."
+    },
+    {
+      "check": "consistency: response request_ref",
+      "target": "tasks/T012/output.json output.request_ref",
+      "result": "pass",
+      "detail": "request_ref is 'T012', the response task's own ID, not the request draft T007. This is a minor labeling issue and does not affect the outcome. It is reported for the orchestrator to decide on."
+    }
+  ],
+  "summary": "Fictional background-check interpretation for Jordan Test (FAKE-ID-1001): outcome no-record, all identifiers matched. Mock result only, no eligibility wording."
+}

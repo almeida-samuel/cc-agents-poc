@@ -1,0 +1,16 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T009",
+  "role": "finance-orchestrator",
+  "type": "resume",
+  "contract": "payment-status",
+  "parent": "T001",
+  "resumes": "T004",
+  "attempt": 1,
+  "instruction": "Resume turn continuing T004 (payment-status contract for T001). All subtasks of T004 are finished; validate their outputs and complete your turn.",
+  "original_input": "tasks/T004/input.json",
+  "previous_output": "tasks/T004/output.json",
+  "finished_subtasks": [
+    { "task_id": "T008", "role": "payments-credit-specialist", "status": "completed", "output": "tasks/T008/output.json" }
+  ]
+}

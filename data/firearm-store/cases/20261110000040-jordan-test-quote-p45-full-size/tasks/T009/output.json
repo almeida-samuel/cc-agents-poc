@@ -1,0 +1,67 @@
+{
+  "task_id": "T009",
+  "role": "finance-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract_response": {
+      "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+      "contract": "payment-status",
+      "outcome": "pending",
+      "positive": true,
+      "payment_status": {
+        "method": "cash",
+        "accepted_method": true,
+        "amount": 689,
+        "currency": "USD",
+        "status": "pending"
+      },
+      "installment_plan": null,
+      "note": "Mock outcome. Cash is an accepted method and not yet paid, which is enough for a quote. Delivery will still need status paid (rule delivery-requires-clearance).",
+      "source": "tasks/T008/output.json"
+    },
+    "applied_finance_change": {
+      "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+      "record": "payment status",
+      "change": { "payment_status": { "from": null, "to": "pending" }, "method": "cash", "amount": 689, "currency": "USD" },
+      "source": "T008 Payment Status Proposal (payments-credit-specialist)"
+    }
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/finance.json",
+      "field": "payment_status",
+      "from": null,
+      "to": { "status": "pending", "method": "cash", "amount": 689, "currency": "USD" },
+      "source": "tasks/T008/output.json (accepted Payment Status Proposal)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/finance.json",
+      "field": "contracts.payment-status.status",
+      "from": "in-progress",
+      "to": "answered (outcome pending)",
+      "source": "T009 turn"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/finance.json",
+      "field": "subtasks.payments-credit-specialist.status",
+      "from": "requested",
+      "to": "accepted",
+      "source": "tasks/T008/output.json"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "Payment Status Proposal required fields", "target": "tasks/T008/output.json", "result": "pass", "detail": "case_id matches the case; method cash (valid enum); amount 689 matches the T004 request; status pending (valid enum)." },
+    { "check": "Payment Status Proposal acceptance: status comes from the case's mock data", "target": "tasks/T008/output.json", "result": "pass", "detail": "data/firearm-store/records/finance/payment-methods.json lists cash with accepted true and status_before_payment pending. Quotation stage, no payment recorded." },
+    { "check": "installment-limits", "target": "T004 request / T008 output", "result": "pass", "detail": "No installment plan requested (installment_request null, method cash), so the rule condition is not triggered and no plan is approved." },
+    { "check": "mock-data-only", "target": "data references", "result": "pass", "detail": "All references resolve under data/firearm-store/. No live service contacted." },
+    { "check": "report-every-transaction", "target": "ledger", "result": "pass", "detail": "No transaction report received (quotation only, no completed sale). No ledger entry applied; records/finance/ledger.json unchanged." },
+    { "check": "Applied Finance Change acceptance: every ledger entry traces to a transaction report", "target": "output.applied_finance_change", "result": "pass", "detail": "The change is a payment status, not a ledger entry. No ledger entries applied." },
+    { "check": "delegation", "target": "state/finance.json payment_status", "result": "pass", "detail": "Source is the accepted payments-credit-specialist output T008. No unit records changed." },
+    { "check": "payment-status contract outcome", "target": "output.contract_response", "result": "pass", "detail": "Outcome pending is one of the contract outcomes and counts as positive for a quote (accepted method, not paid yet)." }
+  ],
+  "summary": "Accepted T008 proposal; set mock payment status pending (cash, 689 USD) and answered payment-status to sales: pending, positive for quote, no installment plan, no ledger change."
+}

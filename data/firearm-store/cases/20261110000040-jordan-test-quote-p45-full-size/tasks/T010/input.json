@@ -1,0 +1,16 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T010",
+  "role": "inventory-orchestrator",
+  "type": "resume",
+  "contract": "inventory-availability",
+  "parent": "T001",
+  "resumes": "T002",
+  "attempt": 1,
+  "instruction": "Resume turn continuing T002 (inventory-availability contract for T001). All subtasks of T002 are finished; validate their outputs and complete your turn.",
+  "original_input": "tasks/T002/input.json",
+  "previous_output": "tasks/T002/output.json",
+  "finished_subtasks": [
+    { "task_id": "T005", "role": "stock-manager", "status": "completed", "output": "tasks/T005/output.json" }
+  ]
+}

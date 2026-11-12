@@ -1,0 +1,165 @@
+{
+  "task_id": "T010",
+  "role": "inventory-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract_response": {
+      "contract": "inventory-availability",
+      "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+      "request_task": "T002",
+      "requested_by": "T001",
+      "action": "reserve",
+      "items": [
+        {
+          "catalog_id": "CAT-RF-001",
+          "quantity": 1,
+          "outcome": "reserved",
+          "item_id": "INV-0005",
+          "reservation_ref": "RES-0002",
+          "reservation_created_at": "2026-11-10T00:23:00Z",
+          "reservation_expires_at": "2026-11-13T00:23:00Z",
+          "release_ref": "DSP-0005",
+          "detail": "INV-0005 (Mockworks R15 Carbine, mock serial MOCK-SN-0005) was released by technical services (DSP-0005, inspection INS-0005 pass) and is now reserved for this case. The reservation expires after 72 hours (rule reservation-expiry); the quote's valid_until should not exceed 2026-11-13T00:23:00Z."
+        }
+      ],
+      "notes": [
+        "Delivery requires that the item stays reserved for this case, compliance is 'clear', and payment is 'paid' (rule delivery-requires-clearance)."
+      ]
+    },
+    "applied_inventory_changes": [
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "RES-0002",
+        "change": { "field": "(new reservation)", "old": null, "new": { "item_id": "INV-0005", "case_id": "20261110001732-casey-sample-quote-r15-carbine", "status": "active", "created_at": "2026-11-10T00:23:00Z", "expires_at": "2026-11-13T00:23:00Z" } },
+        "source": "tasks/T005/output.json (stock-manager proposal, accepted)"
+      },
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "INV-0005",
+        "change": { "field": "status", "old": "available", "new": "reserved" },
+        "source": "tasks/T005/output.json (stock-manager proposal, accepted)"
+      },
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "INV-0005",
+        "change": { "field": "reservation_id", "old": null, "new": "RES-0002" },
+        "source": "tasks/T005/output.json (stock-manager proposal, accepted)"
+      }
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/records/inventory/reservations.json",
+      "field": "reservations[RES-0002]",
+      "from": null,
+      "to": "active reservation of INV-0005 for this case, created 2026-11-10T00:23:00Z, expires 2026-11-13T00:23:00Z",
+      "source": "tasks/T005/output.json"
+    },
+    {
+      "file": "data/firearm-store/records/inventory/items.json",
+      "field": "items[INV-0005].status",
+      "from": "available",
+      "to": "reserved",
+      "source": "tasks/T005/output.json"
+    },
+    {
+      "file": "data/firearm-store/records/inventory/items.json",
+      "field": "items[INV-0005].reservation_id",
+      "from": null,
+      "to": "RES-0002",
+      "source": "tasks/T005/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/inventory.json",
+      "field": "contract_requests[T002].status, accepted_outputs, reservations, record_changes_applied, open_discrepancies",
+      "from": "awaiting stock-manager availability answer and proposed reservation",
+      "to": "answered (reserved, RES-0002); T005 accepted; INV-0003 discrepancy tracked",
+      "source": "tasks/T005/output.json"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "acceptance: stock-manager availability answer",
+      "target": "tasks/T005/output.json availability_answer",
+      "result": "pass",
+      "detail": "case_id and per-item catalog_id, item_id, status and reservable present. Cross-checked records/inventory/items.json: INV-0005 is the only CAT-RF-001 unit and its status was 'available'. No reservation referenced it."
+    },
+    {
+      "check": "acceptance: proposed record changes (from equals current value)",
+      "target": "tasks/T005/output.json proposed_record_changes",
+      "result": "pass",
+      "detail": "INV-0005.status was 'available', reservation_id was absent, RES-0002 did not exist in reservations.json."
+    },
+    {
+      "check": "reservation-expiry",
+      "target": "RES-0002 and existing reservations",
+      "result": "pass",
+      "detail": "Applied at 2026-11-10T00:23:00Z (application time, as the proposal allows) with expires_at = created_at + 72h = 2026-11-13T00:23:00Z. RES-0001 is delivered, so no active reservation needs releasing."
+    },
+    {
+      "check": "release-requires-pass",
+      "target": "INV-0005",
+      "result": "pass",
+      "detail": "release_ref DSP-0005 is a 'release' disposition (records/technical-services/inspections.json) referencing INS-0005 with outcome 'pass'. No item was made 'available' this turn."
+    },
+    {
+      "check": "received-items-unavailable",
+      "target": "CAT-RF-001 units",
+      "result": "pass",
+      "detail": "INV-0005 is not on-hold. The on-hold item INV-0007 is a different catalog item and was not touched."
+    },
+    {
+      "check": "contract rule: only released items reported available or reserved",
+      "target": "contract_response.items[CAT-RF-001]",
+      "result": "pass",
+      "detail": "Reserved item INV-0005 has release disposition DSP-0005."
+    },
+    {
+      "check": "delegation",
+      "target": "reservations.json#RES-0002",
+      "result": "pass",
+      "detail": "Source: accepted stock-manager output tasks/T005/output.json."
+    },
+    {
+      "check": "delegation",
+      "target": "items.json#INV-0005.status",
+      "result": "pass",
+      "detail": "Source: accepted stock-manager output tasks/T005/output.json."
+    },
+    {
+      "check": "delegation",
+      "target": "items.json#INV-0005.reservation_id",
+      "result": "pass",
+      "detail": "Source: accepted stock-manager output tasks/T005/output.json."
+    },
+    {
+      "check": "authority",
+      "target": "all applied changes",
+      "result": "pass",
+      "detail": "Reserving for sales from the stock manager's availability answer and proposed reservation change is within the inventory-orchestrator's listed authority."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "request action",
+      "result": "pass",
+      "detail": "Action is 'reserve', not 'deliver'; rule not triggered."
+    },
+    {
+      "check": "escalation triggers: record discrepancy INV-0003",
+      "target": "tasks/T005/output.json discrepancies",
+      "result": "pass",
+      "detail": "INV-0003 (CAT-HG-002) is sold without traceability fields. It is unrelated to this case, involves no other department's conflicting output, and is already tracked in case 20261110000040-jordan-test-quote-p45-full-size. It is tracked in state/inventory.json and not corrected, since no source exists for a correction. No escalation raised."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only files under data/firearm-store/ were read or written; no live service was contacted."
+    }
+  ],
+  "summary": "Accepted T005 and reserved INV-0005 (CAT-RF-001, release DSP-0005) for the case as RES-0002, expiring 2026-11-13T00:23:00Z; answered inventory-availability to T001 with outcome reserved. INV-0003 discrepancy tracked, not escalated."
+}

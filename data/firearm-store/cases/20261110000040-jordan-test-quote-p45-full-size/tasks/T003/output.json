@@ -1,0 +1,103 @@
+{
+  "task_id": "T003",
+  "role": "compliance-orchestrator",
+  "status": "completed",
+  "output": {
+    "compliance_flag": null,
+    "plan": "First turn of documentation-status for sales (T001). Delegating in parallel: documentation-specialist completeness report (mock requirements for handgun CAT-HG-002, including full-auto-requires-address), and regulatory-verification-specialist background-check request draft. On resume: validate both; if the draft is accepted, send the background-check contract request to the government service; then have the regulatory-verification-specialist interpret the fictional response, and set documentation status and compliance flag."
+  },
+  "new_tasks": [
+    {
+      "role": "documentation-specialist",
+      "type": "work",
+      "input": {
+        "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+        "customer": { "name": "Jordan Test", "id_document": "FAKE-ID-1001", "date_of_birth": "1985-04-12" },
+        "items": [ { "catalog_id": "CAT-HG-002", "category": "handgun", "fire_modes": ["semi-auto"] } ],
+        "documents": "No documents/ folder in the case; customer information is only what request.md states.",
+        "instruction": "Produce a Completeness Report: check the case's mock customer information against the mock compliance requirements for each item category, apply full-auto-requires-address to every item, and list missing fields ({field, rule_id}) and inconsistencies."
+      },
+      "depends_on": []
+    },
+    {
+      "role": "regulatory-verification-specialist",
+      "type": "work",
+      "input": {
+        "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+        "customer": { "name": "Jordan Test", "id_document": "FAKE-ID-1001", "date_of_birth": "1985-04-12" },
+        "instruction": "Produce a Background-Check Request Draft for the government background-check service using only identifying information from the case (name, fake ID, date of birth)."
+      },
+      "depends_on": []
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "(file created)",
+      "from": null,
+      "to": "initial compliance state: documentation_status null, compliance_flag null, background_check not-requested",
+      "source": "T003 input.json; request.md"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "subtasks_requested",
+      "from": null,
+      "to": "completeness report (documentation-specialist), background-check request draft (regulatory-verification-specialist)",
+      "source": "T003 new_tasks"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "input sufficiency (documentation-status contract input)",
+      "target": "tasks/T003/input.json",
+      "result": "pass",
+      "detail": "Case ID, customer identifying info (name, FAKE-ID-1001, DOB) and item with category and fire modes provided; no documents/ folder, which the documentation specialist will assess."
+    },
+    {
+      "check": "delegate the work",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "Completeness assessment and background-check request draft delegated to the unit's specialists; orchestrator does not assess documentation itself."
+    },
+    {
+      "check": "full-auto-requires-address (scheduled)",
+      "target": "CAT-HG-002",
+      "result": "pass",
+      "detail": "Rule will be applied by the documentation specialist and verified on resume; input fire_modes are [semi-auto]."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "background-check plan",
+      "result": "pass",
+      "detail": "No background-check result produced or recorded yet; state initialized with fictional: true; no eligibility statement made."
+    },
+    {
+      "check": "validate-external-outputs (scheduled)",
+      "target": "background-check contract",
+      "result": "pass",
+      "detail": "Government service not yet contacted; the request will be sent only after the draft is accepted, and its response will be validated."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files under data/firearm-store/ read; no live service contacted."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Only state/compliance.json created; no documentation status or compliance flag set without specialist outputs."
+    },
+    {
+      "check": "delegation",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "No unit records changed; only own state file, which needs no specialist source."
+    }
+  ],
+  "summary": "Started documentation-status for T001: requested completeness report (documentation-specialist) and background-check request draft (regulatory-verification-specialist) in parallel; flag pending."
+}

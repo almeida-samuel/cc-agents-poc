@@ -1,0 +1,13 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T007",
+  "role": "documentation-specialist",
+  "type": "work",
+  "attempt": 1,
+  "requested_by": "T003",
+  "customer": { "name": "Casey Sample", "id_document": "FAKE-ID-1002", "date_of_birth": "1990-09-30" },
+  "items": [ { "catalog_id": "CAT-RF-001", "category": "rifle", "fire_modes": ["semi-auto"] } ],
+  "documents": "No documents/ folder in the case; customer information is only what request.md states.",
+  "requirements_ref": "data/firearm-store/records/compliance/requirements.json",
+  "instruction": "Produce a Completeness Report: check the case's mock customer information against the mock compliance requirements for each item category, apply full-auto-requires-address to every item, and list missing fields ({field, rule_id}) and inconsistencies."
+}

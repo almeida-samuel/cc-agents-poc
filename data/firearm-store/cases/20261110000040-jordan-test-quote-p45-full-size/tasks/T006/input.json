@@ -1,0 +1,15 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T006",
+  "role": "documentation-specialist",
+  "type": "work",
+  "parent": "T003",
+  "attempt": 1,
+  "input": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "customer": { "name": "Jordan Test", "id_document": "FAKE-ID-1001", "date_of_birth": "1985-04-12" },
+    "items": [ { "catalog_id": "CAT-HG-002", "category": "handgun", "fire_modes": ["semi-auto"] } ],
+    "documents": "No documents/ folder in the case; customer information is only what request.md states.",
+    "instruction": "Produce a Completeness Report: check the case's mock customer information against the mock compliance requirements for each item category, apply full-auto-requires-address to every item, and list missing fields ({field, rule_id}) and inconsistencies."
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "unit": "sales",
+  "updated_by_task": "T022",
+  "request_status": "closed-dropped-by-operator",
+  "operator_answers": [
+    { "ref": "human/HR-001.json", "choice": 1, "summary": "Accepted blocking findings; drop quotation; release RES-0002 now; close case." }
+  ],
+  "customer_request": {
+    "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+    "request_type": "quotation",
+    "customer": {
+      "name": "Casey Sample",
+      "id_document": "FAKE-ID-1002",
+      "date_of_birth": "1990-09-30"
+    },
+    "items": [
+      { "catalog_id": "CAT-RF-001", "name": "Mockworks R15 Carbine", "quantity": 1, "list_price": 1199 }
+    ],
+    "payment_method": "card"
+  },
+  "contracts": {
+    "inventory-availability": {
+      "action": "reserve",
+      "status": "answered",
+      "response": {
+        "source": "tasks/T010/output.json",
+        "outcome": "reserved",
+        "positive": true,
+        "item_id": "INV-0005",
+        "reservation_ref": "RES-0002",
+        "reservation_expires_at": "2026-11-13T00:23:00Z"
+      },
+      "release_request": {
+        "action": "release",
+        "status": "answered",
+        "requested_by_task": "T018",
+        "item_id": "INV-0005",
+        "reservation_ref": "RES-0002",
+        "basis": "human/HR-001.json",
+        "response": {
+          "source": "tasks/T021/output.json",
+          "outcome": "released",
+          "item_id": "INV-0005",
+          "reservation_ref": "RES-0002",
+          "released_at": "2026-11-10T02:03:00Z",
+          "validated_by_task": "T022"
+        }
+      }
+    },
+    "documentation-status": {
+      "status": "answered",
+      "response": {
+        "source": "tasks/T016/output.json",
+        "flag": "check-failed",
+        "positive": false,
+        "documentation_status": "needs-information",
+        "information_needed": [ { "field": "documents.FORM-PURCHASE", "rule_id": "REQ-BASE" } ],
+        "background_check_outcome": "record-found",
+        "fictional": true
+      }
+    },
+    "payment-status": {
+      "status": "answered",
+      "response": {
+        "source": "tasks/T009/output.json",
+        "outcome": "pending",
+        "positive": true,
+        "method": "card",
+        "amount": 1199,
+        "currency": "USD"
+      }
+    }
+  },
+  "quote": null,
+  "sales_side_ready": false,
+  "sale_completed": false,
+  "transaction_report_required": false,
+  "sales_tasks_complete": true,
+  "case_response": {
+    "sent_by_task": "T017",
+    "type": "blocking-findings",
+    "answered_by": "human/HR-001.json"
+  }
+}

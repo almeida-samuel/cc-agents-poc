@@ -1,0 +1,19 @@
+{
+  "id": "HR-001",
+  "kind": "case-response-answer",
+  "addressed_to": "operator",
+  "case_response_ref": "tasks/T017/output.json#case_response",
+  "case_response_type": "blocking-findings",
+  "options_presented": [
+    "Accept: close the case, and sales asks inventory to release RES-0002 now",
+    "Close the case and keep the reservation until it expires",
+    "Provide FORM-PURCHASE and continue",
+    "Something else"
+  ],
+  "response": {
+    "choice": 1,
+    "answer": "Accept the blocking-findings response. Drop the quotation request and release reservation RES-0002 (INV-0005) now, then close the case."
+  },
+  "recorded_at": "2026-11-10T01:58:40Z",
+  "recorded_by": "dispatcher"
+}

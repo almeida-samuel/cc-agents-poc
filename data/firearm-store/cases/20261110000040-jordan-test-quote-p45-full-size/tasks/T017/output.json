@@ -1,0 +1,176 @@
+{
+  "task_id": "T017",
+  "role": "sales-orchestrator",
+  "status": "completed",
+  "output": {
+    "customer_request_record": {
+      "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+      "request_type": "quotation",
+      "customer": {
+        "name": "Jordan Test",
+        "id_document": "FAKE-ID-1001",
+        "date_of_birth": "1985-04-12"
+      },
+      "items": [ { "catalog_id": "CAT-HG-002", "quantity": 1 } ],
+      "payment_method": "cash"
+    },
+    "quote": null,
+    "quote_not_issued_reason": "Availability is still not positive: the last inventory-availability response (tasks/T010/output.json) is 'unavailable' for CAT-HG-002 with no reservation. Nothing in the case shows a restock since then.",
+    "operator_decision": {
+      "ref": "human/HR-001.json",
+      "answer": "3",
+      "meaning": "Ask again once CAT-HG-002 is restocked"
+    },
+    "waiting_on": {
+      "condition": "CAT-HG-002 restocked and released by technical services",
+      "trigger": "The operator resumes this case once the restock has happened. Restocking is a purchasing-entry case the operator opens; sales has no contract to request it and no way to be told about it.",
+      "on_resume": "Request inventory-availability (reserve, CAT-HG-002 x1) and re-confirm documentation-status and payment-status in parallel. Issue the quote if all three are positive."
+    },
+    "statuses": {
+      "availability": { "outcome": "unavailable", "source": "tasks/T010/output.json" },
+      "compliance": { "flag": "clear", "documentation_status": "complete", "background_check_outcome": "no-record", "fictional": true, "source": "tasks/T015/output.json" },
+      "payment": { "outcome": "pending", "method": "cash", "amount": 689, "currency": "USD", "positive": true, "source": "tasks/T009/output.json" }
+    },
+    "sales_side_ready": false
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "operator_decision",
+      "from": null,
+      "to": { "answer": "3", "meaning": "Ask again once CAT-HG-002 is restocked", "ref": "human/HR-001.json" },
+      "source": "human/HR-001.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "waiting_on",
+      "from": null,
+      "to": { "condition": "CAT-HG-002 restocked and released", "trigger": "operator resumes the case", "on_resume": "re-request inventory-availability reserve, documentation-status, payment-status" },
+      "source": "human/HR-001.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "case_response",
+      "from": { "type": "blocking-findings", "sent_by_task": "T016" },
+      "to": { "type": "blocking-findings", "sent_by_task": "T017", "previous": "T016" },
+      "source": "T017 case_response"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "entry_unit": "sales",
+    "type": "blocking-findings",
+    "summary": "Option 3 recorded: sales will ask for the Mockworks P45 Full Size (CAT-HG-002) quote again once it is restocked. It is still out of stock, so the case is on hold. Sales cannot start a restock or be told when one happens, so you need to resume this case once the restock is done.",
+    "findings": [
+      {
+        "unit": "inventory",
+        "finding": "CAT-HG-002 Mockworks P45 Full Size is still 'unavailable'. The only unit (INV-0003) is sold/delivered and nothing is reserved. The case shows no restock since that answer.",
+        "source_ref": "tasks/T010/output.json (inventory-availability response to T002); operator answer human/HR-001.json"
+      }
+    ],
+    "information_needed": [],
+    "context_statuses": [
+      {
+        "unit": "compliance",
+        "status": "Flag 'clear'; documentation complete. Fictional background-check outcome code: no-record (mock data, not an eligibility determination). Will be re-confirmed on resume.",
+        "source_ref": "tasks/T015/output.json (documentation-status response to T003)"
+      },
+      {
+        "unit": "finance",
+        "status": "Payment status 'pending' (cash is an accepted method, not paid), 689 USD (mock catalog list price). Will be re-confirmed on resume.",
+        "source_ref": "tasks/T009/output.json (payment-status response to T004)"
+      }
+    ],
+    "next_step": "If you want the item restocked, open a restocking case (purchasing is the entry unit for that). When CAT-HG-002 has been restocked and released by technical services, resume this case. Sales will then ask inventory to reserve one unit and re-confirm the documentation and payment statuses in parallel. If all three are positive, you get a quote valid for the 72-hour reservation. If you decide not to wait, tell us to close the case with no quote, or ask for a different catalog item."
+  },
+  "checks": [
+    {
+      "check": "operator answer recorded and matches an option presented",
+      "target": "human/HR-001.json",
+      "result": "pass",
+      "detail": "Answer '3' matches option 3 of the T016 case response's next step (ask again once CAT-HG-002 is restocked)."
+    },
+    {
+      "check": "quote acceptance: issued only when availability, compliance (clear), and payment are all positive",
+      "target": "output.quote",
+      "result": "pass",
+      "detail": "The latest availability is 'unavailable' (tasks/T010/output.json), so no quote is issued."
+    },
+    {
+      "check": "quote acceptance: valid_until matches the reservation",
+      "target": "output.quote",
+      "result": "pass",
+      "detail": "Not applicable: no reservation, so no quote."
+    },
+    {
+      "check": "sales side ready only when all three positive",
+      "target": "state/sales.json sales_side_ready",
+      "result": "pass",
+      "detail": "Kept false."
+    },
+    {
+      "check": "authority: restocking",
+      "target": "new_tasks; escalations",
+      "result": "pass",
+      "detail": "Restocking is a purchasing-entry case opened by the operator. Sales has no contract with purchasing. The operator chose to wait, not to ask for a restock, so nothing is escalated and the operator is told how to proceed."
+    },
+    {
+      "check": "no premature re-request of inventory-availability",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "The operator's condition (restocked) has not been met in the case, so re-requesting now would only repeat T010. No contract tasks created."
+    },
+    {
+      "check": "case response acceptance: exactly one type with its matching field filled",
+      "target": "case_response",
+      "result": "pass",
+      "detail": "type blocking-findings, findings filled, no information missing."
+    },
+    {
+      "check": "case response acceptance: every finding cites its contract response or event",
+      "target": "case_response.findings",
+      "result": "pass",
+      "detail": "Cites tasks/T010/output.json and human/HR-001.json."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "case_response; output.statuses.compliance",
+      "result": "pass",
+      "detail": "Only the outcome code 'no-record' is quoted, labeled fictional; no eligibility statement made."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "No delivery requested: nothing reserved, payment not paid."
+    },
+    {
+      "check": "sale-completion / report-every-transaction",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "No sale completed, so no transaction-report."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files under data/firearm-store/ were read."
+    },
+    {
+      "check": "delegation",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "No sales records changed. Only own state/sales.json was updated, to track the operator's answer."
+    },
+    {
+      "check": "escalation triggers",
+      "target": "T017 turn",
+      "result": "pass",
+      "detail": "No failed acceptance, no conflict with another department, nothing outside authority needed for the operator's chosen option."
+    }
+  ],
+  "summary": "Recorded operator answer 3 (wait for CAT-HG-002 restock). Item still unavailable (T010), no quote. Sent blocking-findings case response: case on hold until the operator resumes it after restock. Sales will then re-request reserve, documentation, and payment."
+}

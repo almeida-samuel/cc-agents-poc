@@ -1,0 +1,10 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T008",
+  "role": "regulatory-verification-specialist",
+  "type": "work",
+  "attempt": 1,
+  "requested_by": "T003",
+  "customer": { "name": "Casey Sample", "id_document": "FAKE-ID-1002", "date_of_birth": "1990-09-30" },
+  "instruction": "Produce a Background-Check Request Draft for the government background-check service using only identifying information from the case (name, fake ID, date of birth)."
+}

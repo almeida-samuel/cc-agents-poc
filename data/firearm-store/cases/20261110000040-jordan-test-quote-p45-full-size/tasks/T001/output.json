@@ -1,0 +1,151 @@
+{
+  "task_id": "T001",
+  "role": "sales-orchestrator",
+  "status": "completed",
+  "output": {
+    "customer_request_record": {
+      "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+      "request_type": "quotation",
+      "customer": {
+        "name": "Jordan Test",
+        "id_document": "FAKE-ID-1001",
+        "date_of_birth": "1985-04-12"
+      },
+      "items": [
+        { "catalog_id": "CAT-HG-002", "quantity": 1 }
+      ],
+      "payment_method": "cash"
+    },
+    "plan": "Item is specific (CAT-HG-002, Mockworks P45 Full Size, list price 689 USD from the mock catalog), so no sales-consultant step is needed. Requesting inventory-availability (reserve), documentation-status, and payment-status in parallel; quote to be assembled on resume once all three respond."
+  },
+  "new_tasks": [
+    {
+      "role": "inventory-orchestrator",
+      "type": "contract",
+      "contract": "inventory-availability",
+      "input": {
+        "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+        "items": [ { "catalog_id": "CAT-HG-002", "quantity": 1 } ],
+        "action": "reserve",
+        "note": "Quotation request. Reserve one released unit for this case if available; return per-item status and the reservation reference with its expiry (72 hours, rule reservation-expiry) so the quote's valid_until can match it."
+      },
+      "depends_on": []
+    },
+    {
+      "role": "compliance-orchestrator",
+      "type": "contract",
+      "contract": "documentation-status",
+      "input": {
+        "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+        "customer": {
+          "name": "Jordan Test",
+          "id_document": "FAKE-ID-1001",
+          "date_of_birth": "1985-04-12"
+        },
+        "items": [
+          { "catalog_id": "CAT-HG-002", "category": "handgun", "fire_modes": ["semi-auto"] }
+        ],
+        "documents": "No documents/ folder in the case; customer information is only what request.md states.",
+        "note": "Return documentation status (with missing fields if incomplete) and the compliance flag, including the background-check outcome labeled fictional."
+      },
+      "depends_on": []
+    },
+    {
+      "role": "finance-orchestrator",
+      "type": "contract",
+      "contract": "payment-status",
+      "input": {
+        "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+        "price": 689,
+        "currency": "USD",
+        "payment_method": "cash",
+        "installment_request": null,
+        "note": "Quotation stage: return the mock payment status for a cash payment of 689 USD (CAT-HG-002 list price)."
+      },
+      "depends_on": []
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "(file created)",
+      "from": null,
+      "to": "initial sales state",
+      "source": "request.md"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "customer_request",
+      "from": null,
+      "to": "quotation / Jordan Test / CAT-HG-002 x1 / cash",
+      "source": "request.md; data/firearm-store/records/sales/catalog.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "contracts",
+      "from": null,
+      "to": "inventory-availability (reserve), documentation-status, payment-status requested",
+      "source": "T001 new_tasks"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "customer-request-record acceptance: built only from case request and specialist outputs",
+      "target": "output.customer_request_record",
+      "result": "pass",
+      "detail": "Customer name, FAKE-ID-1001, DOB, item and payment method all from request.md; catalog_id from mock catalog. Quantity 1 implied by 'the Mockworks P45 Full Size'."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only data/firearm-store/records/sales/catalog.json and the case folder were read; no live service contacted."
+    },
+    {
+      "check": "item resolves in mock catalog",
+      "target": "Mockworks P45 Full Size",
+      "result": "pass",
+      "detail": "CAT-HG-002, handgun, .45 ACP, fire_modes [semi-auto], list_price 689 USD."
+    },
+    {
+      "check": "full-auto-requires-address precondition (informational; enforced by compliance)",
+      "target": "CAT-HG-002",
+      "result": "pass",
+      "detail": "No full-auto mode, so no customer address is required by that rule."
+    },
+    {
+      "check": "quote issuance precondition",
+      "target": "quote",
+      "result": "pass",
+      "detail": "No quote issued: availability, compliance and payment responses not yet received."
+    },
+    {
+      "check": "delivery-requires-clearance / sale-completion / report-every-transaction",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "No delivery requested and no transaction report sent; quotation stage with no payment or clearance yet."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "documentation-status request",
+      "result": "pass",
+      "detail": "Request asks for the background-check outcome labeled fictional; no eligibility statement made."
+    },
+    {
+      "check": "authority",
+      "target": "new_tasks; state_changes",
+      "result": "pass",
+      "detail": "Reservation requested from inventory via contract, not performed by sales; compliance and finance statuses requested, not set. Only state/sales.json changed."
+    },
+    {
+      "check": "delegation",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "No unit records changed; only own state/sales.json, which needs no specialist source."
+    }
+  ],
+  "summary": "Recorded quotation request (Jordan Test, CAT-HG-002 Mockworks P45 Full Size x1, cash, list 689 USD); requested inventory-availability (reserve), documentation-status, and payment-status in parallel."
+}

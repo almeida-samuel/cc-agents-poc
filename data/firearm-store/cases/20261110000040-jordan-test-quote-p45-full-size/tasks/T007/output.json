@@ -1,0 +1,47 @@
+{
+  "task_id": "T007",
+  "role": "regulatory-verification-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "customer": {
+      "name": "Jordan Test",
+      "id_document": "FAKE-ID-1001",
+      "date_of_birth": "1985-04-12"
+    },
+    "fictional": true,
+    "note": "Draft request for the mock government background-check service only. No live service is contacted. Any result will be fictional and is not an eligibility decision."
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "acceptance: uses only identifying information from the case",
+      "target": "output.customer",
+      "result": "pass",
+      "detail": "Name 'Jordan Test', ID 'FAKE-ID-1001', and DOB '1985-04-12' match both input.json and request.md exactly. No other fields were added."
+    },
+    {
+      "check": "acceptance: required fields present (case_id, customer with name, fake ID, date of birth)",
+      "target": "output",
+      "result": "pass",
+      "detail": "case_id and customer.{name, id_document, date_of_birth} are all present."
+    },
+    {
+      "check": "rule: mock-data-only",
+      "target": "output",
+      "result": "pass",
+      "detail": "Uses only case data under data/firearm-store/. The ID is a fake ID (FAKE- prefix). No live service is contacted."
+    },
+    {
+      "check": "rule: fictional-background-checks",
+      "target": "output",
+      "result": "pass",
+      "detail": "This is a request draft, not a result. It is still labeled fictional and contains no eligibility wording."
+    }
+  ],
+  "summary": "Background-check request draft prepared for Jordan Test (FAKE-ID-1001, DOB 1985-04-12) using case data only; fictional, no eligibility wording."
+}

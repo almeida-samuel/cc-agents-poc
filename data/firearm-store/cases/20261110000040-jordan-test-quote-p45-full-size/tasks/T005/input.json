@@ -1,0 +1,22 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T005",
+  "role": "stock-manager",
+  "type": "work",
+  "parent": "T002",
+  "attempt": 1,
+  "input": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "request": "Availability check and reservation proposal for sales (contract inventory-availability, action reserve).",
+    "items": [ { "catalog_id": "CAT-HG-002", "quantity": 1 } ],
+    "records": [
+      "data/firearm-store/records/inventory/items.json",
+      "data/firearm-store/records/inventory/reservations.json"
+    ],
+    "expected_outputs": [
+      "Availability Answer: {case_id, items: [{catalog_id, item_id?, status, reservable}]}. reservable only for items with status available (released by technical services) and no active reservation.",
+      "Proposed Record Change for the reservation, if a reservable unit exists: {case_id, record, field, from, to, reason}, with from equal to the current record value, the reservation tied to this case_id, created_at, and a 72-hour expires_at (rule reservation-expiry)."
+    ],
+    "notes": "Do not treat on-hold or unreleased items as available (rules received-items-unavailable, release-requires-pass). If no unit is reservable, return the status found and no reservation change. Report any record discrepancy or missing catalog entry instead of inventing data."
+  }
+}

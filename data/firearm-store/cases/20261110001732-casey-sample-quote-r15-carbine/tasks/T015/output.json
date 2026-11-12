@@ -1,0 +1,30 @@
+{
+  "task_id": "T015",
+  "role": "regulatory-verification-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+    "outcome": "record-found",
+    "fictional": true,
+    "summary": "Fictional mock response for Casey Sample (FAKE-ID-1002, DOB 1990-09-30) returned outcome code record-found (mock record: felony conviction, 2019). ID, name, and DOB all match the request, so the response is consistent and unambiguous. Fictional mock interpretation only; not a legal determination.",
+    "response_ref": "tasks/T013/output.json",
+    "request_ref": "tasks/T008/output.json",
+    "ambiguities": []
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "rule fictional-background-checks", "target": "output.fictional", "result": "pass", "detail": "fictional == true; outcome reported as an outcome code only." },
+    { "check": "rule mock-data-only", "target": "data references", "result": "pass", "detail": "Read only input.json, request.md, tasks/T008/output.json, tasks/T013/output.json under data/firearm-store/; no live service contacted." },
+    { "check": "acceptance: labeled fictional", "target": "output", "result": "pass", "detail": "fictional: true and summary states it is a fictional mock interpretation." },
+    { "check": "acceptance: no eligibility wording", "target": "output.summary", "result": "pass", "detail": "Summary gives the outcome code and record summary only; no statement about whether the customer may or may not purchase." },
+    { "check": "required fields present", "target": "output", "result": "pass", "detail": "case_id, outcome, fictional, summary, response_ref present." },
+    { "check": "outcome in enum", "target": "output.outcome", "result": "pass", "detail": "record-found is one of no-record, record-found, delayed, cannot-determine." },
+    { "check": "response well-formed and consistent", "target": "tasks/T013/output.json", "result": "pass", "detail": "Response is fictional: true, request_ref points to T008, outcome is a valid code, record_summary is present for record-found, and match is true for id_document, name, and date_of_birth." },
+    { "check": "response matches request and case identity", "target": "T008 customer vs T013 vs request.md/input.json", "result": "pass", "detail": "Casey Sample / FAKE-ID-1002 / 1990-09-30 match in every source; no contradictions." }
+  ],
+  "summary": "Fictional interpretation of T013: outcome record-found (mock felony conviction, 2019); full ID/name/DOB match, no ambiguity; labeled fictional, not a legal determination."
+}

@@ -1,0 +1,16 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T021",
+  "role": "inventory-orchestrator",
+  "type": "resume",
+  "contract": "inventory-availability",
+  "attempt": 1,
+  "resumes": "T019",
+  "parent": "T018",
+  "instruction": "Resume turn continuing T019 (inventory-availability contract, action release, requested by T018). Validate the finished subtask output below, apply changes within your authority, and answer the contract.",
+  "original_input": "tasks/T019/input.json",
+  "previous_output": "tasks/T019/output.json",
+  "finished_subtasks": [
+    { "task_id": "T020", "role": "stock-manager", "status": "completed", "output": "tasks/T020/output.json" }
+  ]
+}

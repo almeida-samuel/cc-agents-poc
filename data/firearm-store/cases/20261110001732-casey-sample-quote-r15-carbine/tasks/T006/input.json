@@ -1,0 +1,20 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T006",
+  "role": "payments-credit-specialist",
+  "type": "work",
+  "attempt": 1,
+  "requested_by": "T004",
+  "expected_output": "Payment Status Proposal",
+  "price": 1199,
+  "currency": "USD",
+  "payment_method": "card",
+  "installment_request": null,
+  "customer": { "name": "Casey Sample", "id_document": "FAKE-ID-1002" },
+  "stage": "quotation",
+  "mock_records": [
+    "data/firearm-store/records/finance/payment-methods.json",
+    "data/firearm-store/records/finance/credit-profiles.json"
+  ],
+  "note": "Propose the mock payment status for a card payment of 1199 USD (CAT-RF-001 list price) at the quotation stage, from the case's mock data. No installment plan requested."
+}

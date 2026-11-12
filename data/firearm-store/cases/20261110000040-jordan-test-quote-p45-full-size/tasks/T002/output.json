@@ -1,0 +1,81 @@
+{
+  "task_id": "T002",
+  "role": "inventory-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract": "inventory-availability",
+    "note": "Planning turn. The contract response (per-item status and reservation reference with 72-hour expiry) will be produced on the resume turn after the stock manager's availability answer and proposed reservation change are validated.",
+    "items": []
+  },
+  "new_tasks": [
+    {
+      "role": "stock-manager",
+      "type": "work",
+      "input": {
+        "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+        "request": "Availability check and reservation proposal for sales (contract inventory-availability, action reserve).",
+        "items": [ { "catalog_id": "CAT-HG-002", "quantity": 1 } ],
+        "records": [
+          "data/firearm-store/records/inventory/items.json",
+          "data/firearm-store/records/inventory/reservations.json"
+        ],
+        "expected_outputs": [
+          "Availability Answer: {case_id, items: [{catalog_id, item_id?, status, reservable}]}. reservable only for items with status available (released by technical services) and no active reservation.",
+          "Proposed Record Change for the reservation, if a reservable unit exists: {case_id, record, field, from, to, reason}, with from equal to the current record value, the reservation tied to this case_id, created_at, and a 72-hour expires_at (rule reservation-expiry)."
+        ],
+        "notes": "Do not treat on-hold or unreleased items as available (rules received-items-unavailable, release-requires-pass). If no unit is reservable, return the status found and no reservation change. Report any record discrepancy or missing catalog entry instead of inventing data."
+      }
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/inventory.json",
+      "field": "(file created)",
+      "from": null,
+      "to": "request T002 tracked, status waiting-on-specialist (stock-manager)",
+      "source": "inventory-availability request T002 (tracking only)"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "contract-input-complete (inventory-availability)",
+      "target": "tasks/T002/input.json",
+      "result": "pass",
+      "detail": "Case ID, catalog item CAT-HG-002 with quantity 1, and action reserve are present."
+    },
+    {
+      "check": "delegation",
+      "target": "availability answer and reservation change",
+      "result": "pass",
+      "detail": "No record changed this turn; availability and reservation proposal delegated to stock-manager. Only the case-level state/inventory.json was created for tracking."
+    },
+    {
+      "check": "release-requires-pass",
+      "target": "CAT-HG-002",
+      "result": "pass",
+      "detail": "Nothing reported available or reserved this turn; stock manager instructed that only released items are reservable."
+    },
+    {
+      "check": "reservation-expiry",
+      "target": "pending reservation proposal",
+      "result": "pass",
+      "detail": "Stock manager instructed to attach a 72-hour expiry; will be verified on resume."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "T002",
+      "result": "pass",
+      "detail": "Not applicable: action is reserve, not deliver."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "referenced records",
+      "result": "pass",
+      "detail": "All referenced data is under data/firearm-store/."
+    }
+  ],
+  "summary": "Delegated availability check and 72-hour reservation proposal for CAT-HG-002 x1 to stock-manager; contract response follows on resume."
+}

@@ -1,0 +1,72 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "unit": "sales",
+  "customer_request": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "request_type": "quotation",
+    "customer": {
+      "name": "Jordan Test",
+      "id_document": "FAKE-ID-1001",
+      "date_of_birth": "1985-04-12"
+    },
+    "items": [
+      { "catalog_id": "CAT-HG-002", "name": "Mockworks P45 Full Size", "quantity": 1, "list_price": 689 }
+    ],
+    "payment_method": "cash"
+  },
+  "contracts": {
+    "inventory-availability": {
+      "status": "answered",
+      "action": "reserve",
+      "requested_by_task": "T001",
+      "outcome": "unavailable",
+      "reservation_ref": null,
+      "reservation_expires_at": null,
+      "response_ref": "tasks/T010/output.json",
+      "positive": false
+    },
+    "documentation-status": {
+      "status": "answered",
+      "requested_by_task": "T001",
+      "outcome": "clear",
+      "documentation_status": "complete",
+      "background_check": { "outcome": "no-record", "fictional": true },
+      "response_ref": "tasks/T015/output.json",
+      "positive": true
+    },
+    "payment-status": {
+      "status": "answered",
+      "requested_by_task": "T001",
+      "outcome": "pending",
+      "method": "cash",
+      "amount": 689,
+      "currency": "USD",
+      "response_ref": "tasks/T009/output.json",
+      "positive": true
+    }
+  },
+  "quote": null,
+  "quote_blocked_reason": "inventory-availability outcome unavailable for CAT-HG-002 (tasks/T010/output.json)",
+  "sales_side_ready": false,
+  "operator_decision": {
+    "ref": "human/HR-001.json",
+    "answer": "3",
+    "meaning": "Ask again once CAT-HG-002 (Mockworks P45 Full Size) is restocked",
+    "recorded_at": "2026-11-10T00:14:00Z",
+    "applied_by_task": "T017"
+  },
+  "waiting_on": {
+    "condition": "CAT-HG-002 restocked and released by technical services (sellable in inventory)",
+    "trigger": "operator tells the case to resume once restocked (restocking is a purchasing-entry case opened by the operator; sales has no contract to request it)",
+    "on_resume": "request inventory-availability (action reserve, CAT-HG-002 x1) and re-confirm documentation-status and payment-status in parallel, then issue the quote if all three are positive"
+  },
+  "case_response": {
+    "type": "blocking-findings",
+    "sent_by_task": "T017",
+    "previous": "T016"
+  },
+  "delivery": null,
+  "sale_completed": false,
+  "transaction_reported": false,
+  "updated_by_task": "T017"
+}

@@ -1,0 +1,30 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "unit": "inventory",
+  "requests": [
+    {
+      "task_id": "T002",
+      "contract": "inventory-availability",
+      "requester": "sales-orchestrator",
+      "parent": "T001",
+      "action": "reserve",
+      "items": [ { "catalog_id": "CAT-HG-002", "quantity": 1 } ],
+      "status": "answered",
+      "delegated_to": "stock-manager",
+      "specialist_task": "T005",
+      "specialist_output": "accepted",
+      "answered_by_task": "T010",
+      "outcome": "unavailable"
+    }
+  ],
+  "reservations": [],
+  "open_discrepancies": [
+    {
+      "record": "data/firearm-store/records/inventory/items.json#INV-0003",
+      "detail": "INV-0003 is sold/delivered but has no reservation_id, delivery_ref, sold_at, sale_case_id or sale_report_ref, and no reservation in reservations.json. Not corrected: no specialist proposed a change and no source exists. Low severity; does not affect this case's availability answer.",
+      "source": "tasks/T005/output.json",
+      "status": "open"
+    }
+  ],
+  "last_updated_by_task": "T010"
+}

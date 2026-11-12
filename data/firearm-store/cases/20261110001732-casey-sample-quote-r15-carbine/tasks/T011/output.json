@@ -1,0 +1,125 @@
+{
+  "task_id": "T011",
+  "role": "compliance-orchestrator",
+  "status": "completed",
+  "output": {
+    "compliance_flag": null,
+    "documentation_status": "needs-information",
+    "information_needed": [
+      { "field": "documents.FORM-PURCHASE", "rule_id": "REQ-BASE" }
+    ],
+    "background_check": { "status": "requested", "outcome": null, "fictional": true },
+    "plan": "Accepted T007 (completeness report) and T008 (background-check request draft). Documentation status set to needs-information (FORM-PURCHASE missing, REQ-BASE). Sent the background-check contract request to the mock government service. On the next resume: validate the government response (validate-external-outputs), have the regulatory-verification-specialist interpret it, then set the compliance flag and answer documentation-status to sales (T001)."
+  },
+  "new_tasks": [
+    {
+      "role": "government-background-check",
+      "type": "contract",
+      "contract": "background-check",
+      "input": {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "request_ref": "tasks/T008/output.json",
+        "customer": { "name": "Casey Sample", "id_document": "FAKE-ID-1002", "date_of_birth": "1990-09-30" },
+        "fictional": true,
+        "instruction": "Return a fictional Background-Check Result (request_ref, outcome, match, record_summary if record-found, fictional: true) from the mock criminal records only. Use a record only when ID document, name and date of birth all match; otherwise cannot-determine with the mismatch in match. Not an eligibility determination."
+      },
+      "depends_on": []
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "documentation_status",
+      "from": null,
+      "to": "needs-information",
+      "source": "tasks/T007/output.json (accepted)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "information_needed",
+      "from": [],
+      "to": [ { "field": "documents.FORM-PURCHASE", "rule_id": "REQ-BASE" } ],
+      "source": "tasks/T007/output.json (accepted)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "background_check.status / request_draft / request_sent_by",
+      "from": "not-requested / null / null",
+      "to": "requested / tasks/T008/output.json / T011",
+      "source": "tasks/T008/output.json (accepted); T011 new_tasks"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/compliance.json",
+      "field": "contract_served.resumed_by, subtasks_requested",
+      "from": "[], 2 entries",
+      "to": "[T011], 3 entries (government-background-check added)",
+      "source": "T011 input.json; T011 new_tasks"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "acceptance (completeness report): full-auto-requires-address checked for every item",
+      "target": "tasks/T007/output.json",
+      "result": "pass",
+      "detail": "Rule applied to the only item CAT-RF-001; specialist check present."
+    },
+    {
+      "check": "acceptance (completeness report): complete only with no missing fields and no inconsistencies",
+      "target": "tasks/T007/output.json",
+      "result": "pass",
+      "detail": "Status needs-information with one missing entry (documents.FORM-PURCHASE, REQ-BASE); consistent with requirements.json REQ-BASE forms ['FORM-PURCHASE'] and absence of a documents/ folder."
+    },
+    {
+      "check": "full-auto-requires-address",
+      "target": "CAT-RF-001",
+      "result": "pass",
+      "detail": "Verified in data/firearm-store/records/sales/catalog.json: fire_modes ['semi-auto']; 'full-auto' absent, so customer.address is not required."
+    },
+    {
+      "check": "acceptance (background-check request draft): uses only identifying information from the case",
+      "target": "tasks/T008/output.json",
+      "result": "pass",
+      "detail": "Name 'Casey Sample', FAKE-ID-1002, DOB 1990-09-30 match request.md exactly; case_id and customer present; no extra data."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "tasks/T008/output.json; T011 contract request",
+      "result": "pass",
+      "detail": "Draft and contract request labeled fictional: true; no result or eligibility wording; state background_check.fictional true."
+    },
+    {
+      "check": "validate-external-outputs (scheduled)",
+      "target": "background-check contract request",
+      "result": "pass",
+      "detail": "No external response yet; government response will be validated on the next resume before interpretation."
+    },
+    {
+      "check": "compliance flag acceptance: clear only when documentation complete and background check no-record",
+      "target": "state/compliance.json compliance_flag",
+      "result": "pass",
+      "detail": "Flag left null until the background check result is validated and interpreted; not set to clear."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes; new_tasks",
+      "result": "pass",
+      "detail": "Documentation status set from accepted completeness report and background check requested from accepted draft, both within listed authority. No eligibility determination made."
+    },
+    {
+      "check": "delegation",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "No unit records changed; state changes cite accepted specialist outputs T007 and T008."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only files under data/firearm-store/ read; government service is the mock external party; no live service contacted."
+    }
+  ],
+  "summary": "Accepted T007 and T008; documentation status needs-information (FORM-PURCHASE, REQ-BASE); sent fictional background-check request to the mock government service; flag pending."
+}

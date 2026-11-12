@@ -1,0 +1,79 @@
+{
+  "task_id": "T006",
+  "role": "documentation-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "status": "complete",
+    "requirements_applied": [
+      "REQ-BASE",
+      "REQ-FULL-AUTO",
+      "FORM-PURCHASE",
+      "full-auto-requires-address",
+      "mock-data-only"
+    ],
+    "missing": [],
+    "inconsistencies": [],
+    "notes": [
+      "REQ-BASE / FORM-PURCHASE: customer.name (Jordan Test), customer.id_document (FAKE-ID-1001), customer.date_of_birth (1985-04-12) and items (CAT-HG-002) all have values from the case.",
+      "full-auto-requires-address: CAT-HG-002 (Mockworks P45 Full Size) fire_modes = [semi-auto] in input and in records/sales/catalog.json; no full-auto mode, so customer.address is not required. 'Full Size' in the product name refers to frame size, not fire mode.",
+      "The case has no documents/ folder; FORM-PURCHASE fields are filled from request.md customer information only. No submitted document exists to cross-check the name on the ID against; request.md and input.json values agree."
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "REQ-BASE required customer fields",
+      "target": "customer.name, customer.id_document, customer.date_of_birth",
+      "result": "pass",
+      "detail": "All three present in request.md and task input: Jordan Test, FAKE-ID-1001, 1985-04-12."
+    },
+    {
+      "check": "FORM-PURCHASE field completeness",
+      "target": "FORM-PURCHASE",
+      "result": "pass",
+      "detail": "Fields customer.name, customer.id_document, customer.date_of_birth, items all have case values; conditional customer.address not triggered (no full-auto item)."
+    },
+    {
+      "check": "full-auto-requires-address",
+      "target": "item CAT-HG-002",
+      "result": "pass",
+      "detail": "'full-auto' not in fire_modes ['semi-auto'] (confirmed against records/sales/catalog.json); address not required."
+    },
+    {
+      "check": "Consistency: customer details across case sources",
+      "target": "request.md vs tasks/T006/input.json",
+      "result": "pass",
+      "detail": "Name, ID document and date of birth match. No documents/ folder, so no ID document to cross-check."
+    },
+    {
+      "check": "Consistency: item details",
+      "target": "CAT-HG-002",
+      "result": "pass",
+      "detail": "Input category 'handgun' and fire_modes ['semi-auto'] match the catalog record for Mockworks P45 Full Size."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "all data references",
+      "result": "pass",
+      "detail": "Only data under data/firearm-store/ was read (case files, records/compliance/requirements.json, records/compliance/forms.json, records/sales/catalog.json). No live services contacted."
+    },
+    {
+      "check": "Acceptance: full-auto-requires-address checked for every item",
+      "target": "Completeness Report",
+      "result": "pass",
+      "detail": "1 of 1 items checked."
+    },
+    {
+      "check": "Acceptance: 'complete' only with no missing fields and no inconsistencies",
+      "target": "Completeness Report",
+      "result": "pass",
+      "detail": "missing = [], inconsistencies = []."
+    }
+  ],
+  "summary": "Completeness report: complete. All REQ-BASE/FORM-PURCHASE fields present for Jordan Test; CAT-HG-002 is semi-auto only, so full-auto-requires-address does not require an address."
+}

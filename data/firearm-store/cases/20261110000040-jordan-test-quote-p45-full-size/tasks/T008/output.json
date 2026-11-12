@@ -1,0 +1,51 @@
+{
+  "task_id": "T008",
+  "role": "payments-credit-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "method": "cash",
+    "amount": 689,
+    "status": "pending",
+    "source": "data/firearm-store/records/finance/payment-methods.json (method cash: accepted true, status_before_payment pending)",
+    "notes": "Quotation stage: no payment has been made yet, so the mock status is pending. No installment plan requested, so no Installment Options output is produced. All data is mock."
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only data/firearm-store/records/finance/payment-methods.json and credit-profiles.json were read; no live services contacted."
+    },
+    {
+      "check": "Payment Status Proposal acceptance: status comes from the case's mock data",
+      "target": "output.status",
+      "result": "pass",
+      "detail": "Status 'pending' taken from payment-methods.json status_before_payment for method 'cash'; the case is at the quotation stage with no recorded payment."
+    },
+    {
+      "check": "Payment Status Proposal required fields",
+      "target": "output",
+      "result": "pass",
+      "detail": "case_id, method (cash, valid enum), amount (689 USD), status (pending, valid enum) all present."
+    },
+    {
+      "check": "Payment method accepted",
+      "target": "payment-methods.json method cash",
+      "result": "pass",
+      "detail": "cash has accepted: true."
+    },
+    {
+      "check": "installment-limits",
+      "target": "installment_request",
+      "result": "pass",
+      "detail": "Rule condition not met: no installment plan requested (installment_request null, method cash). No plans offered; financed amount 0."
+    }
+  ],
+  "summary": "Proposed payment status pending for cash payment of 689 USD (quotation stage, from mock payment-methods.json); no installments requested."
+}

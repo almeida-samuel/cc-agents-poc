@@ -1,0 +1,43 @@
+{
+  "task_id": "T006",
+  "role": "payments-credit-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+    "method": "card",
+    "amount": 1199,
+    "status": "pending"
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only data/firearm-store/records/finance/payment-methods.json and credit-profiles.json were read; no live service contacted."
+    },
+    {
+      "check": "Payment Status Proposal acceptance: status comes from the case's mock data",
+      "target": "output.status",
+      "result": "pass",
+      "detail": "payment-methods.json: method 'card' accepted=true, status_before_payment='pending'. Quotation stage, no payment made yet, so status is 'pending'."
+    },
+    {
+      "check": "Payment Status Proposal fields: case_id, method (enum), amount (USD), status (enum)",
+      "target": "output",
+      "result": "pass",
+      "detail": "All required fields present; method='card' and status='pending' are valid enum values; amount=1199 USD from input price."
+    },
+    {
+      "check": "installment-limits",
+      "target": "installment_request",
+      "result": "pass",
+      "detail": "Not applicable: installment_request is null and method is card, so no plan was offered and no financed amount exists."
+    }
+  ],
+  "summary": "Card payment of 1199 USD proposed as 'pending' (mock status_before_payment for card at quotation stage); no installments requested."
+}

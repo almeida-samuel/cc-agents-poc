@@ -1,0 +1,17 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T017",
+  "role": "sales-orchestrator",
+  "type": "resume",
+  "parent": null,
+  "resumes": "T001",
+  "attempt": 1,
+  "instruction": "Resume turn continuing T001 after the operator answered your blocking-findings case response (T016). Handle the operator's answer as your role spec and guides describe.",
+  "original_input": "tasks/T001/input.json",
+  "previous_outputs": ["tasks/T001/output.json", "tasks/T016/output.json"],
+  "operator_answer": {
+    "ref": "human/HR-001.json",
+    "answer": "3",
+    "meaning": "Ask again once CAT-HG-002 (Mockworks P45 Full Size) is restocked"
+  }
+}

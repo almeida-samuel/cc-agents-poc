@@ -1,0 +1,192 @@
+{
+  "task_id": "T016",
+  "role": "sales-orchestrator",
+  "status": "completed",
+  "output": {
+    "customer_request_record": {
+      "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+      "request_type": "quotation",
+      "customer": {
+        "name": "Jordan Test",
+        "id_document": "FAKE-ID-1001",
+        "date_of_birth": "1985-04-12"
+      },
+      "items": [ { "catalog_id": "CAT-HG-002", "quantity": 1 } ],
+      "payment_method": "cash"
+    },
+    "quote": null,
+    "quote_not_issued_reason": "Availability is not positive: inventory-availability returned 'unavailable' for CAT-HG-002 and made no reservation, so there is no item_id and no reservation expiry to set valid_until. Compliance (clear) and payment (pending, accepted cash method) were positive.",
+    "statuses": {
+      "availability": { "outcome": "unavailable", "source": "tasks/T010/output.json" },
+      "compliance": { "flag": "clear", "documentation_status": "complete", "background_check_outcome": "no-record", "fictional": true, "source": "tasks/T015/output.json" },
+      "payment": { "outcome": "pending", "method": "cash", "amount": 689, "currency": "USD", "positive": true, "source": "tasks/T009/output.json" }
+    },
+    "sales_side_ready": false
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "contracts.inventory-availability",
+      "from": { "status": "requested" },
+      "to": { "status": "answered", "outcome": "unavailable", "reservation_ref": null, "positive": false },
+      "source": "tasks/T010/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "contracts.documentation-status",
+      "from": { "status": "requested" },
+      "to": { "status": "answered", "outcome": "clear", "background_check": { "outcome": "no-record", "fictional": true }, "positive": true },
+      "source": "tasks/T015/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "contracts.payment-status",
+      "from": { "status": "requested" },
+      "to": { "status": "answered", "outcome": "pending", "method": "cash", "amount": 689, "positive": true },
+      "source": "tasks/T009/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "quote_blocked_reason",
+      "from": null,
+      "to": "inventory-availability outcome unavailable for CAT-HG-002",
+      "source": "tasks/T010/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/sales.json",
+      "field": "case_response",
+      "from": null,
+      "to": { "type": "blocking-findings", "sent_by_task": "T016" },
+      "source": "T016 case_response"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "entry_unit": "sales",
+    "type": "blocking-findings",
+    "summary": "No quotation can be issued for the Mockworks P45 Full Size (CAT-HG-002) for Jordan Test: inventory reports no sellable unit and made no reservation. Compliance (clear) and payment (cash, pending) came back positive, so out-of-stock is the only blocker.",
+    "findings": [
+      {
+        "unit": "inventory",
+        "finding": "CAT-HG-002 Mockworks P45 Full Size: outcome 'unavailable'. The only unit (INV-0003) is sold/delivered; no reservation was made.",
+        "source_ref": "tasks/T010/output.json (inventory-availability response to T002)"
+      }
+    ],
+    "information_needed": [],
+    "context_statuses": [
+      {
+        "unit": "compliance",
+        "status": "Flag 'clear'; documentation complete. Fictional background-check outcome code: no-record (mock data, not an eligibility determination).",
+        "source_ref": "tasks/T015/output.json (documentation-status response to T003)"
+      },
+      {
+        "unit": "finance",
+        "status": "Payment status 'pending' (cash is an accepted method, not paid), 689 USD (mock catalog list price). Positive for a quote.",
+        "source_ref": "tasks/T009/output.json (payment-status response to T004)"
+      }
+    ],
+    "next_step": "Nothing is pending on the operator's side for this request. If you want, open a new request for a different catalog item (sales can ask the sales consultant for alternatives) or ask again once inventory has restocked CAT-HG-002. If you take no action, the case closes without a quote. No reservation, delivery, or transaction report will be made."
+  },
+  "checks": [
+    {
+      "check": "contract response validity: inventory-availability",
+      "target": "tasks/T010/output.json",
+      "result": "pass",
+      "detail": "Per-item status for CAT-HG-002 present; 'unavailable' is a contract outcome; reservation_ref null is consistent with no reservation; case_id matches."
+    },
+    {
+      "check": "contract response validity: documentation-status",
+      "target": "tasks/T015/output.json",
+      "result": "pass",
+      "detail": "Flag 'clear' and documentation status 'complete' present; background check labeled fictional: true with outcome code no-record; case_id matches."
+    },
+    {
+      "check": "contract response validity: payment-status",
+      "target": "tasks/T009/output.json",
+      "result": "pass",
+      "detail": "Outcome 'pending' with accepted_method true for cash, 689 USD; positive per the payment-status contract definition; no installment plan requested."
+    },
+    {
+      "check": "quote acceptance: issued only when availability, compliance (clear), and payment are all positive",
+      "target": "output.quote",
+      "result": "pass",
+      "detail": "Availability is 'unavailable' (not positive), so no quote was issued. Compliance clear and payment positive."
+    },
+    {
+      "check": "quote acceptance: valid_until matches the reservation",
+      "target": "output.quote",
+      "result": "pass",
+      "detail": "Not applicable: no reservation exists, so no quote and no valid_until."
+    },
+    {
+      "check": "sales side ready only when all three positive",
+      "target": "state/sales.json sales_side_ready",
+      "result": "pass",
+      "detail": "Kept false because availability is unavailable."
+    },
+    {
+      "check": "case response acceptance: exactly one type with its matching field filled",
+      "target": "case_response",
+      "result": "pass",
+      "detail": "type blocking-findings with findings filled; no information is missing (information_needed empty)."
+    },
+    {
+      "check": "case response acceptance: every finding cites its contract response",
+      "target": "case_response.findings",
+      "result": "pass",
+      "detail": "The single finding cites tasks/T010/output.json."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "case_response; output.statuses.compliance",
+      "result": "pass",
+      "detail": "Only the outcome code 'no-record' is quoted, labeled fictional; no eligibility statement made."
+    },
+    {
+      "check": "compliance flag not overridden",
+      "target": "documentation-status response",
+      "result": "pass",
+      "detail": "Flag is clear; no flag or needs-human-review to wait on."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "No delivery requested: nothing reserved, payment not paid."
+    },
+    {
+      "check": "sale-completion / report-every-transaction",
+      "target": "new_tasks",
+      "result": "pass",
+      "detail": "No sale completed (not paid, not delivered), so no transaction-report requested."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files under data/firearm-store/ were read; prices from the mock catalog (689 USD, recorded in T001)."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes; new_tasks",
+      "result": "pass",
+      "detail": "Only own state/sales.json changed; no reservation, compliance, or finance status set by sales."
+    },
+    {
+      "check": "delegation",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "No sales records changed; state changes only track contract responses, which need no specialist source."
+    },
+    {
+      "check": "escalation triggers",
+      "target": "T016 turn",
+      "result": "pass",
+      "detail": "No cross-department conflict, no out-of-authority action, no failed acceptance. The INV-0003 traceability gap belongs to inventory, which is tracking it, so sales does not escalate it."
+    }
+  ],
+  "summary": "Validated all three contract responses: availability unavailable (CAT-HG-002 only unit INV-0003 sold), compliance clear (fictional no-record), payment pending cash 689 USD. No quote; sent blocking-findings case response (out of stock)."
+}

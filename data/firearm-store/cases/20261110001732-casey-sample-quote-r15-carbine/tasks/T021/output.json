@@ -1,0 +1,66 @@
+{
+  "task_id": "T021",
+  "role": "inventory-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract_response": {
+      "contract": "inventory-availability",
+      "request_task": "T019",
+      "requested_by": "T018",
+      "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+      "action": "release",
+      "items": [
+        {
+          "catalog_id": "CAT-RF-001",
+          "quantity": 1,
+          "item_id": "INV-0005",
+          "status": "released",
+          "reservation_ref": "RES-0002",
+          "released_at": "2026-11-10T02:03:00Z",
+          "item_status_after": "available"
+        }
+      ],
+      "note": "RES-0002 released at the operator's direction (human/HR-001.json, choice 1). No delivery took place; no transaction report is expected from inventory for this case."
+    },
+    "applied_inventory_changes": [
+      { "case_id": "20261110001732-casey-sample-quote-r15-carbine", "record": "RES-0002", "change": { "field": "status", "old": "active", "new": "released" }, "source": "tasks/T020/output.json" },
+      { "case_id": "20261110001732-casey-sample-quote-r15-carbine", "record": "RES-0002", "change": { "field": "released_at", "old": null, "new": "2026-11-10T02:03:00Z" }, "source": "tasks/T020/output.json" },
+      { "case_id": "20261110001732-casey-sample-quote-r15-carbine", "record": "RES-0002", "change": { "field": "release_reason", "old": null, "new": "Operator dropped the quotation (human/HR-001.json, choice 1); no sale, payment, or delivery." }, "source": "tasks/T020/output.json (proposal reason), tasks/T019/input.json" },
+      { "case_id": "20261110001732-casey-sample-quote-r15-carbine", "record": "INV-0005", "change": { "field": "status", "old": "reserved", "new": "available" }, "source": "tasks/T020/output.json; release disposition DSP-0005 (INS-0005 pass)" },
+      { "case_id": "20261110001732-casey-sample-quote-r15-carbine", "record": "INV-0005", "change": { "field": "reservation_id", "old": "RES-0002", "new": null }, "source": "tasks/T020/output.json" }
+    ],
+    "open_discrepancies": [
+      "INV-0003 sold/delivered with no reservation, delivery movement, or sale references (reported by stock-manager T005 and T020). Unrelated to this case and already tracked in case 20261110000040-jordan-test-quote-p45-full-size; left uncorrected because there is no source for a correction."
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [
+    { "file": "data/firearm-store/records/inventory/reservations.json", "field": "RES-0002.status", "from": "active", "to": "released", "source": "tasks/T020/output.json" },
+    { "file": "data/firearm-store/records/inventory/reservations.json", "field": "RES-0002.released_at", "from": null, "to": "2026-11-10T02:03:00Z", "source": "tasks/T020/output.json" },
+    { "file": "data/firearm-store/records/inventory/reservations.json", "field": "RES-0002.release_reason", "from": null, "to": "Operator dropped the quotation (human/HR-001.json, choice 1); no sale, payment, or delivery.", "source": "tasks/T020/output.json" },
+    { "file": "data/firearm-store/records/inventory/reservations.json", "field": "RES-0002.source", "from": "inventory-availability reserve request T002 (...) applied by inventory-orchestrator in T010", "to": "(appended) released per T019, stock-manager proposal T020, applied in T021", "source": "tasks/T020/output.json" },
+    { "file": "data/firearm-store/records/inventory/items.json", "field": "INV-0005.status", "from": "reserved", "to": "available", "source": "tasks/T020/output.json; DSP-0005 release disposition" },
+    { "file": "data/firearm-store/records/inventory/items.json", "field": "INV-0005.reservation_id", "from": "RES-0002", "to": null, "source": "tasks/T020/output.json" },
+    { "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/inventory.json", "field": "contract_requests[T019]", "from": "awaiting-stock-manager", "to": "answered (released) in T021", "source": "tasks/T020/output.json" },
+    { "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/inventory.json", "field": "reservations[RES-0002].status", "from": "active", "to": "released", "source": "tasks/T020/output.json" },
+    { "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/inventory.json", "field": "accepted_outputs / record_changes_applied", "from": "T005 entries only", "to": "T020 accepted and its changes recorded", "source": "tasks/T020/output.json" }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "acceptance: stock-manager output T020 (availability answer + proposed record changes)", "target": "tasks/T020/output.json", "result": "pass", "detail": "Availability answer covers INV-0005 with status and reservable flag; all four proposed changes have case_id, record, field, from, to, reason; every 'from' matched current records before applying (RES-0002.status active, released_at absent, INV-0005.status reserved, reservation_id RES-0002). Output accepted." },
+    { "check": "reservation belongs to case and is not delivered", "target": "RES-0002", "result": "pass", "detail": "RES-0002.case_id equals this case; status was 'active'; no delivered_at/delivery_ref; INV-0005 location 'showroom'." },
+    { "check": "release-requires-pass", "target": "INV-0005 -> available", "result": "pass", "detail": "INV-0005.release_ref DSP-0005 is a 'release' disposition referencing INS-0005 with outcome 'pass' (records/technical-services/inspections.json)." },
+    { "check": "received-items-unavailable", "target": "INV-0005", "result": "pass", "detail": "Item was already released by technical services (DSP-0005) before reservation; returning to 'available' requires no new disposition." },
+    { "check": "reservation-expiry", "target": "RES-0002", "result": "pass", "detail": "Created 2026-11-10T00:23:00Z, released 2026-11-10T02:03:00Z, before the 72h expiry; released at operator request." },
+    { "check": "delivery-requires-clearance", "target": "action", "result": "pass", "detail": "Action is 'release'; no delivery performed." },
+    { "check": "report-every-transaction", "target": "case", "result": "pass", "detail": "No sale or purchase occurred; no transaction report expected." },
+    { "check": "authority", "target": "release of RES-0002 and INV-0005 status change", "result": "pass", "detail": "Releasing reservations for sales from the stock manager's proposed change is listed authority." },
+    { "check": "delegation", "target": "RES-0002.status, RES-0002.released_at, RES-0002.release_reason, INV-0005.status, INV-0005.reservation_id", "result": "pass", "detail": "Every record change cites accepted stock-manager output T020. released_at value set at application time as T020 requested; release_reason and source annotation record T020's stated reason." },
+    { "check": "acceptance: Applied Inventory Change (every change has a source; 'available' only with release disposition)", "target": "output.applied_inventory_changes", "result": "pass", "detail": "All five changes cite a source; the 'available' change cites DSP-0005." },
+    { "check": "record discrepancy handling", "target": "INV-0003", "result": "pass", "detail": "Discrepancy reported by T020 is unrelated to this case and already tracked in case 20261110000040-jordan-test-quote-p45-full-size; no change applied without a source; kept in open_discrepancies." },
+    { "check": "mock-data-only", "target": "data references", "result": "pass", "detail": "Only case files and data/firearm-store/records/ were read or written; no live service." }
+  ],
+  "summary": "Released RES-0002 and returned INV-0005 (CAT-RF-001) to available (DSP-0005 pass) per accepted stock-manager T020; answered sales T018 with outcome 'released', reservation RES-0002."
+}

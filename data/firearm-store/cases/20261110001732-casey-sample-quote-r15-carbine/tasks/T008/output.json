@@ -1,0 +1,54 @@
+{
+  "task_id": "T008",
+  "role": "regulatory-verification-specialist",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+    "customer": {
+      "name": "Casey Sample",
+      "id_document": "FAKE-ID-1002",
+      "date_of_birth": "1990-09-30"
+    },
+    "fictional": true,
+    "addressed_to": "government-background-check (mock service)",
+    "note": "Fictional mock background-check request. Not a real check and not an eligibility determination."
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "acceptance: uses only identifying information from the case",
+      "target": "output.customer",
+      "result": "pass",
+      "detail": "Name, fake ID, and date of birth match request.md ('Casey Sample (FAKE-ID-1002, born 1990-09-30)') and input.json exactly; no other data added."
+    },
+    {
+      "check": "required fields present (case_id, customer)",
+      "target": "output",
+      "result": "pass",
+      "detail": "case_id and customer {name, id_document, date_of_birth} present."
+    },
+    {
+      "check": "inputs consistent",
+      "target": "input.json vs request.md",
+      "result": "pass",
+      "detail": "No missing or contradictory identifying information."
+    },
+    {
+      "check": "rule mock-data-only",
+      "target": "output",
+      "result": "pass",
+      "detail": "Only case data under data/firearm-store/ used; no live service contacted; ID is a fake mock ID."
+    },
+    {
+      "check": "rule fictional-background-checks",
+      "target": "output",
+      "result": "pass",
+      "detail": "Request draft labeled fictional; contains no result or eligibility wording."
+    }
+  ],
+  "summary": "Drafted fictional background-check request for Casey Sample (FAKE-ID-1002, DOB 1990-09-30) using only case identifying information."
+}

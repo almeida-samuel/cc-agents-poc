@@ -1,0 +1,104 @@
+{
+  "task_id": "T019",
+  "role": "inventory-orchestrator",
+  "status": "completed",
+  "output": {
+    "plan": "Serve inventory-availability (release) for RES-0002 / INV-0005 (CAT-RF-001 x1). Delegating to stock-manager for the proposed reservation release and item status change. On resume: validate (from equals current value, reservation belongs to this case and is not delivered), apply to records/inventory/reservations.json and items.json, and answer sales (T018) with outcome 'released' and reservation reference RES-0002, or 'cannot-determine' with the reason.",
+    "contract_response": null
+  },
+  "new_tasks": [
+    {
+      "role": "stock-manager",
+      "type": "work",
+      "input": {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "request": {
+          "contract": "inventory-availability",
+          "action": "release",
+          "items": [ { "catalog_id": "CAT-RF-001", "quantity": 1, "item_id": "INV-0005", "reservation_ref": "RES-0002" } ],
+          "reason": "Operator dropped the quotation request (human/HR-001.json, choice 1) and asked for the reservation to be released now. No sale, payment, or delivery took place."
+        },
+        "records": [
+          "data/firearm-store/records/inventory/items.json",
+          "data/firearm-store/records/inventory/reservations.json",
+          "data/firearm-store/records/inventory/movements.json"
+        ],
+        "expected_outputs": [
+          "Availability Answer: {case_id, items: [{catalog_id, item_id, status, reservable}]} describing INV-0005 after the proposed release.",
+          "Proposed Record Change(s) to release the reservation: {case_id, record, field, from, to, reason}; from must equal the current record value. Expected scope: RES-0002.status (active -> released, with a released_at timestamp), INV-0005.status (reserved -> available), INV-0005.reservation_id (RES-0002 -> removed/null)."
+        ],
+        "note": "Confirm RES-0002 belongs to this case, is 'active', and was not delivered (no delivery movement for INV-0005). INV-0005 may return to 'available' only because it already carries release disposition DSP-0005 (rule release-requires-pass); verify release_ref is present. If any check fails, propose no change and report why. Report any record discrepancies."
+      },
+      "depends_on": []
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/inventory.json",
+      "field": "contract_requests[T019]",
+      "from": null,
+      "to": "release request for RES-0002 / INV-0005 awaiting stock-manager",
+      "source": "tasks/T019/input.json"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "contract input completeness (inventory-availability)",
+      "target": "tasks/T019/input.json",
+      "result": "pass",
+      "detail": "Case ID, catalog item CAT-RF-001 with quantity 1, item INV-0005, reservation RES-0002, and action 'release' present. Reason backed by human/HR-001.json (operator choice 1)."
+    },
+    {
+      "check": "request consistency with records",
+      "target": "records/inventory/reservations.json#RES-0002, items.json#INV-0005",
+      "result": "pass",
+      "detail": "RES-0002 is 'active' for this case on INV-0005; INV-0005 is 'reserved' with reservation_id RES-0002. Final verification delegated to stock-manager."
+    },
+    {
+      "check": "delegation",
+      "target": "reservation release and item status change",
+      "result": "pass",
+      "detail": "No record change applied this turn; the release proposal is delegated to stock-manager. Only own state/inventory.json updated."
+    },
+    {
+      "check": "authority",
+      "target": "release of RES-0002",
+      "result": "pass",
+      "detail": "Releasing reservations for sales from the stock manager's proposed change is within the inventory-orchestrator's listed authority."
+    },
+    {
+      "check": "release-requires-pass",
+      "target": "INV-0005",
+      "result": "pass",
+      "detail": "Returning INV-0005 to 'available' would rely on existing release disposition DSP-0005 (INS-0005 pass, verified in T010). No change applied yet."
+    },
+    {
+      "check": "reservation-expiry",
+      "target": "RES-0002",
+      "result": "pass",
+      "detail": "Expires 2026-11-13T00:23:00Z; release is requested before expiry at the operator's direction, not by expiry."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "request action",
+      "result": "pass",
+      "detail": "Action is 'release', not 'deliver'; rule not triggered."
+    },
+    {
+      "check": "report-every-transaction",
+      "target": "case",
+      "result": "pass",
+      "detail": "No sale or purchase occurred; no transaction report expected."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files and data/firearm-store/records/inventory/ referenced; no live service."
+    }
+  ],
+  "summary": "Delegated the release proposal for RES-0002 / INV-0005 (CAT-RF-001) to stock-manager; will apply the release and answer sales (T018) on resume."
+}

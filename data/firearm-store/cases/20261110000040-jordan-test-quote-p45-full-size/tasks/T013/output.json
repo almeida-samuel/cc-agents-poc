@@ -1,0 +1,124 @@
+{
+  "task_id": "T013",
+  "role": "compliance-orchestrator",
+  "status": "completed",
+  "output": {
+    "compliance_flag": null,
+    "documentation_status": "complete",
+    "information_needed": [],
+    "background_check": { "status": "response-received", "outcome": null, "fictional": true, "response_ref": "tasks/T012/output.json" },
+    "plan": "Resume of T003 (after T011). Government background-check response T012 validated and accepted (validate-external-outputs). Per role authority the result is recorded as the regulatory-verification-specialist interprets it, so an interpretation task is created. On the next resume: validate the interpretation (fictional, no eligibility wording, consistent with T012), record the outcome, set the compliance flag (clear only if documentation complete and outcome no-record), and return the documentation-status response to sales."
+  },
+  "new_tasks": [
+    {
+      "role": "regulatory-verification-specialist",
+      "type": "work",
+      "input": {
+        "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+        "expected_output": "Background-Check Interpretation",
+        "response_ref": "tasks/T012/output.json",
+        "request_draft_ref": "tasks/T007/output.json",
+        "fictional": true,
+        "instruction": "Interpret the fictional government background-check response in tasks/T012/output.json for Jordan Test (FAKE-ID-1001). Return case_id, outcome (no-record, record-found, delayed, or cannot-determine), fictional: true, a short summary, and response_ref. Use the outcome code only; no eligibility wording."
+      },
+      "depends_on": []
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "background_check.status",
+      "from": "requested",
+      "to": "response-received",
+      "source": "tasks/T012/output.json (external response, validated and accepted in T013)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "background_check.response_ref",
+      "from": null,
+      "to": "tasks/T012/output.json",
+      "source": "tasks/T012/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "background_check.interpretation",
+      "from": null,
+      "to": "requested from regulatory-verification-specialist (T013)",
+      "source": "T013 new_tasks"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "contract_served.resumed_by",
+      "from": ["T011"],
+      "to": ["T011", "T013"],
+      "source": "tasks/T013/input.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "subtasks_requested",
+      "from": "completeness report (accepted), request draft (accepted), background-check contract request",
+      "to": "completeness report (accepted), request draft (accepted), background-check contract request (T012, accepted), background-check interpretation (requested)",
+      "source": "T013 validation; T013 new_tasks"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "rule validate-external-outputs",
+      "target": "tasks/T012/output.json",
+      "result": "pass",
+      "detail": "External government response validated against the background-check contract before use: accepted."
+    },
+    {
+      "check": "acceptance: background-check contract outcome is one of the allowed codes",
+      "target": "tasks/T012/output.json output.outcome",
+      "result": "pass",
+      "detail": "Outcome 'no-record' is one of no-record, record-found, delayed, cannot-determine; record_summary null is consistent with no-record."
+    },
+    {
+      "check": "acceptance: response matches the request",
+      "target": "tasks/T012/output.json output.match",
+      "result": "pass",
+      "detail": "id_document, name, and date_of_birth all match FAKE-ID-1001 / Jordan Test / 1985-04-12 from request.md and T007."
+    },
+    {
+      "check": "rule fictional-background-checks",
+      "target": "tasks/T012/output.json; state/compliance.json",
+      "result": "pass",
+      "detail": "fictional: true; note states it is not an eligibility determination; state records only outcome codes with fictional: true."
+    },
+    {
+      "check": "rule mock-data-only",
+      "target": "tasks/T012/output.json source",
+      "result": "pass",
+      "detail": "Source is data/firearm-store/external/government-background-check/criminal-records.json; no live service."
+    },
+    {
+      "check": "rule full-auto-requires-address",
+      "target": "CAT-HG-002",
+      "result": "pass",
+      "detail": "fire_modes ['semi-auto'] (verified in T011); documentation status complete stands."
+    },
+    {
+      "check": "acceptance: compliance flag 'clear' only with complete documentation and no-record",
+      "target": "state/compliance.json compliance_flag",
+      "result": "pass",
+      "detail": "Flag not set yet: the outcome is recorded only once the regulatory-verification-specialist's interpretation is accepted."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Only state/compliance.json tracking fields changed; recording the result as the specialist interprets it is deferred to the interpretation task."
+    },
+    {
+      "check": "delegation",
+      "target": "state_changes; background-check interpretation",
+      "result": "pass",
+      "detail": "No unit records changed. Interpretation delegated to regulatory-verification-specialist rather than done by the orchestrator."
+    }
+  ],
+  "summary": "Validated and accepted the fictional government background-check response T012 (outcome code no-record, fictional); asked regulatory-verification-specialist to interpret it before recording the outcome and setting the compliance flag."
+}

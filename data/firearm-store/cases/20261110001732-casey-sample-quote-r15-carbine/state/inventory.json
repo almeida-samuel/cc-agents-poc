@@ -1,0 +1,59 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "unit": "inventory",
+  "contract_requests": [
+    {
+      "task_id": "T002",
+      "contract": "inventory-availability",
+      "requested_by": "T001",
+      "action": "reserve",
+      "items": [ { "catalog_id": "CAT-RF-001", "quantity": 1 } ],
+      "status": "answered",
+      "answered_in": "T010",
+      "outcome": "reserved"
+    },
+    {
+      "task_id": "T019",
+      "contract": "inventory-availability",
+      "requested_by": "T018",
+      "action": "release",
+      "items": [ { "catalog_id": "CAT-RF-001", "quantity": 1, "item_id": "INV-0005", "reservation_ref": "RES-0002" } ],
+      "reason": "Operator dropped the quotation (human/HR-001.json, choice 1); no sale, payment, or delivery took place.",
+      "status": "answered",
+      "answered_in": "T021",
+      "outcome": "released"
+    }
+  ],
+  "accepted_outputs": [
+    { "task_id": "T005", "role": "stock-manager", "accepted_in": "T010" },
+    { "task_id": "T020", "role": "stock-manager", "accepted_in": "T021" }
+  ],
+  "reservations": [
+    {
+      "reservation_id": "RES-0002",
+      "item_id": "INV-0005",
+      "catalog_id": "CAT-RF-001",
+      "status": "released",
+      "created_at": "2026-11-10T00:23:00Z",
+      "expires_at": "2026-11-13T00:23:00Z",
+      "released_at": "2026-11-10T02:03:00Z",
+      "release_ref": "DSP-0005"
+    }
+  ],
+  "record_changes_applied": [
+    { "record": "data/firearm-store/records/inventory/reservations.json#RES-0002", "field": "(new entry)", "from": null, "to": "active reservation INV-0005 for this case, expires 2026-11-13T00:23:00Z", "source": "tasks/T005/output.json", "applied_in": "T010" },
+    { "record": "data/firearm-store/records/inventory/items.json#INV-0005", "field": "status", "from": "available", "to": "reserved", "source": "tasks/T005/output.json", "applied_in": "T010" },
+    { "record": "data/firearm-store/records/inventory/items.json#INV-0005", "field": "reservation_id", "from": null, "to": "RES-0002", "source": "tasks/T005/output.json", "applied_in": "T010" },
+    { "record": "data/firearm-store/records/inventory/reservations.json#RES-0002", "field": "status", "from": "active", "to": "released", "source": "tasks/T020/output.json", "applied_in": "T021" },
+    { "record": "data/firearm-store/records/inventory/reservations.json#RES-0002", "field": "released_at", "from": null, "to": "2026-11-10T02:03:00Z", "source": "tasks/T020/output.json", "applied_in": "T021" },
+    { "record": "data/firearm-store/records/inventory/reservations.json#RES-0002", "field": "release_reason", "from": null, "to": "Operator dropped the quotation (human/HR-001.json, choice 1); no sale, payment, or delivery.", "source": "tasks/T020/output.json (reason) / tasks/T019/input.json", "applied_in": "T021" },
+    { "record": "data/firearm-store/records/inventory/items.json#INV-0005", "field": "status", "from": "reserved", "to": "available", "source": "tasks/T020/output.json; release disposition DSP-0005 (INS-0005 pass)", "applied_in": "T021" },
+    { "record": "data/firearm-store/records/inventory/items.json#INV-0005", "field": "reservation_id", "from": "RES-0002", "to": null, "source": "tasks/T020/output.json", "applied_in": "T021" }
+  ],
+  "open_discrepancies": [
+    {
+      "record": "data/firearm-store/records/inventory/items.json#INV-0003",
+      "detail": "INV-0003 (CAT-HG-002) is sold/delivered without reservation_id, delivery_ref, sold_at, sale_case_id or sale_report_ref. Reported again by stock-manager T020 (first in T005); already tracked in case 20261110000040-jordan-test-quote-p45-full-size. Not corrected: no source for a correction. Unrelated to this case."
+    }
+  ]
+}

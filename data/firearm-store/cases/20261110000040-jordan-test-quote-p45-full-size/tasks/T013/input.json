@@ -1,0 +1,16 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "task_id": "T013",
+  "role": "compliance-orchestrator",
+  "type": "resume",
+  "contract": "documentation-status",
+  "parent": "T001",
+  "resumes": "T003",
+  "attempt": 1,
+  "instruction": "Resume turn continuing T011 (your previous turn on the documentation-status contract for T001, originally T003). All subtasks of T011 are finished; validate their outputs and complete your turn.",
+  "original_input": "tasks/T003/input.json",
+  "previous_outputs": ["tasks/T003/output.json", "tasks/T011/output.json"],
+  "finished_subtasks": [
+    { "task_id": "T012", "role": "government-background-check", "status": "completed", "output": "tasks/T012/output.json" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T017",
+  "role": "sales-orchestrator",
+  "type": "resume",
+  "attempt": 1,
+  "resumes": "T001",
+  "parent": null,
+  "instruction": "Resume turn continuing T001 (entry task, quotation). All contract requests you made have been answered. Validate the contract responses below, apply changes within your authority, and continue or send the case response.",
+  "original_input": "tasks/T001/input.json",
+  "previous_output": "tasks/T001/output.json",
+  "finished_subtasks": [
+    { "task_id": "T002", "role": "inventory-orchestrator", "contract": "inventory-availability", "status": "completed", "final_turn": "T010", "output": "tasks/T010/output.json" },
+    { "task_id": "T003", "role": "compliance-orchestrator", "contract": "documentation-status", "status": "completed", "final_turn": "T016", "output": "tasks/T016/output.json" },
+    { "task_id": "T004", "role": "finance-orchestrator", "contract": "payment-status", "status": "completed", "final_turn": "T009", "output": "tasks/T009/output.json" }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T020",
+  "role": "stock-manager",
+  "type": "work",
+  "attempt": 1,
+  "requested_by": "T019",
+  "request": {
+    "contract": "inventory-availability",
+    "action": "release",
+    "items": [ { "catalog_id": "CAT-RF-001", "quantity": 1, "item_id": "INV-0005", "reservation_ref": "RES-0002" } ],
+    "reason": "Operator dropped the quotation request (human/HR-001.json, choice 1) and asked for the reservation to be released now. No sale, payment, or delivery took place."
+  },
+  "records": [
+    "data/firearm-store/records/inventory/items.json",
+    "data/firearm-store/records/inventory/reservations.json",
+    "data/firearm-store/records/inventory/movements.json"
+  ],
+  "expected_outputs": [
+    "Availability Answer: {case_id, items: [{catalog_id, item_id, status, reservable}]} describing INV-0005 after the proposed release.",
+    "Proposed Record Change(s) to release the reservation: {case_id, record, field, from, to, reason}; from must equal the current record value. Expected scope: RES-0002.status (active -> released, with a released_at timestamp), INV-0005.status (reserved -> available), INV-0005.reservation_id (RES-0002 -> removed/null)."
+  ],
+  "note": "Confirm RES-0002 belongs to this case, is 'active', and was not delivered (no delivery movement for INV-0005). INV-0005 may return to 'available' only because it already carries release disposition DSP-0005 (rule release-requires-pass); verify release_ref is present. If any check fails, propose no change and report why. Report any record discrepancies."
+}

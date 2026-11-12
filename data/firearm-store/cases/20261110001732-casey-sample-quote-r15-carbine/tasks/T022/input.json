@@ -1,0 +1,16 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T022",
+  "role": "sales-orchestrator",
+  "type": "resume",
+  "attempt": 1,
+  "resumes": "T001",
+  "continues_turn": "T018",
+  "parent": null,
+  "instruction": "Resume turn continuing T001; this turn follows T018, where you asked inventory to release RES-0002 after the operator dropped the request (human/HR-001.json). Validate the contract response below, apply changes within your authority, and finish the case as the operator's answer requires.",
+  "previous_outputs": ["tasks/T017/output.json", "tasks/T018/output.json"],
+  "operator_answer_ref": "human/HR-001.json",
+  "finished_subtasks": [
+    { "task_id": "T019", "role": "inventory-orchestrator", "contract": "inventory-availability", "status": "completed", "final_turn": "T021", "output": "tasks/T021/output.json" }
+  ]
+}

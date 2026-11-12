@@ -1,0 +1,22 @@
+{
+  "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+  "tasks": [
+    { "id": "T001", "role": "sales-orchestrator", "type": "work", "parent": null, "depends_on": [], "status": "completed", "attempt": 1, "continued_by": "T016" },
+    { "id": "T002", "role": "inventory-orchestrator", "type": "contract", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "inventory-availability", "continued_by": "T010" },
+    { "id": "T003", "role": "compliance-orchestrator", "type": "contract", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "documentation-status", "continued_by": "T011" },
+    { "id": "T004", "role": "finance-orchestrator", "type": "contract", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "payment-status", "continued_by": "T009" },
+    { "id": "T005", "role": "stock-manager", "type": "work", "parent": "T002", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T006", "role": "documentation-specialist", "type": "work", "parent": "T003", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T007", "role": "regulatory-verification-specialist", "type": "work", "parent": "T003", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T008", "role": "payments-credit-specialist", "type": "work", "parent": "T004", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T009", "role": "finance-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "payment-status", "resumes": "T004" },
+    { "id": "T010", "role": "inventory-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "inventory-availability", "resumes": "T002" },
+    { "id": "T011", "role": "compliance-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "documentation-status", "resumes": "T003", "continued_by": "T013" },
+    { "id": "T012", "role": "government-background-check", "type": "contract", "parent": "T011", "depends_on": [], "status": "completed", "attempt": 1, "contract": "background-check" },
+    { "id": "T013", "role": "compliance-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "documentation-status", "resumes": "T003", "continued_by": "T015" },
+    { "id": "T014", "role": "regulatory-verification-specialist", "type": "work", "parent": "T013", "depends_on": [], "status": "completed", "attempt": 1 },
+    { "id": "T015", "role": "compliance-orchestrator", "type": "resume", "parent": "T001", "depends_on": [], "status": "completed", "attempt": 1, "contract": "documentation-status", "resumes": "T003" },
+    { "id": "T016", "role": "sales-orchestrator", "type": "resume", "parent": null, "depends_on": [], "status": "completed", "attempt": 1, "resumes": "T001" },
+    { "id": "T017", "role": "sales-orchestrator", "type": "resume", "parent": null, "depends_on": [], "status": "completed", "attempt": 1, "resumes": "T001" }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "task_id": "T013",
+  "role": "government-background-check",
+  "status": "completed",
+  "output": {
+    "request_ref": "tasks/T008/output.json",
+    "outcome": "record-found",
+    "match": { "id_document": true, "name": true, "date_of_birth": true },
+    "record_summary": "Fictional record: mock felony conviction, 2019.",
+    "fictional": true,
+    "source": "data/firearm-store/external/government-background-check/criminal-records.json",
+    "note": "Fictional mock result only; not a real eligibility determination."
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "mock-data-only", "target": "data source", "result": "pass", "detail": "Only data/firearm-store/external/government-background-check/criminal-records.json was read; no live service contacted." },
+    { "check": "fictional-background-checks", "target": "output.fictional", "result": "pass", "detail": "fictional == true; outcome code given, no eligibility statement." },
+    { "check": "acceptance: from mock criminal records", "target": "output.outcome", "result": "pass", "detail": "Outcome and record_summary copied from record FAKE-ID-1002." },
+    { "check": "acceptance: full match required (ID, name, DOB)", "target": "output.match", "result": "pass", "detail": "FAKE-ID-1002 listed; name 'Casey Sample' and DOB 1990-09-30 both match the record, so the record is used." },
+    { "check": "acceptance: required fields present", "target": "output", "result": "pass", "detail": "request_ref, outcome, match, fictional present; record_summary included for record-found." }
+  ],
+  "summary": "Fictional background check for Casey Sample (FAKE-ID-1002): record-found (mock felony conviction, 2019); ID, name, and DOB all match; fictional, not an eligibility determination."
+}

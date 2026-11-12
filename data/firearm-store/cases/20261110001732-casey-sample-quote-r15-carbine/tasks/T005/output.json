@@ -1,0 +1,81 @@
+{
+  "task_id": "T005",
+  "role": "stock-manager",
+  "status": "completed",
+  "output": {
+    "availability_answer": {
+      "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+      "items": [
+        {
+          "catalog_id": "CAT-RF-001",
+          "item_id": "INV-0005",
+          "status": "available",
+          "reservable": true,
+          "release_ref": "DSP-0005",
+          "location": "showroom",
+          "active_reservation": null
+        }
+      ],
+      "requested_quantity": 1,
+      "reservable_quantity": 1
+    },
+    "proposed_record_changes": [
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "data/firearm-store/records/inventory/reservations.json#RES-0002",
+        "field": "reservations[] (new entry)",
+        "from": null,
+        "to": {
+          "reservation_id": "RES-0002",
+          "item_id": "INV-0005",
+          "catalog_id": "CAT-RF-001",
+          "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+          "status": "active",
+          "created_at": "2026-11-10T00:20:00Z",
+          "expires_at": "2026-11-13T00:20:00Z",
+          "source": "inventory-availability reserve request T005 (from T002)"
+        },
+        "reason": "Reserve 1 unit of CAT-RF-001 for the case. INV-0005 is the only CAT-RF-001 unit; it is available, has release_ref DSP-0005, and has no reservation. expires_at = created_at + 72h (rule reservation-expiry). If the orchestrator applies at a different time, set created_at to the application time and keep expires_at = created_at + 72h."
+      },
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "data/firearm-store/records/inventory/items.json#INV-0005",
+        "field": "status",
+        "from": "available",
+        "to": "reserved",
+        "reason": "Item is reserved for this case by RES-0002."
+      },
+      {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "record": "data/firearm-store/records/inventory/items.json#INV-0005",
+        "field": "reservation_id",
+        "from": null,
+        "to": "RES-0002",
+        "reason": "Link the item to its new reservation. The field does not exist on INV-0005 today (current value null)."
+      }
+    ],
+    "expired_reservations": [],
+    "discrepancies": [
+      {
+        "record": "data/firearm-store/records/inventory/items.json#INV-0003",
+        "detail": "INV-0003 (CAT-HG-002) has status 'sold' and location 'delivered' but has no reservation_id, delivery_ref, sold_at, or sale_case_id, and there is no matching reservation in reservations.json or delivery movement in movements.json. The sale is not supported by the other inventory records. Not related to this case; reported for the orchestrator."
+      }
+    ]
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "mock-data-only", "target": "records read", "result": "pass", "detail": "I only read data/firearm-store/records/inventory/{items,reservations,movements}.json and contacted no live service." },
+    { "check": "received-items-unavailable", "target": "INV-0005", "result": "pass", "detail": "Status is 'available' with release_ref DSP-0005; the item is not on-hold. The only on-hold item (INV-0007, CAT-SG-001) is a different catalog item and is not offered." },
+    { "check": "stock-reconciliation: available requires release_ref", "target": "all CAT-RF-001 units", "result": "pass", "detail": "INV-0005 has release_ref DSP-0005. There are no other CAT-RF-001 units." },
+    { "check": "acceptance: reservable only for available items without active reservation", "target": "availability_answer.items[INV-0005]", "result": "pass", "detail": "No reservation in reservations.json references INV-0005; status is available, so reservable is true." },
+    { "check": "reservation-expiry", "target": "reservations.json (all)", "result": "pass", "detail": "RES-0001 has status delivered (delivered_at 2026-11-09T23:28:00Z), so it is not subject to release. No active reservation is older than 72h, so none needs releasing." },
+    { "check": "acceptance: from equals current record value", "target": "proposed_record_changes", "result": "pass", "detail": "INV-0005.status is currently 'available'. INV-0005.reservation_id is absent (null). RES-0002 does not exist (null)." },
+    { "check": "acceptance: reservation carries 72-hour expiry", "target": "RES-0002", "result": "pass", "detail": "created_at 2026-11-10T00:20:00Z, expires_at 2026-11-13T00:20:00Z (+72h)." },
+    { "check": "stock-reconciliation: records consistent", "target": "items.json vs reservations.json vs movements.json", "result": "fail", "detail": "INV-0003 is sold but has no supporting reservation, delivery movement, or sale reference. This is reported as a discrepancy and does not affect CAT-RF-001. INV-0001 / RES-0001 / MOV-0002 are consistent." }
+  ],
+  "summary": "CAT-RF-001: INV-0005 is available (release DSP-0005) and reservable. Proposed reservation RES-0002 (72h expiry), with INV-0005 moving to reserved. No expired reservations. Discrepancy: INV-0003 is sold without supporting records."
+}

@@ -1,0 +1,160 @@
+{
+  "task_id": "T015",
+  "role": "compliance-orchestrator",
+  "status": "completed",
+  "output": {
+    "case_id": "20261110000040-jordan-test-quote-p45-full-size",
+    "flag": "clear",
+    "documentation_status": "complete",
+    "information_needed": [],
+    "background_check": {
+      "outcome": "no-record",
+      "fictional": true,
+      "response_ref": "tasks/T012/output.json",
+      "interpretation_ref": "tasks/T014/output.json",
+      "note": "Fictional mock outcome code only; not a legal eligibility determination."
+    },
+    "contract": "documentation-status",
+    "requester": "sales-orchestrator",
+    "requester_task": "T001",
+    "documentation_ref": "tasks/T006/output.json",
+    "summary": "Documentation complete for CAT-HG-002 (Mockworks P45 Full Size, semi-auto only; no address required). Fictional background-check outcome code: no-record. Compliance flag: clear. Mock data only; not an eligibility determination."
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "background_check.outcome",
+      "from": null,
+      "to": "no-record",
+      "source": "tasks/T014/output.json (regulatory-verification-specialist interpretation, accepted in T015)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "background_check.status",
+      "from": "response-received",
+      "to": "recorded",
+      "source": "tasks/T014/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "background_check.interpretation",
+      "from": "requested from regulatory-verification-specialist (T013)",
+      "to": "tasks/T014/output.json (accepted in T015)",
+      "source": "tasks/T014/output.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "background_check.notes",
+      "from": null,
+      "to": ["Response field request_ref is 'T012' (the response's own task ID) rather than the request draft T007; identifiers fully match, outcome unaffected."],
+      "source": "tasks/T014/output.json checks (consistency: response request_ref)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "compliance_flag",
+      "from": null,
+      "to": "clear",
+      "source": "tasks/T006/output.json (documentation complete, accepted in T011) + tasks/T014/output.json (outcome no-record, accepted in T015)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "contract_served.resumed_by",
+      "from": ["T011", "T013"],
+      "to": ["T011", "T013", "T015"],
+      "source": "tasks/T015/input.json"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "contract_served.response_sent_by",
+      "from": null,
+      "to": "T015",
+      "source": "T015 output (documentation-status response)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110000040-jordan-test-quote-p45-full-size/state/compliance.json",
+      "field": "subtasks_requested[3]",
+      "from": "regulatory-verification-specialist: background-check interpretation (T013)",
+      "to": "regulatory-verification-specialist: background-check interpretation (T014, accepted)",
+      "source": "T015 validation of tasks/T014/output.json"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "acceptance: background-check interpretation has required fields (case_id, outcome, fictional, summary, response_ref)",
+      "target": "tasks/T014/output.json output",
+      "result": "pass",
+      "detail": "All fields present; outcome 'no-record' is an allowed code; case_id matches."
+    },
+    {
+      "check": "consistency: interpretation matches the validated government response",
+      "target": "tasks/T014/output.json vs tasks/T012/output.json",
+      "result": "pass",
+      "detail": "Both give outcome no-record; response_ref points to T012; T012 match shows id_document, name, date_of_birth all true for FAKE-ID-1001 / Jordan Test / 1985-04-12."
+    },
+    {
+      "check": "ambiguity: verification outcome ambiguous (escalation trigger to human boundary)",
+      "target": "tasks/T014/output.json; tasks/T012/output.json output.request_ref",
+      "result": "pass",
+      "detail": "Not ambiguous. The only anomaly is request_ref 'T012' instead of T007, a labeling issue; all three identifiers fully match and the outcome code is unaffected. Recorded as a note in state; no human request needed."
+    },
+    {
+      "check": "rule fictional-background-checks",
+      "target": "tasks/T014/output.json; T015 output.background_check; state/compliance.json",
+      "result": "pass",
+      "detail": "fictional == true on the interpretation, the recorded result, and this response; only the outcome code is reported, no eligibility wording."
+    },
+    {
+      "check": "rule mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "All references are case files under data/firearm-store/; the government source is data/firearm-store/external/government-background-check/criminal-records.json. No live service."
+    },
+    {
+      "check": "rule full-auto-requires-address",
+      "target": "CAT-HG-002 fire_modes",
+      "result": "pass",
+      "detail": "fire_modes ['semi-auto']; no full-auto, so customer.address is not required; documentation status 'complete' stands."
+    },
+    {
+      "check": "rule validate-external-outputs",
+      "target": "tasks/T012/output.json",
+      "result": "pass",
+      "detail": "External response was validated and accepted in T013 before use; no new external output in this turn."
+    },
+    {
+      "check": "acceptance: compliance flag 'clear' only when documentation complete and background check no-record",
+      "target": "output.flag",
+      "result": "pass",
+      "detail": "documentation_status 'complete' (T006, accepted in T011) and background_check.outcome 'no-record' (T014, accepted) -> 'clear'."
+    },
+    {
+      "check": "acceptance: needs-human-review stays until a human response is recorded",
+      "target": "state/compliance.json compliance_flag",
+      "result": "pass",
+      "detail": "No needs-human-review flag was ever set on this case; no human requests outstanding."
+    },
+    {
+      "check": "acceptance: compliance flag output has required fields (case_id, flag, documentation_status, background_check with fictional: true)",
+      "target": "output",
+      "result": "pass",
+      "detail": "All required fields present; information_needed is empty because documentation is complete."
+    },
+    {
+      "check": "authority",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "Only state/compliance.json changed: recorded the fictional result as the regulatory-verification-specialist interprets it and set the compliance flag, both within role authority. No real eligibility determination."
+    },
+    {
+      "check": "delegation",
+      "target": "state_changes",
+      "result": "pass",
+      "detail": "No unit records changed. The recorded outcome cites the accepted specialist output T014; the flag cites accepted outputs T006 and T014."
+    }
+  ],
+  "summary": "Accepted background-check interpretation T014 (fictional outcome code no-record); documentation complete; compliance flag set to clear and documentation-status response returned to sales (T001). Mock data only, not an eligibility determination."
+}

@@ -1,0 +1,112 @@
+{"ts":"2026-11-10T00:00:40Z","actor":"dispatcher","type":"case-opened","data":{"entry_unit":"sales","request":"request.md"}}
+{"ts":"2026-11-10T00:00:40Z","actor":"dispatcher","type":"task-created","task_id":"T001","data":{"role":"sales-orchestrator","type":"work"}}
+{"ts":"2026-11-10T00:00:40Z","actor":"dispatcher","type":"task-ready","task_id":"T001","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:00:41Z","actor":"dispatcher","type":"task-started","task_id":"T001","data":{}}
+{"ts":"2026-11-10T00:01:45Z","actor":"sales-orchestrator","type":"state-changed","task_id":"T001","data":{"file":"state/sales.json","fields":["(file created)","customer_request","contracts"]}}
+{"ts":"2026-11-10T00:01:45Z","actor":"sales-orchestrator","type":"check","task_id":"T001","data":{"checks":9,"failed":0,"list":["customer-request-record acceptance","mock-data-only","item resolves in mock catalog","full-auto-requires-address precondition","quote issuance precondition","delivery-requires-clearance / sale-completion / report-every-transaction","fictional-background-checks","authority","delegation"]}}
+{"ts":"2026-11-10T00:01:45Z","actor":"sales-orchestrator","type":"task-completed","task_id":"T001","data":{"summary":"Recorded quotation request (Jordan Test, CAT-HG-002 Mockworks P45 Full Size x1, cash, list 689 USD); requested inventory-availability (reserve), documentation-status, and payment-status in parallel.","status_now":"waiting","subtasks":["T002","T003","T004"]}}
+{"ts":"2026-11-10T00:01:46Z","actor":"dispatcher","type":"task-created","task_id":"T002","data":{"role":"inventory-orchestrator","type":"contract","contract":"inventory-availability","parent":"T001"}}
+{"ts":"2026-11-10T00:01:46Z","actor":"dispatcher","type":"task-created","task_id":"T003","data":{"role":"compliance-orchestrator","type":"contract","contract":"documentation-status","parent":"T001"}}
+{"ts":"2026-11-10T00:01:46Z","actor":"dispatcher","type":"task-created","task_id":"T004","data":{"role":"finance-orchestrator","type":"contract","contract":"payment-status","parent":"T001"}}
+{"ts":"2026-11-10T00:01:46Z","actor":"dispatcher","type":"task-ready","task_id":"T002","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:01:46Z","actor":"dispatcher","type":"task-ready","task_id":"T003","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:01:46Z","actor":"dispatcher","type":"task-ready","task_id":"T004","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:01:47Z","actor":"dispatcher","type":"task-started","task_id":"T002","data":{}}
+{"ts":"2026-11-10T00:01:47Z","actor":"dispatcher","type":"task-started","task_id":"T003","data":{}}
+{"ts":"2026-11-10T00:01:47Z","actor":"dispatcher","type":"task-started","task_id":"T004","data":{}}
+{"ts":"2026-11-10T00:02:40Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T002","data":{"file":"state/inventory.json","fields":["(file created)"]}}
+{"ts":"2026-11-10T00:02:40Z","actor":"inventory-orchestrator","type":"check","task_id":"T002","data":{"checks":6,"failed":0,"list":["contract-input-complete (inventory-availability)","delegation","release-requires-pass","reservation-expiry","delivery-requires-clearance","mock-data-only"]}}
+{"ts":"2026-11-10T00:02:40Z","actor":"inventory-orchestrator","type":"task-completed","task_id":"T002","data":{"summary":"Delegated availability check and 72-hour reservation proposal for CAT-HG-002 x1 to stock-manager; contract response follows on resume.","status_now":"waiting","subtasks":["T005"]}}
+{"ts":"2026-11-10T00:02:41Z","actor":"dispatcher","type":"task-created","task_id":"T005","data":{"role":"stock-manager","type":"work","parent":"T002"}}
+{"ts":"2026-11-10T00:02:41Z","actor":"dispatcher","type":"task-ready","task_id":"T005","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:02:41Z","actor":"dispatcher","type":"task-started","task_id":"T005","data":{}}
+{"ts":"2026-11-10T00:03:10Z","actor":"compliance-orchestrator","type":"state-changed","task_id":"T003","data":{"file":"state/compliance.json","fields":["(file created)","subtasks_requested"]}}
+{"ts":"2026-11-10T00:03:10Z","actor":"compliance-orchestrator","type":"check","task_id":"T003","data":{"checks":8,"failed":0,"list":["input sufficiency (documentation-status contract input)","delegate the work","full-auto-requires-address (scheduled)","fictional-background-checks","validate-external-outputs (scheduled)","mock-data-only","authority","delegation"]}}
+{"ts":"2026-11-10T00:03:10Z","actor":"compliance-orchestrator","type":"task-completed","task_id":"T003","data":{"summary":"Started documentation-status for T001: requested completeness report (documentation-specialist) and background-check request draft (regulatory-verification-specialist) in parallel; flag pending.","status_now":"waiting","subtasks":["T006","T007"]}}
+{"ts":"2026-11-10T00:03:10Z","actor":"finance-orchestrator","type":"state-changed","task_id":"T004","data":{"file":"state/finance.json","fields":["(file created)"]}}
+{"ts":"2026-11-10T00:03:10Z","actor":"finance-orchestrator","type":"check","task_id":"T004","data":{"checks":4,"failed":0,"list":["contract-input","installment-limits","mock-data-only","delegation"]}}
+{"ts":"2026-11-10T00:03:10Z","actor":"finance-orchestrator","type":"task-completed","task_id":"T004","data":{"summary":"Created state/finance.json and delegated the Payment Status Proposal (cash, 689 USD) to payments-credit-specialist; finance will answer payment-status on resume.","status_now":"waiting","subtasks":["T008"]}}
+{"ts":"2026-11-10T00:03:11Z","actor":"dispatcher","type":"task-created","task_id":"T006","data":{"role":"documentation-specialist","type":"work","parent":"T003"}}
+{"ts":"2026-11-10T00:03:11Z","actor":"dispatcher","type":"task-created","task_id":"T007","data":{"role":"regulatory-verification-specialist","type":"work","parent":"T003"}}
+{"ts":"2026-11-10T00:03:11Z","actor":"dispatcher","type":"task-created","task_id":"T008","data":{"role":"payments-credit-specialist","type":"work","parent":"T004"}}
+{"ts":"2026-11-10T00:03:11Z","actor":"dispatcher","type":"task-ready","task_id":"T006","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:03:11Z","actor":"dispatcher","type":"task-ready","task_id":"T007","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:03:11Z","actor":"dispatcher","type":"task-ready","task_id":"T008","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:03:12Z","actor":"dispatcher","type":"task-started","task_id":"T006","data":{}}
+{"ts":"2026-11-10T00:03:12Z","actor":"dispatcher","type":"task-started","task_id":"T007","data":{}}
+{"ts":"2026-11-10T00:03:12Z","actor":"dispatcher","type":"task-started","task_id":"T008","data":{}}
+{"ts":"2026-11-10T00:04:00Z","actor":"payments-credit-specialist","type":"check","task_id":"T008","data":{"checks":5,"failed":0,"list":["mock-data-only","Payment Status Proposal acceptance","Payment Status Proposal required fields","Payment method accepted","installment-limits"]}}
+{"ts":"2026-11-10T00:04:00Z","actor":"payments-credit-specialist","type":"task-completed","task_id":"T008","data":{"summary":"Proposed payment status pending for cash payment of 689 USD (quotation stage, from mock payment-methods.json); no installments requested."}}
+{"ts":"2026-11-10T00:04:01Z","actor":"dispatcher","type":"task-created","task_id":"T009","data":{"role":"finance-orchestrator","type":"resume","contract":"payment-status","parent":"T001","resumes":"T004","reason":"all subtasks of T004 finished (T008 completed)"}}
+{"ts":"2026-11-10T00:04:01Z","actor":"dispatcher","type":"task-completed","task_id":"T004","data":{"continued_by":"T009"}}
+{"ts":"2026-11-10T00:04:01Z","actor":"dispatcher","type":"task-ready","task_id":"T009","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:04:02Z","actor":"dispatcher","type":"task-started","task_id":"T009","data":{}}
+{"ts":"2026-11-10T00:05:00Z","actor":"stock-manager","type":"check","task_id":"T005","data":{"checks":7,"failed":1,"failed_checks":["stock-reconciliation: record consistency (INV-0003 sold with no sale traceability fields)"]}}
+{"ts":"2026-11-10T00:05:00Z","actor":"stock-manager","type":"task-completed","task_id":"T005","data":{"summary":"CAT-HG-002 not available: its only unit INV-0003 is sold/delivered; no reservation proposed. INV-0003 has no sale traceability fields (discrepancy reported)."}}
+{"ts":"2026-11-10T00:05:00Z","actor":"documentation-specialist","type":"check","task_id":"T006","data":{"checks":8,"failed":0}}
+{"ts":"2026-11-10T00:05:00Z","actor":"documentation-specialist","type":"task-completed","task_id":"T006","data":{"summary":"Completeness report: complete. All REQ-BASE/FORM-PURCHASE fields present for Jordan Test; CAT-HG-002 is semi-auto only, so full-auto-requires-address does not require an address."}}
+{"ts":"2026-11-10T00:05:00Z","actor":"regulatory-verification-specialist","type":"check","task_id":"T007","data":{"checks":4,"failed":0}}
+{"ts":"2026-11-10T00:05:00Z","actor":"regulatory-verification-specialist","type":"task-completed","task_id":"T007","data":{"summary":"Background-check request draft prepared for Jordan Test (FAKE-ID-1001, DOB 1985-04-12) using case data only; fictional, no eligibility wording."}}
+{"ts":"2026-11-10T00:05:01Z","actor":"dispatcher","type":"task-created","task_id":"T010","data":{"role":"inventory-orchestrator","type":"resume","contract":"inventory-availability","parent":"T001","resumes":"T002","reason":"all subtasks of T002 finished (T005 completed)"}}
+{"ts":"2026-11-10T00:05:01Z","actor":"dispatcher","type":"task-completed","task_id":"T002","data":{"continued_by":"T010"}}
+{"ts":"2026-11-10T00:05:01Z","actor":"dispatcher","type":"task-created","task_id":"T011","data":{"role":"compliance-orchestrator","type":"resume","contract":"documentation-status","parent":"T001","resumes":"T003","reason":"all subtasks of T003 finished (T006, T007 completed)"}}
+{"ts":"2026-11-10T00:05:01Z","actor":"dispatcher","type":"task-completed","task_id":"T003","data":{"continued_by":"T011"}}
+{"ts":"2026-11-10T00:05:01Z","actor":"dispatcher","type":"task-ready","task_id":"T010","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:05:01Z","actor":"dispatcher","type":"task-ready","task_id":"T011","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:05:02Z","actor":"dispatcher","type":"task-started","task_id":"T010","data":{}}
+{"ts":"2026-11-10T00:05:02Z","actor":"dispatcher","type":"task-started","task_id":"T011","data":{}}
+{"ts":"2026-11-10T00:06:00Z","actor":"finance-orchestrator","type":"output-accepted","task_id":"T009","data":{"accepted_task":"T008","expected_output":"Payment Status Proposal"}}
+{"ts":"2026-11-10T00:06:00Z","actor":"finance-orchestrator","type":"state-changed","task_id":"T009","data":{"file":"state/finance.json","fields":["payment_status","contracts.payment-status.status","subtasks.payments-credit-specialist.status"],"payment_status":"pending"}}
+{"ts":"2026-11-10T00:06:00Z","actor":"finance-orchestrator","type":"check","task_id":"T009","data":{"checks":8,"failed":0}}
+{"ts":"2026-11-10T00:06:00Z","actor":"finance-orchestrator","type":"task-completed","task_id":"T009","data":{"summary":"Accepted T008 proposal; set mock payment status pending (cash, 689 USD) and answered payment-status to sales: pending, positive for quote, no installment plan, no ledger change."}}
+{"ts":"2026-11-10T00:07:00Z","actor":"inventory-orchestrator","type":"output-accepted","task_id":"T010","data":{"accepted_task":"T005","expected_output":"Availability Answer"}}
+{"ts":"2026-11-10T00:07:00Z","actor":"inventory-orchestrator","type":"state-changed","task_id":"T010","data":{"file":"state/inventory.json","fields":["requests[T002].status","open_discrepancies"]}}
+{"ts":"2026-11-10T00:07:00Z","actor":"inventory-orchestrator","type":"check","task_id":"T010","data":{"checks":11,"failed":0}}
+{"ts":"2026-11-10T00:07:00Z","actor":"inventory-orchestrator","type":"task-completed","task_id":"T010","data":{"summary":"Answered inventory-availability for T001: CAT-HG-002 unavailable (only unit INV-0003 is sold/delivered), no reservation made. INV-0003 traceability gap tracked in state."}}
+{"ts":"2026-11-10T00:08:00Z","actor":"compliance-orchestrator","type":"output-accepted","task_id":"T011","data":{"accepted_task":"T006","expected_output":"Completeness Report"}}
+{"ts":"2026-11-10T00:08:00Z","actor":"compliance-orchestrator","type":"output-accepted","task_id":"T011","data":{"accepted_task":"T007","expected_output":"Background-Check Request Draft"}}
+{"ts":"2026-11-10T00:08:00Z","actor":"compliance-orchestrator","type":"state-changed","task_id":"T011","data":{"file":"state/compliance.json","fields":["documentation_status","background_check.status","subtasks_requested"],"documentation_status":"complete"}}
+{"ts":"2026-11-10T00:08:00Z","actor":"compliance-orchestrator","type":"check","task_id":"T011","data":{"checks":12,"failed":0}}
+{"ts":"2026-11-10T00:08:00Z","actor":"compliance-orchestrator","type":"task-completed","task_id":"T011","data":{"summary":"Accepted T006 and T007; set documentation status complete and sent the fictional background-check request to the government service; flag pending.","status_now":"waiting","subtasks":["T012"]}}
+{"ts":"2026-11-10T00:08:01Z","actor":"dispatcher","type":"task-created","task_id":"T012","data":{"role":"government-background-check","type":"contract","contract":"background-check","parent":"T011"}}
+{"ts":"2026-11-10T00:08:01Z","actor":"dispatcher","type":"task-ready","task_id":"T012","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:08:02Z","actor":"dispatcher","type":"task-started","task_id":"T012","data":{}}
+{"ts":"2026-11-10T00:09:00Z","actor":"government-background-check","type":"check","task_id":"T012","data":{"checks":5,"failed":0}}
+{"ts":"2026-11-10T00:09:00Z","actor":"government-background-check","type":"task-completed","task_id":"T012","data":{"summary":"Fictional background check for Jordan Test (FAKE-ID-1001): no-record, with ID, name, and DOB all matching. Mock result, not an eligibility determination.","fictional":true}}
+{"ts":"2026-11-10T00:09:01Z","actor":"dispatcher","type":"task-created","task_id":"T013","data":{"role":"compliance-orchestrator","type":"resume","contract":"documentation-status","parent":"T001","resumes":"T003","continues":"T011","reason":"all subtasks of T011 finished (T012 completed)"}}
+{"ts":"2026-11-10T00:09:01Z","actor":"dispatcher","type":"task-completed","task_id":"T011","data":{"continued_by":"T013"}}
+{"ts":"2026-11-10T00:09:01Z","actor":"dispatcher","type":"task-ready","task_id":"T013","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:09:02Z","actor":"dispatcher","type":"task-started","task_id":"T013","data":{}}
+{"ts":"2026-11-10T00:10:00Z","actor":"compliance-orchestrator","type":"output-accepted","task_id":"T013","data":{"accepted_task":"T012","expected_output":"background-check response","outcome":"no-record","fictional":true}}
+{"ts":"2026-11-10T00:10:00Z","actor":"compliance-orchestrator","type":"state-changed","task_id":"T013","data":{"file":"state/compliance.json","fields":["background_check.status","background_check.response_ref","background_check.interpretation","contract_served.resumed_by","subtasks_requested"]}}
+{"ts":"2026-11-10T00:10:00Z","actor":"compliance-orchestrator","type":"check","task_id":"T013","data":{"checks":9,"failed":0}}
+{"ts":"2026-11-10T00:10:00Z","actor":"compliance-orchestrator","type":"task-completed","task_id":"T013","data":{"summary":"Validated and accepted the fictional background-check response T012 (no-record); asked regulatory-verification-specialist to interpret it before setting the compliance flag.","status_now":"waiting","subtasks":["T014"]}}
+{"ts":"2026-11-10T00:10:01Z","actor":"dispatcher","type":"task-created","task_id":"T014","data":{"role":"regulatory-verification-specialist","type":"work","parent":"T013"}}
+{"ts":"2026-11-10T00:10:01Z","actor":"dispatcher","type":"task-ready","task_id":"T014","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:10:02Z","actor":"dispatcher","type":"task-started","task_id":"T014","data":{}}
+{"ts":"2026-11-10T00:11:00Z","actor":"regulatory-verification-specialist","type":"check","task_id":"T014","data":{"checks":"all pass","note":"T012 request_ref points to T012 instead of T007; identifiers still match T007"}}
+{"ts":"2026-11-10T00:11:00Z","actor":"regulatory-verification-specialist","type":"task-completed","task_id":"T014","data":{"summary":"Interpretation: no-record (fictional), all identifiers matched; flagged T012 request_ref inconsistency for compliance-orchestrator.","fictional":true}}
+{"ts":"2026-11-10T00:11:01Z","actor":"dispatcher","type":"task-created","task_id":"T015","data":{"role":"compliance-orchestrator","type":"resume","contract":"documentation-status","parent":"T001","resumes":"T003","continues":"T013","reason":"all subtasks of T013 finished (T014 completed)"}}
+{"ts":"2026-11-10T00:11:01Z","actor":"dispatcher","type":"task-completed","task_id":"T013","data":{"continued_by":"T015"}}
+{"ts":"2026-11-10T00:11:01Z","actor":"dispatcher","type":"task-ready","task_id":"T015","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:11:02Z","actor":"dispatcher","type":"task-started","task_id":"T015","data":{}}
+{"ts":"2026-11-10T00:12:00Z","actor":"compliance-orchestrator","type":"output-accepted","task_id":"T015","data":{"accepted_task":"T014","expected_output":"Background-Check Interpretation","outcome":"no-record","fictional":true}}
+{"ts":"2026-11-10T00:12:00Z","actor":"compliance-orchestrator","type":"state-changed","task_id":"T015","data":{"file":"state/compliance.json","compliance_flag":"clear","documentation_status":"complete","note":"T012 request_ref mismatch logged"}}
+{"ts":"2026-11-10T00:12:00Z","actor":"compliance-orchestrator","type":"check","task_id":"T015","data":{"checks":12,"failed":0}}
+{"ts":"2026-11-10T00:12:00Z","actor":"compliance-orchestrator","type":"task-completed","task_id":"T015","data":{"summary":"Accepted T014 interpretation (fictional no-record); compliance flag clear, documentation complete; documentation-status response ready for sales."}}
+{"ts":"2026-11-10T00:12:01Z","actor":"dispatcher","type":"task-created","task_id":"T016","data":{"role":"sales-orchestrator","type":"resume","parent":null,"resumes":"T001","reason":"all subtasks of T001 finished (T002→T010, T003→T015, T004→T009 completed)"}}
+{"ts":"2026-11-10T00:12:01Z","actor":"dispatcher","type":"task-completed","task_id":"T001","data":{"continued_by":"T016"}}
+{"ts":"2026-11-10T00:12:01Z","actor":"dispatcher","type":"task-ready","task_id":"T016","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:12:02Z","actor":"dispatcher","type":"task-started","task_id":"T016","data":{}}
+{"ts":"2026-11-10T00:13:00Z","actor":"sales-orchestrator","type":"output-accepted","task_id":"T016","data":{"accepted_tasks":["T010","T015","T009"],"contracts":["inventory-availability","documentation-status","payment-status"]}}
+{"ts":"2026-11-10T00:13:00Z","actor":"sales-orchestrator","type":"state-changed","task_id":"T016","data":{"file":"state/sales.json"}}
+{"ts":"2026-11-10T00:13:00Z","actor":"sales-orchestrator","type":"check","task_id":"T016","data":{"checks":16,"failed":0}}
+{"ts":"2026-11-10T00:13:00Z","actor":"sales-orchestrator","type":"task-completed","task_id":"T016","data":{"summary":"No quote; sent blocking-findings case response (CAT-HG-002 out of stock). Compliance clear (fictional no-record), payment pending cash 689 USD."}}
+{"ts":"2026-11-10T00:13:01Z","actor":"dispatcher","type":"case-response","task_id":"T016","data":{"type":"blocking-findings","source":"tasks/T016/output.json","presented_to":"operator"}}
+{"ts":"2026-11-10T00:14:00Z","actor":"operator","type":"human-response","task_id":"T016","data":{"request_id":"HR-001","kind":"case-response-answer","answer":"3","meaning":"Ask again once CAT-HG-002 is restocked","ref":"human/HR-001.json"}}
+{"ts":"2026-11-10T00:14:01Z","actor":"dispatcher","type":"task-created","task_id":"T017","data":{"role":"sales-orchestrator","type":"resume","parent":null,"resumes":"T001","reason":"operator answered case response asking to continue (HR-001)"}}
+{"ts":"2026-11-10T00:14:01Z","actor":"dispatcher","type":"task-ready","task_id":"T017","data":{"reason":"no dependencies"}}
+{"ts":"2026-11-10T00:14:02Z","actor":"dispatcher","type":"task-started","task_id":"T017","data":{}}
+{"ts":"2026-11-10T00:15:00Z","actor":"sales-orchestrator","type":"state-changed","task_id":"T017","data":{"file":"state/sales.json","note":"operator decision HR-001 recorded; case on hold awaiting CAT-HG-002 restock"}}
+{"ts":"2026-11-10T00:15:00Z","actor":"sales-orchestrator","type":"task-completed","task_id":"T017","data":{"summary":"Recorded operator answer 3 (wait for CAT-HG-002 restock). Item still unavailable (T010), no quote. Blocking-findings case response: case on hold until the operator resumes it after restock."}}
+{"ts":"2026-11-10T00:15:01Z","actor":"dispatcher","type":"case-response","task_id":"T017","data":{"type":"blocking-findings","source":"tasks/T017/output.json","presented_to":"operator"}}

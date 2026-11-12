@@ -1,0 +1,19 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "task_id": "T018",
+  "role": "sales-orchestrator",
+  "type": "resume",
+  "attempt": 1,
+  "resumes": "T001",
+  "continues_turn": "T017",
+  "parent": null,
+  "instruction": "Resume turn continuing T001 after your case response (T017). The operator answered it (human/HR-001.json): they accept the blocking findings and drop the quotation request, and ask that reservation RES-0002 (INV-0005) be released now. Act on this answer within your authority.",
+  "previous_outputs": ["tasks/T001/output.json", "tasks/T017/output.json"],
+  "operator_answer": {
+    "ref": "human/HR-001.json",
+    "kind": "case-response-answer",
+    "choice": 1,
+    "answer": "Accept the blocking-findings response. Drop the quotation request and release reservation RES-0002 (INV-0005) now, then close the case."
+  },
+  "finished_subtasks": []
+}

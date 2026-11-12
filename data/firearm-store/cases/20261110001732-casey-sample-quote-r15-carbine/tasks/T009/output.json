@@ -1,0 +1,60 @@
+{
+  "task_id": "T009",
+  "role": "finance-orchestrator",
+  "status": "completed",
+  "output": {
+    "contract_response": {
+      "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+      "contract": "payment-status",
+      "outcome": "pending",
+      "positive": true,
+      "payment_status": { "method": "card", "method_accepted": true, "amount": 1199, "currency": "USD", "status": "pending" },
+      "installment_plan": null,
+      "note": "Mock: card is an accepted method, not paid yet. Enough for a quote; delivery still requires 'paid' (rule delivery-requires-clearance)."
+    },
+    "applied_finance_change": {
+      "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+      "record": "payment status",
+      "change": { "field": "payment_status", "from": null, "to": { "method": "card", "amount": 1199, "currency": "USD", "status": "pending" } },
+      "source": "tasks/T006/output.json (payments-credit-specialist Payment Status Proposal)"
+    }
+  },
+  "new_tasks": [],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/finance.json",
+      "field": "payment_status",
+      "from": null,
+      "to": { "method": "card", "amount": 1199, "currency": "USD", "status": "pending" },
+      "source": "tasks/T006/output.json (accepted Payment Status Proposal)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/finance.json",
+      "field": "contracts.payment-status.status / outcome",
+      "from": "in-progress / null",
+      "to": "answered / pending",
+      "source": "T009 (this turn)"
+    },
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/finance.json",
+      "field": "subtasks.payments-credit-specialist",
+      "from": "requested (task_id null)",
+      "to": "accepted (task_id T006)",
+      "source": "tasks/T006/output.json"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    { "check": "Payment Status Proposal fields", "target": "tasks/T006/output.json", "result": "pass", "detail": "case_id matches; method 'card' and status 'pending' are valid enum values; amount 1199 USD matches the T004 request." },
+    { "check": "Payment Status Proposal acceptance: status comes from the case's mock data", "target": "tasks/T006/output.json", "result": "pass", "detail": "data/firearm-store/records/finance/payment-methods.json: card accepted=true, status_before_payment='pending'; quotation stage, no payment made." },
+    { "check": "installment-limits", "target": "T004 request / T006 output", "result": "pass", "detail": "No installment plan requested or offered; rule condition not triggered." },
+    { "check": "report-every-transaction", "target": "case", "result": "pass", "detail": "Quotation stage; no transaction report received, so no ledger entry applied (ledger_entries stays empty)." },
+    { "check": "Applied Finance Change acceptance: every ledger entry traces to a transaction report", "target": "output.applied_finance_change", "result": "pass", "detail": "No ledger entry applied; the only change is the payment status." },
+    { "check": "delegation", "target": "payment_status", "result": "pass", "detail": "Payment status set from the accepted payments-credit-specialist output T006, within authority ('set a case's payment status from the payment status proposal')." },
+    { "check": "mock-data-only", "target": "all data references", "result": "pass", "detail": "All references resolve under data/firearm-store/; no live service contacted." },
+    { "check": "payment-status contract output", "target": "output.contract_response", "result": "pass", "detail": "Outcome 'pending' is a listed outcome and positive for a quote (accepted payment method)." }
+  ],
+  "summary": "Accepted T006; set mock payment status to 'pending' (card, 1199 USD) and answered payment-status to sales: pending, positive for a quote; no ledger change."
+}

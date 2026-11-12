@@ -1,0 +1,28 @@
+{
+  "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+  "unit": "finance",
+  "contracts": {
+    "payment-status": {
+      "status": "answered",
+      "served_by_task": "T004",
+      "resumed_by_task": "T009",
+      "requested_by_task": "T001",
+      "request": { "price": 1199, "currency": "USD", "payment_method": "card", "installment_request": null },
+      "outcome": "pending"
+    }
+  },
+  "subtasks": {
+    "payments-credit-specialist": { "status": "accepted", "expected_output": "Payment Status Proposal", "created_by_task": "T004", "task_id": "T006" }
+  },
+  "payment_status": {
+    "method": "card",
+    "amount": 1199,
+    "currency": "USD",
+    "status": "pending",
+    "mock": true,
+    "source": "tasks/T006/output.json (payments-credit-specialist Payment Status Proposal, accepted in T009)"
+  },
+  "installment_plan": null,
+  "ledger_entries": [],
+  "updated_by_task": "T009"
+}

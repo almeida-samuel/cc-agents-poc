@@ -1,0 +1,56 @@
+{
+  "task_id": "T012",
+  "role": "government-background-check",
+  "status": "completed",
+  "output": {
+    "request_ref": "T012",
+    "outcome": "no-record",
+    "match": {
+      "id_document": true,
+      "name": true,
+      "date_of_birth": true
+    },
+    "record_summary": null,
+    "fictional": true,
+    "source": "data/firearm-store/external/government-background-check/criminal-records.json",
+    "note": "Fictional mock result. Not a real eligibility determination."
+  },
+  "new_tasks": [],
+  "state_changes": [],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "mock-data-only",
+      "target": "data source",
+      "result": "pass",
+      "detail": "Only data/firearm-store/external/government-background-check/criminal-records.json was used. No live service was contacted."
+    },
+    {
+      "check": "fictional-background-checks",
+      "target": "output.fictional",
+      "result": "pass",
+      "detail": "fictional == true. The output gives only the outcome code and makes no eligibility statement."
+    },
+    {
+      "check": "acceptance: comes from mock criminal records",
+      "target": "output.outcome",
+      "result": "pass",
+      "detail": "The outcome 'no-record' was taken from the mock record for FAKE-ID-1001."
+    },
+    {
+      "check": "acceptance: full match required (id_document, name, date_of_birth)",
+      "target": "output.match",
+      "result": "pass",
+      "detail": "Request FAKE-ID-1001 / Jordan Test / 1985-04-12 matches the record on all three fields."
+    },
+    {
+      "check": "acceptance: required fields present",
+      "target": "output",
+      "result": "pass",
+      "detail": "request_ref, outcome, match, and fictional are all present. record_summary is not needed because the outcome is not record-found."
+    }
+  ],
+  "summary": "Fictional background check for Jordan Test (FAKE-ID-1001): no-record, with ID, name, and DOB all matching. Mock result, not an eligibility determination."
+}

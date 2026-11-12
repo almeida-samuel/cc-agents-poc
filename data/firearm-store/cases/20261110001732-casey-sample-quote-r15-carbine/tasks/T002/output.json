@@ -1,0 +1,85 @@
+{
+  "task_id": "T002",
+  "role": "inventory-orchestrator",
+  "status": "completed",
+  "output": {
+    "plan": "Serve inventory-availability (reserve) for CAT-RF-001 x1. Delegating to stock-manager for the availability answer and, if a released unit without an active reservation exists, a proposed reservation record with a 72-hour expiry. On resume: validate, apply the reservation to records/inventory/reservations.json (and item status if proposed), and answer sales with per-item status and reservation reference/expiry.",
+    "contract_response": null
+  },
+  "new_tasks": [
+    {
+      "role": "stock-manager",
+      "type": "work",
+      "input": {
+        "case_id": "20261110001732-casey-sample-quote-r15-carbine",
+        "request": {
+          "contract": "inventory-availability",
+          "action": "reserve",
+          "items": [ { "catalog_id": "CAT-RF-001", "quantity": 1 } ]
+        },
+        "records": [
+          "data/firearm-store/records/inventory/items.json",
+          "data/firearm-store/records/inventory/reservations.json",
+          "data/firearm-store/records/inventory/movements.json"
+        ],
+        "expected_outputs": [
+          "Availability Answer: {case_id, items: [{catalog_id, item_id?, status, reservable}]}; reservable only for available (released) items without an active reservation.",
+          "Proposed Record Change(s) for one reservation if a unit is reservable: {case_id, record, field, from, to, reason}; from must equal the current record value; reservation carries created_at and expires_at = created_at + 72h (rule reservation-expiry)."
+        ],
+        "note": "Apply received-items-unavailable: on-hold items are not reservable. Check existing reservations for expiry (>72h and not delivered) and report any that should be released. If no reservable unit exists, report the status (unavailable / on-hold) and propose no change. Report any record discrepancies."
+      },
+      "depends_on": []
+    }
+  ],
+  "state_changes": [
+    {
+      "file": "data/firearm-store/cases/20261110001732-casey-sample-quote-r15-carbine/state/inventory.json",
+      "field": "(file created)",
+      "from": null,
+      "to": "initial inventory state with T002 contract request (reserve CAT-RF-001 x1) awaiting stock-manager",
+      "source": "tasks/T002/input.json"
+    }
+  ],
+  "escalations": [],
+  "human_requests": [],
+  "case_response": null,
+  "checks": [
+    {
+      "check": "contract input completeness (inventory-availability)",
+      "target": "tasks/T002/input.json",
+      "result": "pass",
+      "detail": "Case ID, catalog item CAT-RF-001 with quantity 1, and action 'reserve' present."
+    },
+    {
+      "check": "delegation",
+      "target": "availability answer and reservation",
+      "result": "pass",
+      "detail": "No record change applied this turn; availability and reservation proposal delegated to stock-manager. Only own state/inventory.json created."
+    },
+    {
+      "check": "release-requires-pass / received-items-unavailable",
+      "target": "contract response",
+      "result": "pass",
+      "detail": "No item reported available or reserved yet; stock-manager instructed that only released items are reservable."
+    },
+    {
+      "check": "reservation-expiry",
+      "target": "stock-manager task input",
+      "result": "pass",
+      "detail": "Proposed reservation must carry a 72-hour expiry; existing reservations to be checked for expiry."
+    },
+    {
+      "check": "delivery-requires-clearance",
+      "target": "request action",
+      "result": "pass",
+      "detail": "Action is 'reserve', not 'deliver'; rule not triggered."
+    },
+    {
+      "check": "mock-data-only",
+      "target": "data references",
+      "result": "pass",
+      "detail": "Only case files and data/firearm-store/records/inventory/ referenced; no live service."
+    }
+  ],
+  "summary": "Delegated availability check and reservation proposal for CAT-RF-001 x1 to stock-manager; will apply the reservation and answer sales on resume."
+}
